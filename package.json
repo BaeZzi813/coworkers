@@ -47,5 +47,8 @@
     "prettier-plugin-tailwindcss": "^0.7.1",
     "storybook": "^10.0.4",
     "typescript": "^5"
+  },
+  "engines": {
+    "node": "22.17.1"
   }
 }
