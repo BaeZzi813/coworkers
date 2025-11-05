@@ -43,3 +43,6 @@ next-env.d.ts
 # vscode
 .vscode/*
 !.vscode/settings.json
+
+*storybook.log
+storybook-static
