@@ -1,4 +1,4 @@
-import "@/styles/globals.css";
+import "@/styles/tailwind.css";
 import type { Preview } from "@storybook/nextjs";
 
 const preview: Preview = {
