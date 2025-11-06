@@ -14,22 +14,19 @@ export const Palette: Story = {
         <div className="w-44 bg-brand-primary">brand-primary</div>
         <div className="w-44 bg-brand-secondary">brand-secondary</div>
         <div className="w-44 bg-brand-tertiary">brand-tertiary</div>
-        <div className="w-44 bg-brand-gradient">brand-gradient</div>
         <div className="w-44 bg-point-purple">point-purple</div>
-        <div className="w-44 bg-point-blue">point-blue</div>
         <div className="w-44 bg-point-cyan">point-cyan</div>
         <div className="w-44 bg-point-pink">point-pink</div>
         <div className="w-44 bg-point-rose">point-rose</div>
         <div className="w-44 bg-point-orange">point-orange</div>
         <div className="w-44 bg-point-yellow">point-yellow</div>
-        <div className="w-44 bg-background-primary text-white">
-          background-primary
-        </div>
-        <div className="w-44 bg-background-secondary text-white">
-          background-secondary
-        </div>
+        <div className="w-44 bg-background-primary">background-primary</div>
+        <div className="w-44 bg-background-secondary">background-secondary</div>
         <div className="w-44 bg-background-tertiary">background-tertiary</div>
-        <div className="w-44 bg-background-inverse">background-inverse</div>
+        <div className="w-44 bg-interaction-inactive">interaction-inactive</div>
+        <div className="w-44 bg-interaction-hover">interaction-hover</div>
+        <div className="w-44 bg-interaction-pressed">interaction-pressed</div>
+        <div className="w-44 bg-border-primary">border-primary</div>
         <div className="w-44 bg-text-primary">text-primary</div>
         <div className="w-44 bg-text-secondary">text-secondary</div>
         <div className="w-44 bg-text-tertiary">text-tertiary</div>
