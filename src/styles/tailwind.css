@@ -47,6 +47,12 @@
   --color-icon-primary: #64748b;
   --color-icon-inverse: #f8fafc;
   --color-icon-brand: #74a1fb;
+
+  /* state */
+  --color-state-50: #f8fafc;
+  --color-state-200: #e2e8f0;
+  --color-state-300: #cbd5e1;
+  --color-state-400: #94a3b8;
 }
 
 @utility bg-brand-gradient {

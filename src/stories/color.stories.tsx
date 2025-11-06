@@ -39,6 +39,10 @@ export const Palette: Story = {
         <div className="w-44 bg-icon-primary">icon-primary</div>
         <div className="w-44 bg-icon-inverse">icon-inverse</div>
         <div className="w-44 bg-icon-brand">icon-brand</div>
+        <div className="w-44 bg-state-50">state-50</div>
+        <div className="w-44 bg-state-200">state-200</div>
+        <div className="w-44 bg-state-300">state-300</div>
+        <div className="w-44 bg-state-400">state-400</div>
       </div>
     </>
   ),
