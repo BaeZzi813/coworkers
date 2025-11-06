@@ -1,59 +1,33 @@
-import { Button } from "@/components/button";
+import { Button as ButtonComponent } from "@/components/button";
 import type { Meta, StoryObj } from "@storybook/nextjs";
 
 const meta = {
-  title: "Color",
-  component: Button,
+  title: "Components/Button",
+  component: ButtonComponent,
   parameters: {
     layout: "centered",
   },
-  tags: ["autodocs"],
-} satisfies Meta<typeof Button>;
+} satisfies Meta<typeof ButtonComponent>;
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Primary: Story = {
+export const Button: Story = {
   args: {
     title: "Button",
-    variant: "primary",
     size: "large",
     isFullWidth: false,
     rounded: false,
     disabled: false,
   },
-};
-
-export const Outlined: Story = {
-  args: {
-    title: "Button",
-    variant: "outlined",
-    size: "large",
-    isFullWidth: false,
-    rounded: false,
-    disabled: false,
-  },
-};
-
-export const Danger: Story = {
-  args: {
-    title: "Button",
-    variant: "danger",
-    size: "large",
-    isFullWidth: false,
-    rounded: false,
-    disabled: false,
-  },
-};
-
-export const Disabled: Story = {
-  args: {
-    title: "Button",
-    variant: "primary",
-    size: "large",
-    isFullWidth: false,
-    rounded: false,
-    disabled: true,
+  render: (args) => {
+    return (
+      <div className="flex w-xl flex-col items-center gap-4">
+        <ButtonComponent variant="primary" {...args} />
+        <ButtonComponent variant="outlined" {...args} />
+        <ButtonComponent variant="danger" {...args} />
+      </div>
+    );
   },
 };
