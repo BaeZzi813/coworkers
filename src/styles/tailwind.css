@@ -8,6 +8,7 @@
   --color-brand-primary: #5189fa;
   --color-brand-secondary: #eef3ff;
   --color-brand-tertiary: #315296;
+  --brand-gradient: linear-gradient(90deg, #5189fa 0%, #315296 100%);
 
   /* point */
   --color-point-purple: #a855f7;
@@ -21,6 +22,7 @@
   --color-background-primary: #ffffff;
   --color-background-secondary: #f1f5f9;
   --color-background-tertiary: #e2e8f0;
+  --color-background-inverse: #ffffff;
 
   /* interaction */
   --color-interaction-inactive: #94a3b8;
@@ -45,6 +47,10 @@
   --color-icon-primary: #64748b;
   --color-icon-inverse: #f8fafc;
   --color-icon-brand: #74a1fb;
+}
+
+@utility bg-brand-gradient {
+  background-image: var(--brand-gradient);
 }
 
 @layer utilities {
