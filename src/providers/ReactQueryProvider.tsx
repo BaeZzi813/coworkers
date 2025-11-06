@@ -25,7 +25,7 @@ export default function ReactQueryProvider({
             staleTime: 60 * 1000, // 1분
           },
         },
-      }),
+      })
   );
 
   return (
