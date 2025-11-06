@@ -1,3 +1,3 @@
 export default function Home() {
-  return <div class>테스트입니다.</div>;
+  return <h1 className="text-4xl text-blue-500">Home</h1>;
 }

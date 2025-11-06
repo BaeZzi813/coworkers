@@ -1,7 +1,7 @@
 import type { StorybookConfig } from "@storybook/nextjs";
-import type { RuleSetRule } from "webpack";
 import path from "path";
 import { fileURLToPath } from "url";
+import type { RuleSetRule } from "webpack";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

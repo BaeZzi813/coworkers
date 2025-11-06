@@ -1,5 +1,5 @@
 {
-  "name": "team-project",
+  "name": "coworkers",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -39,11 +39,15 @@
     "@vitest/coverage-v8": "^4.0.7",
     "eslint": "^9",
     "eslint-config-next": "16.0.1",
+    "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-storybook": "^10.0.4",
     "playwright": "^1.56.1",
     "prettier": "^3.6.2",
     "prettier-plugin-tailwindcss": "^0.7.1",
     "storybook": "^10.0.4",
     "typescript": "^5"
+  },
+  "engines": {
+    "node": "22.17.1"
   }
 }

@@ -1,12 +1,10 @@
-"use client";
-
 import {
+  DehydratedState,
+  HydrationBoundary,
   QueryClient,
   QueryClientProvider,
-  HydrationBoundary,
 } from "@tanstack/react-query";
 import { ReactNode, useState } from "react";
-import { DehydratedState } from "@tanstack/react-query";
 
 interface ReactQueryProviderProps {
   children: ReactNode;
@@ -22,7 +20,7 @@ export default function ReactQueryProvider({
       new QueryClient({
         defaultOptions: {
           queries: {
-            staleTime: 60 * 1000, // 1분
+            staleTime: 60 * 1000,
           },
         },
       })
