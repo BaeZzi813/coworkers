@@ -52,11 +52,42 @@ import XmarkIcon24 from "@/assets/icons/ic-xmark-24.svg";
 import { FC, SVGProps } from "react";
 import { IconSize } from "./types";
 
-interface IconsType {
-  [key: string]: Partial<Record<IconSize, FC<SVGProps<SVGSVGElement>>>>;
-}
+export type IconName =
+  | "alert"
+  | "board"
+  | "calendar"
+  | "checkCompact"
+  | "checkPrimary"
+  | "checkbox"
+  | "checkboxCheck"
+  | "chess"
+  | "chevronLeft"
+  | "chevronRight"
+  | "clock"
+  | "comment"
+  | "dots"
+  | "expand"
+  | "fold"
+  | "gear"
+  | "heart"
+  | "heartFill"
+  | "image"
+  | "invisible"
+  | "magnifier"
+  | "menu"
+  | "pencil"
+  | "plus"
+  | "progressDone"
+  | "repeat"
+  | "secession"
+  | "thumbup"
+  | "visible"
+  | "xmark";
 
-const Icons: IconsType = {
+const Icons: Record<
+  IconName,
+  Partial<Record<IconSize, FC<SVGProps<SVGSVGElement>>>>
+> = {
   alert: {
     large: AlertIcon24,
     small: AlertIcon20,
