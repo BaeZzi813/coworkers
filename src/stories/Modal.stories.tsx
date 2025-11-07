@@ -1,6 +1,9 @@
 import { Button } from "@/components/button";
 import Icon from "@/components/icon";
-import { Alert as AlertComponent } from "@/components/modal";
+import {
+  Alert as AlertComponent,
+  Sheet as SheetComponent,
+} from "@/components/modal";
 import type { Meta } from "@storybook/nextjs";
 
 const meta = {
@@ -95,6 +98,40 @@ export function Alert() {
           ]}
         />
       </div>
+    </div>
+  );
+}
+
+export function Sheet() {
+  return (
+    <div className="bg-gray-400 p-6">
+      <SheetComponent
+        title="할 일 만들기"
+        message={`할 일은 실제로 행동 가능한 작업 중심으로\n작성해주시면 좋습니다.`}
+        content={
+          <div className="flex flex-col gap-6">
+            <SheetComponent.Section title="할 일 제목">
+              <input
+                className="w-full border-border-primary bg-amber-50 p-4"
+                placeholder="목록 명을 입력해주세요."
+              />
+            </SheetComponent.Section>
+            <SheetComponent.Section title="할 일 제목">
+              <input
+                className="w-full border-border-primary bg-amber-50 p-4"
+                placeholder="목록 명을 입력해주세요."
+              />
+            </SheetComponent.Section>
+            <SheetComponent.Section title="할 일 제목">
+              <input
+                className="w-full border-border-primary bg-amber-50 p-4"
+                placeholder="목록 명을 입력해주세요."
+              />
+            </SheetComponent.Section>
+          </div>
+        }
+        action={<Button key="alert-close" title="링크 복사하기" />}
+      />
     </div>
   );
 }
