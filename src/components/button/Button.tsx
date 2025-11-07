@@ -1,3 +1,5 @@
+import clsx from "clsx";
+
 type Variant = "primary" | "outlined" | "danger";
 
 type Size = "large" | "medium" | "small";
@@ -82,7 +84,13 @@ export default function Button({
 }: Props) {
   return (
     <button
-      className={`cursor-pointer disabled:cursor-default ${backgrounds[variant]} ${borders(variant, size, rounded)} ${sizes({ size, isFullWidth })} ${fonts(variant, size)}`}
+      className={clsx(
+        "cursor-pointer disabled:cursor-default",
+        backgrounds[variant],
+        borders(variant, size, rounded),
+        sizes({ size, isFullWidth }),
+        fonts(variant, size)
+      )}
       disabled={disabled}
     >
       <div className="flex items-center justify-center gap-1">{title}</div>
