@@ -6,6 +6,8 @@
 
   /* brand */
   --color-brand-primary: #5189fa;
+  --color-brand-primary-hover: var(--color-interaction-hover);
+  --color-brand-primary-pressed: var(--color-interaction-pressed);
   --color-brand-secondary: #eef3ff;
   --color-brand-tertiary: #315296;
   --brand-gradient: linear-gradient(90deg, #5189fa 0%, #315296 100%);
@@ -42,6 +44,8 @@
 
   /* status */
   --color-status-danger: #fc4b4b;
+  --color-status-danger-hover: #ca3c3c;
+  --color-status-danger-pressed: #b63636;
 
   /* icon */
   --color-icon-primary: #64748b;
