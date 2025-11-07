@@ -3,7 +3,7 @@ import { type IconName } from "@/components/icon/icons";
 import clsx from "clsx";
 import { MouseEventHandler } from "react";
 
-type Variant = "primary" | "outlined" | "danger";
+type Variant = "primary" | "outlinedPrimary" | "outlinedSecondary" | "danger";
 
 type ButtonSize = "large" | "medium" | "small";
 
@@ -21,7 +21,8 @@ interface Props {
 const backgrounds: Record<Variant, string> = {
   primary:
     "bg-brand-primary hover:bg-brand-primary-hover active:bg-brand-primary-pressed disabled:bg-interaction-inactive",
-  outlined: "bg-transparent",
+  outlinedPrimary: "bg-transparent",
+  outlinedSecondary: "bg-transparent",
   danger:
     "bg-status-danger hover:bg-status-danger-hover active:bg-status-danger-pressed disabled:bg-interaction-inactive",
 };
@@ -34,18 +35,24 @@ function borders(variant: Variant, size: ButtonSize, rounded: boolean) {
   };
 
   const round = rounded ? "rounded-full" : borderRadius[size];
-  if (variant !== "outlined") {
-    return round;
-  }
 
-  return `${round} border-1 border-brand-primary hover:border-brand-primary-hover active:border-brand-primary-pressed disabled:border-interaction-inactive`;
+  switch (variant) {
+    case "primary":
+    case "danger":
+      return round;
+    case "outlinedPrimary":
+      return `${round} border-1 border-brand-primary hover:border-brand-primary-hover active:border-brand-primary-pressed disabled:border-interaction-inactive`;
+    case "outlinedSecondary":
+      return `${round} border-1 border-border-secondary`;
+  }
 }
 
 function fonts(variant: Variant, size: ButtonSize) {
   const textColor: Record<Variant, string> = {
     primary: "text-white",
-    outlined:
+    outlinedPrimary:
       "text-brand-primary hover:text-brand-primary-hover active:text-brand-primary-pressed disabled:text-interaction-inactive",
+    outlinedSecondary: "text-text-default",
     danger: "text-white",
   };
 

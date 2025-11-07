@@ -30,7 +30,16 @@ export const Button: Story = {
       <div className="flex gap-4">
         <div className="flex w-xl flex-col items-center gap-4">
           <ButtonComponent variant="primary" {...args} onClick={handleClick} />
-          <ButtonComponent variant="outlined" {...args} onClick={handleClick} />
+          <ButtonComponent
+            variant="outlinedPrimary"
+            {...args}
+            onClick={handleClick}
+          />
+          <ButtonComponent
+            variant="outlinedSecondary"
+            {...args}
+            onClick={handleClick}
+          />
           <ButtonComponent variant="danger" {...args} onClick={handleClick} />
         </div>
         <div className="flex w-xl flex-col items-center gap-4">
@@ -42,7 +51,13 @@ export const Button: Story = {
           />
           <ButtonComponent
             iconName="checkPrimary"
-            variant="outlined"
+            variant="outlinedPrimary"
+            {...args}
+            onClick={handleClick}
+          />
+          <ButtonComponent
+            iconName="checkPrimary"
+            variant="outlinedSecondary"
             {...args}
             onClick={handleClick}
           />
