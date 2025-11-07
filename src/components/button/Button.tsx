@@ -1,3 +1,5 @@
+import Icon from "@/components/icon";
+import { type IconName } from "@/components/icon/icons";
 import clsx from "clsx";
 
 type Variant = "primary" | "outlined" | "danger";
@@ -6,6 +8,7 @@ type Size = "large" | "medium" | "small";
 
 interface Props {
   title: string;
+  iconName?: IconName;
   variant?: Variant;
   size?: Size;
   isFullWidth?: boolean;
@@ -75,7 +78,7 @@ function sizes({ size, isFullWidth }: { size: Size; isFullWidth: boolean }) {
 
 export default function Button({
   title,
-
+  iconName,
   variant = "primary",
   size = "large",
   isFullWidth = true,
@@ -86,6 +89,7 @@ export default function Button({
     <button
       className={clsx(
         "cursor-pointer disabled:cursor-default",
+        "flex justify-center",
         backgrounds[variant],
         borders(variant, size, rounded),
         sizes({ size, isFullWidth }),
@@ -93,7 +97,14 @@ export default function Button({
       )}
       disabled={disabled}
     >
-      <div className="flex items-center justify-center gap-1">{title}</div>
+      <div className="flex items-center gap-2">
+        {iconName && (
+          <div className="size-4">
+            <Icon name={iconName} />
+          </div>
+        )}
+        <div className="flex items-center justify-center gap-1">{title}</div>
+      </div>
     </button>
   );
 }

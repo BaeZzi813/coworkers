@@ -23,10 +23,25 @@ export const Button: Story = {
   },
   render: (args) => {
     return (
-      <div className="flex w-xl flex-col items-center gap-4">
-        <ButtonComponent variant="primary" {...args} />
-        <ButtonComponent variant="outlined" {...args} />
-        <ButtonComponent variant="danger" {...args} />
+      <div className="flex gap-4">
+        <div className="flex w-xl flex-col items-center gap-4">
+          <ButtonComponent variant="primary" {...args} />
+          <ButtonComponent variant="outlined" {...args} />
+          <ButtonComponent variant="danger" {...args} />
+        </div>
+        <div className="flex w-xl flex-col items-center gap-4">
+          <ButtonComponent
+            iconName="checkCompact"
+            variant="primary"
+            {...args}
+          />
+          <ButtonComponent
+            iconName="checkPrimary"
+            variant="outlined"
+            {...args}
+          />
+          <ButtonComponent iconName="checkCompact" variant="danger" {...args} />
+        </div>
       </div>
     );
   },
