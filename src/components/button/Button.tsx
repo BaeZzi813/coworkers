@@ -4,13 +4,13 @@ import clsx from "clsx";
 
 type Variant = "primary" | "outlined" | "danger";
 
-type Size = "large" | "medium" | "small";
+type ButtonSize = "large" | "medium" | "small";
 
 interface Props {
   title: string;
   iconName?: IconName;
   variant?: Variant;
-  size?: Size;
+  size?: ButtonSize;
   isFullWidth?: boolean;
   rounded?: boolean;
   disabled?: boolean;
@@ -24,8 +24,8 @@ const backgrounds: Record<Variant, string> = {
     "bg-status-danger hover:bg-status-danger-hover active:bg-status-danger-pressed disabled:bg-interaction-inactive",
 };
 
-function borders(variant: Variant, size: Size, rounded: boolean) {
-  const borderRadius: Record<Size, string> = {
+function borders(variant: Variant, size: ButtonSize, rounded: boolean) {
+  const borderRadius: Record<ButtonSize, string> = {
     large: "rounded-xl",
     medium: "rounded-xl",
     small: "rounded-lg",
@@ -39,7 +39,7 @@ function borders(variant: Variant, size: Size, rounded: boolean) {
   return `${round} border-1 border-brand-primary hover:border-brand-primary-hover active:border-brand-primary-pressed disabled:border-interaction-inactive`;
 }
 
-function fonts(variant: Variant, size: Size) {
+function fonts(variant: Variant, size: ButtonSize) {
   const textColor: Record<Variant, string> = {
     primary: "text-white",
     outlined:
@@ -47,7 +47,7 @@ function fonts(variant: Variant, size: Size) {
     danger: "text-white",
   };
 
-  const fontSize: Record<Size, string> = {
+  const fontSize: Record<ButtonSize, string> = {
     large: `text-lg-s ${textColor[variant]}`,
     medium: `text-md-s ${textColor[variant]}`,
     small: `text-md-s ${textColor[variant]}`,
@@ -56,14 +56,20 @@ function fonts(variant: Variant, size: Size) {
   return fontSize[size];
 }
 
-function sizes({ size, isFullWidth }: { size: Size; isFullWidth: boolean }) {
-  const height: Record<Size, string> = {
+function sizes({
+  size,
+  isFullWidth,
+}: {
+  size: ButtonSize;
+  isFullWidth: boolean;
+}) {
+  const height: Record<ButtonSize, string> = {
     large: "h-12",
     medium: "h-10",
     small: "h-8",
   };
 
-  const padding: Record<Size, string> = {
+  const padding: Record<ButtonSize, string> = {
     large: "px-6",
     medium: "px-5",
     small: "px-3",
