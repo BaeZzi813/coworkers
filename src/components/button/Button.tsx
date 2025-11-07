@@ -1,6 +1,7 @@
 import Icon from "@/components/icon";
 import { type IconName } from "@/components/icon/icons";
 import clsx from "clsx";
+import { MouseEventHandler } from "react";
 
 type Variant = "primary" | "outlined" | "danger";
 
@@ -14,6 +15,7 @@ interface Props {
   isFullWidth?: boolean;
   rounded?: boolean;
   disabled?: boolean;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
 }
 
 const backgrounds: Record<Variant, string> = {
@@ -90,6 +92,7 @@ export default function Button({
   isFullWidth = true,
   rounded = false,
   disabled,
+  onClick,
 }: Props) {
   return (
     <button
@@ -102,6 +105,7 @@ export default function Button({
         fonts(variant, size)
       )}
       disabled={disabled}
+      onClick={onClick}
     >
       <div className="flex items-center gap-2">
         {iconName && (

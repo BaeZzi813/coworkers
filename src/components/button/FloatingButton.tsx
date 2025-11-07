@@ -1,5 +1,6 @@
 import { IconName } from "@/components/icon/icons";
 import clsx from "clsx";
+import { MouseEventHandler } from "react";
 import Icon from "../icon";
 
 type Variant = "primary" | "inverse";
@@ -7,6 +8,7 @@ type Variant = "primary" | "inverse";
 interface Props {
   variant?: Variant;
   iconName: IconName;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
 }
 
 const backgroundColor: Record<Variant, string> = {
@@ -23,6 +25,7 @@ const border: Record<Variant, string> = {
 export default function FloatingButton({
   variant = "primary",
   iconName,
+  onClick,
 }: Props) {
   return (
     <button
@@ -31,6 +34,7 @@ export default function FloatingButton({
         border[variant],
         "flex size-14 cursor-pointer items-center justify-center"
       )}
+      onClick={onClick}
     >
       <div className="size-6 -translate-x-[0.5px]">
         <Icon name={iconName} />
