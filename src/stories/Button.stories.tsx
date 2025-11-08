@@ -22,11 +22,52 @@ export const Button: Story = {
     disabled: false,
   },
   render: (args) => {
+    const handleClick = () => {
+      console.log("Button clicked");
+    };
+
     return (
-      <div className="flex w-xl flex-col items-center gap-4">
-        <ButtonComponent variant="primary" {...args} />
-        <ButtonComponent variant="outlined" {...args} />
-        <ButtonComponent variant="danger" {...args} />
+      <div className="flex gap-4">
+        <div className="flex w-xl flex-col items-center gap-4">
+          <ButtonComponent variant="primary" {...args} onClick={handleClick} />
+          <ButtonComponent
+            variant="outlinedPrimary"
+            {...args}
+            onClick={handleClick}
+          />
+          <ButtonComponent
+            variant="outlinedSecondary"
+            {...args}
+            onClick={handleClick}
+          />
+          <ButtonComponent variant="danger" {...args} onClick={handleClick} />
+        </div>
+        <div className="flex w-xl flex-col items-center gap-4">
+          <ButtonComponent
+            iconName="checkCompact"
+            variant="primary"
+            {...args}
+            onClick={handleClick}
+          />
+          <ButtonComponent
+            iconName="checkPrimary"
+            variant="outlinedPrimary"
+            {...args}
+            onClick={handleClick}
+          />
+          <ButtonComponent
+            iconName="checkPrimary"
+            variant="outlinedSecondary"
+            {...args}
+            onClick={handleClick}
+          />
+          <ButtonComponent
+            iconName="checkCompact"
+            variant="danger"
+            {...args}
+            onClick={handleClick}
+          />
+        </div>
       </div>
     );
   },
