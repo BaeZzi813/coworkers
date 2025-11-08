@@ -1,12 +1,14 @@
-import InvisibleIcon from "@/assets/icons/ic-invisible.svg";
-import VisibleIcon from "@/assets/icons/ic-visible.svg";
-import { Button } from "@/components/button";
 import clsx from "clsx";
-import { forwardRef, InputHTMLAttributes, useMemo, useState } from "react";
+import type { PropsWithChildren, ReactNode, Ref } from "react";
+import { InputHTMLAttributes } from "react";
 
-type Size = "pc" | "mobile" | "modal";
-type Variant = "default" | "password" | "passwordChange";
+type Size = "large" | "small";
 type InputType = "text" | "password";
+
+type PropsWithChildrenAndRef<
+  P = unknown,
+  R = unknown,
+> = PropsWithChildren<P> & { ref?: Ref<R> };
 
 interface Props
   extends Omit<
@@ -16,117 +18,94 @@ interface Props
   size?: Size;
   placeholder?: string;
   type?: InputType;
-  variant?: Variant;
+  contentPadding?: string;
+  trailing?: ReactNode; //프롭스로 아이콘이나 버튼 등을 받고 사이즈도 프롭스로 커스텀
+  trailingClassName?: string;
+  trailingPadding?: string;
 }
 
 const baseClasses =
-  "rounded-xl border border-state-300 bg-background-primary text-text-primary placeholder:text-text-default focus:border-brand-primary focus:outline-none focus:ring-2 focus:ring-brand-primary transition disabled:border-state-200 disabled:bg-state-50 disabled:text-text-disabled";
+  "w-full rounded-xl border border-state-300 bg-background-primary text-text-primary placeholder:text-text-default focus:border-brand-primary focus:outline-none focus:ring-2 focus:ring-brand-primary transition disabled:border-state-200 disabled:bg-state-50 disabled:text-text-disabled";
 
 const wrapperClasses = "relative flex items-center";
 
-const sizeClasses: Record<Size, string> = {
-  pc: "w-[460px] h-12 px-4",
-  mobile: "w-[300px] h-11 px-4",
-  modal: "w-[280px] h-11 px-4",
+const heightClasses: Record<Size, string> = {
+  large: "h-12",
+  small: "h-10",
 };
 
-const trailingPadding: Partial<Record<Variant, string>> = {
-  password: "pr-12",
-  passwordChange: "pr-28",
+const horizontalPadding: Record<Size, string> = {
+  large: "px-4",
+  small: "px-3",
 };
 
-function size({
+function inputSize({
   size,
-  variant,
+  contentPadding,
+  Trailing,
+  trailingPadding,
   className,
 }: {
   size: Size;
-  variant: Variant;
+  contentPadding?: string;
+  Trailing: boolean;
+  trailingPadding?: string;
   className?: string;
 }) {
   return clsx(
     baseClasses,
-    sizeClasses[size],
-    trailingPadding[variant],
+    heightClasses[size],
+    contentPadding ?? horizontalPadding[size],
+    Trailing ? (trailingPadding ?? "pr-12") : null,
     className
   );
 }
 
-function trailing({
-  variant,
-  isPasswordVisible,
-  onTogglePassword,
-}: {
-  variant: Variant;
-  isPasswordVisible: boolean;
-  onTogglePassword: () => void;
-}) {
-  if (variant === "password") {
-    const Icon = isPasswordVisible ? VisibleIcon : InvisibleIcon;
+type InputComponentProps = PropsWithChildrenAndRef<Props, HTMLInputElement>;
 
-    return (
-      <button
-        type="button"
-        className="absolute right-3 flex h-6 w-6 cursor-pointer items-center justify-center"
-        onClick={onTogglePassword}
-        aria-label={isPasswordVisible ? "비밀번호 숨기기" : "비밀번호 표시"}
-      >
-        <Icon width={24} height={24} aria-hidden />
-      </button>
-    );
-  }
+function Input({
+  ref,
+  size: sizeProp = "large",
+  placeholder = "",
+  type = "text",
+  contentPadding,
+  trailing,
+  trailingClassName,
+  trailingPadding,
+  className,
+  ...rest
+}: InputComponentProps) {
+  const Trailing = Boolean(trailing);
 
-  if (variant === "passwordChange") {
-    return (
-      <div className="absolute right-3">
-        <Button title="변경하기" size="small" isFullWidth={false} />
-      </div>
-    );
-  }
-  return null;
-}
-
-const Input = forwardRef<HTMLInputElement, Props>(function Input(
-  {
-    size: sizeProp = "pc",
-    placeholder = "",
-    type = "text",
-    variant = "default",
+  const inputClassName = inputSize({
+    size: sizeProp,
+    contentPadding,
+    Trailing,
+    trailingPadding,
     className,
-    ...rest
-  },
-  ref
-) {
-  const [isPasswordVisible, setPasswordVisible] = useState(false);
-
-  const inputClassName = size({ size: sizeProp, variant, className });
-
-  const trailingContent = useMemo(
-    () =>
-      trailing({
-        variant,
-        isPasswordVisible,
-        onTogglePassword: () => setPasswordVisible((prev) => !prev),
-      }),
-    [isPasswordVisible, variant]
-  );
-
-  const baseType: InputType = variant === "password" ? "password" : type;
-  const resolvedType =
-    variant === "password" && isPasswordVisible ? "text" : baseType;
+  });
 
   return (
     <div className={wrapperClasses}>
       <input
         ref={ref}
-        type={resolvedType}
+        type={type}
         placeholder={placeholder}
         className={inputClassName}
         {...rest}
       />
-      {trailingContent}
+      {Trailing ? (
+        <div
+          className={clsx(
+            "absolute right-3 flex items-center",
+            trailingClassName
+          )}
+        >
+          {trailing}
+        </div>
+      ) : null}
     </div>
   );
-});
+}
 
 export default Input;

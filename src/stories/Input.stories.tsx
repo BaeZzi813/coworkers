@@ -1,5 +1,34 @@
+import InvisibleIcon from "@/assets/icons/ic-invisible.svg";
+import VisibleIcon from "@/assets/icons/ic-visible.svg";
+import { Button } from "@/components/button";
 import { Input as InputComponent } from "@/components/input";
 import type { Meta, StoryObj } from "@storybook/nextjs";
+import type { ComponentPropsWithoutRef } from "react";
+
+const trailingVariants = {
+  none: null,
+  button: <Button title="확인" size="small" isFullWidth={false} />,
+  visible: <VisibleIcon width={24} height={24} />,
+  invisible: <InvisibleIcon width={24} height={24} />,
+  both: (
+    <div className="flex items-center gap-1">
+      <VisibleIcon width={24} height={24} />
+      <InvisibleIcon width={24} height={24} />
+    </div>
+  ),
+} as const;
+
+const trailingPaddingMap = {
+  none: undefined,
+  button: "pr-28",
+  visible: "pr-16",
+  invisible: "pr-16",
+  both: "pr-20",
+} as const;
+
+type InputArgs = ComponentPropsWithoutRef<typeof InputComponent> & {
+  trailingVariant?: keyof typeof trailingVariants;
+};
 
 const meta = {
   title: "Components/Input",
@@ -10,7 +39,7 @@ const meta = {
   argTypes: {
     size: {
       control: { type: "radio" },
-      options: ["pc", "mobile", "modal"],
+      options: ["large", "small"],
     },
     type: {
       control: { type: "radio" },
@@ -19,30 +48,40 @@ const meta = {
     placeholder: {
       control: { type: "text" },
     },
-    variant: {
+    trailingVariant: {
       control: { type: "radio" },
-      options: ["default", "password", "passwordChange"],
+      options: ["none", "button", "visible", "invisible"],
     },
   },
   args: {
     placeholder: "이메일을 입력하세요.",
-    size: "pc",
+    size: "large",
     type: "text",
-    variant: "default",
+    trailingVariant: "none",
   },
-} satisfies Meta<typeof InputComponent>;
+} satisfies Meta<InputArgs>;
 
 export default meta;
 
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<InputArgs>;
 
-export const Input: Story = {
-  args: {
-    size: "pc",
-  },
+function mapVariants({
+  trailingVariant = "none",
+  ...rest
+}: Partial<InputArgs>): ComponentPropsWithoutRef<typeof InputComponent> {
+  const trailing = trailingVariants[trailingVariant];
+
+  return {
+    ...rest,
+    trailing,
+    trailingPadding: trailingPaddingMap[trailingVariant],
+  };
+}
+
+export const Default: Story = {
   render: (args) => (
     <div className="flex w-xl flex-col items-center gap-4">
-      <InputComponent {...args} />
+      <InputComponent {...mapVariants(args)} />
     </div>
   ),
 };
