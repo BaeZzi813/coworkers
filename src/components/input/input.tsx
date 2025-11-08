@@ -1,43 +1,131 @@
-import { forwardRef, InputHTMLAttributes } from "react";
-import type { InputSize } from "./types";
+import InvisibleIcon from "@/assets/icons/ic-invisible.svg";
+import VisibleIcon from "@/assets/icons/ic-visible.svg";
+import { Button } from "@/components/button";
+import clsx from "clsx";
+import { forwardRef, InputHTMLAttributes, useMemo, useState } from "react";
 
+type Size = "pc" | "mobile" | "modal";
+type Variant = "default" | "password" | "passwordChange";
 type InputType = "text" | "password";
 
-interface InputProps
+interface Props
   extends Omit<
     InputHTMLAttributes<HTMLInputElement>,
     "size" | "type" | "placeholder"
   > {
-  size?: InputSize;
+  size?: Size;
   placeholder?: string;
   type?: InputType;
+  variant?: Variant;
 }
 
-const sizeStyles: Record<InputSize, string> = {
+const baseClasses =
+  "rounded-xl border border-state-300 bg-background-primary text-text-primary placeholder:text-text-default focus:border-brand-primary focus:outline-none focus:ring-2 focus:ring-brand-primary transition disabled:border-state-200 disabled:bg-state-50 disabled:text-text-disabled";
+
+const wrapperClasses = "relative flex items-center";
+
+const sizeClasses: Record<Size, string> = {
   pc: "w-[460px] h-12 px-4",
   mobile: "w-[300px] h-11 px-4",
+  modal: "w-[280px] h-11 px-4",
 };
 
-const baseStyle =
-  "rounded-xl border border-gray-300 bg-white text-gray-900 placeholder:text-gray-400 focus:border-brand-primary focus:outline-none focus:ring-2 focus:ring-brand-primary transition disabled:border-gray-200 disabled:bg-gray-100 disabled:text-gray-400";
+const trailingPadding: Partial<Record<Variant, string>> = {
+  password: "pr-12",
+  passwordChange: "pr-28",
+};
 
-const Input = forwardRef<HTMLInputElement, InputProps>(function renderInput(
-  { size = "pc", placeholder = "", type = "text", className, ...rest },
+function size({
+  size,
+  variant,
+  className,
+}: {
+  size: Size;
+  variant: Variant;
+  className?: string;
+}) {
+  return clsx(
+    baseClasses,
+    sizeClasses[size],
+    trailingPadding[variant],
+    className
+  );
+}
+
+function trailing({
+  variant,
+  isPasswordVisible,
+  onTogglePassword,
+}: {
+  variant: Variant;
+  isPasswordVisible: boolean;
+  onTogglePassword: () => void;
+}) {
+  if (variant === "password") {
+    const Icon = isPasswordVisible ? VisibleIcon : InvisibleIcon;
+
+    return (
+      <button
+        type="button"
+        className="absolute right-3 flex h-6 w-6 cursor-pointer items-center justify-center"
+        onClick={onTogglePassword}
+        aria-label={isPasswordVisible ? "비밀번호 숨기기" : "비밀번호 표시"}
+      >
+        <Icon width={24} height={24} aria-hidden />
+      </button>
+    );
+  }
+
+  if (variant === "passwordChange") {
+    return (
+      <div className="absolute right-3">
+        <Button title="변경하기" size="small" isFullWidth={false} />
+      </div>
+    );
+  }
+  return null;
+}
+
+const Input = forwardRef<HTMLInputElement, Props>(function Input(
+  {
+    size: sizeProp = "pc",
+    placeholder = "",
+    type = "text",
+    variant = "default",
+    className,
+    ...rest
+  },
   ref
 ) {
-  const sizeClassName = sizeStyles[size];
-  const combinedClassName = [baseStyle, sizeClassName, className]
-    .filter(Boolean)
-    .join(" ");
+  const [isPasswordVisible, setPasswordVisible] = useState(false);
+
+  const inputClassName = size({ size: sizeProp, variant, className });
+
+  const trailingContent = useMemo(
+    () =>
+      trailing({
+        variant,
+        isPasswordVisible,
+        onTogglePassword: () => setPasswordVisible((prev) => !prev),
+      }),
+    [isPasswordVisible, variant]
+  );
+
+  const baseType: InputType = variant === "password" ? "password" : type;
+  const resolvedType =
+    variant === "password" && isPasswordVisible ? "text" : baseType;
 
   return (
-    <input
-      ref={ref}
-      type={type}
-      placeholder={placeholder}
-      className={combinedClassName}
-      {...rest}
-    />
+    <div className={wrapperClasses}>
+      <input
+        ref={ref}
+        type={resolvedType}
+        placeholder={placeholder}
+        className={inputClassName}
+        {...rest}
+      />
+      {trailingContent}
+    </div>
   );
 });
 
