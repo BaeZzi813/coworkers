@@ -32,7 +32,8 @@
   --color-interaction-pressed: #3b63b5;
 
   /* border */
-  --color-border-primary: rgb(248 250 252 / 50%);
+  --color-border-primary: #e2e8f0;
+  --color-border-secondary: #cbd5e1;
 
   /* text */
   --color-text-primary: #1e293b;

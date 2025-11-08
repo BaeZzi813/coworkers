@@ -1,5 +1,5 @@
-import Icons from "./icons";
-import type { IconName, IconSize } from "./types";
+import Icons, { IconName } from "./icons";
+import type { IconSize } from "./types";
 
 export interface IconProps {
   name: IconName;
