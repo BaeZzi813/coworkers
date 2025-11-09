@@ -22,7 +22,11 @@ export function Dropdown() {
       />
       <DropdownComponent
         anchor={<Button title="Align Right" isFullWidth={false} />}
-        options={["Option 1", "Option 2", "Option 3"]}
+        options={[
+          { value: "option-1", label: "Option 1" },
+          { value: "option-2", label: "Option 2" },
+          { value: "option-3", label: "Option 3" },
+        ]}
         alignment="right"
         onSelect={(option) => console.log(option)}
       />

@@ -4,13 +4,18 @@ import { ReactNode, useState } from "react";
 
 type Alignment = "left" | "right" | "fill";
 
+interface DropdownOption {
+  label: string;
+  value: string;
+}
+
 interface Props {
   anchor: ReactNode;
-  options: string[];
+  options: DropdownOption[] | string[];
   gap?: number;
   alignment?: Alignment;
   alignmentOffset?: number;
-  onSelect: (option: string) => void;
+  onSelect: (option: DropdownOption | string) => void;
 }
 
 export default function Dropdown({
@@ -43,7 +48,7 @@ export default function Dropdown({
     setIsOpen(!isOpen);
   };
 
-  const handleOptionClick = (option: string) => {
+  const handleOptionClick = (option: DropdownOption | string) => {
     onSelect(option);
     setIsOpen(false);
   };
@@ -62,15 +67,19 @@ export default function Dropdown({
           )}
           style={alignmentStyles}
         >
-          {options.map((option) => (
-            <li
-              key={option}
-              className="text-lg-r cursor-pointer px-6 py-3.5 whitespace-nowrap hover:bg-background-tertiary"
-              onClick={() => handleOptionClick(option)}
-            >
-              {option}
-            </li>
-          ))}
+          {options.map((option) => {
+            const key = typeof option === "string" ? option : option.value;
+            const label = typeof option === "string" ? option : option.label;
+            return (
+              <li
+                key={key}
+                className="text-lg-r cursor-pointer px-6 py-3.5 whitespace-nowrap hover:bg-background-tertiary"
+                onClick={() => handleOptionClick(option)}
+              >
+                {label}
+              </li>
+            );
+          })}
         </ul>
       )}
     </div>
