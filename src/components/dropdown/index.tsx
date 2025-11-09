@@ -49,7 +49,7 @@ export default function Dropdown({
   };
 
   return (
-    <div className="relative" ref={targetRef}>
+    <div className="relative w-fit" ref={targetRef}>
       <div onClick={handleAnchorClick}>{anchor}</div>
       {isOpen && (
         <ul
