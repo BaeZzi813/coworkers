@@ -14,7 +14,7 @@ export default meta;
 
 export function Dropdown() {
   return (
-    <div className="flex gap-4">
+    <div className="flex flex-col gap-4">
       <DropdownComponent
         anchor={<Button title="Align Left" isFullWidth={false} />}
         options={["Option 1", "Option 2", "Option 3"]}
@@ -24,6 +24,14 @@ export function Dropdown() {
         anchor={<Button title="Align Right" isFullWidth={false} />}
         options={["Option 1", "Option 2", "Option 3"]}
         alignment="right"
+        onSelect={(option) => console.log(option)}
+      />
+      <DropdownComponent
+        anchor={
+          <Button title="Align fill with long anchor" isFullWidth={false} />
+        }
+        options={["Option 1", "Option 2", "Option 3"]}
+        alignment="fill"
         onSelect={(option) => console.log(option)}
       />
       <DropdownComponent

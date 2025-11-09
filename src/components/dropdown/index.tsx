@@ -2,7 +2,7 @@ import { useBackdropClick } from "@/hooks/use-backdrop-click";
 import clsx from "clsx";
 import { ReactNode, useState } from "react";
 
-type Alignment = "left" | "right";
+type Alignment = "left" | "right" | "fill";
 
 interface Props {
   anchor: ReactNode;
@@ -27,10 +27,16 @@ export default function Dropdown({
   });
 
   const alignmentStyles = { top: `calc(100% + ${gap}px)` };
-  if (alignment === "left") {
-    Object.assign(alignmentStyles, { left: alignmentOffset });
-  } else {
-    Object.assign(alignmentStyles, { right: alignmentOffset });
+  switch (alignment) {
+    case "left":
+      Object.assign(alignmentStyles, { left: alignmentOffset });
+      break;
+    case "right":
+      Object.assign(alignmentStyles, { right: alignmentOffset });
+      break;
+    case "fill":
+      Object.assign(alignmentStyles, { left: 0, right: 0 });
+      break;
   }
 
   const handleAnchorClick = () => {
