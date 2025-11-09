@@ -4,7 +4,7 @@ import { ReactNode, useState } from "react";
 
 type Alignment = "left" | "right" | "fill";
 
-interface DropdownOption {
+export interface DropdownOption {
   label: string;
   value: string;
 }
