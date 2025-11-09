@@ -13,12 +13,26 @@ const meta = {
 export default meta;
 
 export function Dropdown() {
-  const button = <Button title="Open" isFullWidth={false} />;
   return (
-    <DropdownComponent
-      anchor={button}
-      options={["Option 1", "Option 2", "Option 3"]}
-      onSelect={(option) => console.log(option)}
-    />
+    <div className="flex gap-4">
+      <DropdownComponent
+        anchor={<Button title="Align Left" isFullWidth={false} />}
+        options={["Option 1", "Option 2", "Option 3"]}
+        onSelect={(option) => console.log(option)}
+      />
+      <DropdownComponent
+        anchor={<Button title="Align Right" isFullWidth={false} />}
+        options={["Option 1", "Option 2", "Option 3"]}
+        alignment="right"
+        onSelect={(option) => console.log(option)}
+      />
+      <DropdownComponent
+        anchor={<Button title="Align offset" isFullWidth={false} />}
+        options={["Option 1", "Option 2", "Option 3"]}
+        alignment="right"
+        alignmentOffset={-24}
+        onSelect={(option) => console.log(option)}
+      />
+    </div>
   );
 }

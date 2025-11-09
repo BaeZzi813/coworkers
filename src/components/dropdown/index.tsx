@@ -2,23 +2,36 @@ import { useBackdropClick } from "@/hooks/use-backdrop-click";
 import clsx from "clsx";
 import { ReactNode, useState } from "react";
 
+type Alignment = "left" | "right";
+
 interface Props {
   anchor: ReactNode;
   options: string[];
   gap?: number;
+  alignment?: Alignment;
+  alignmentOffset?: number;
   onSelect: (option: string) => void;
 }
 
 export default function Dropdown({
   anchor,
-  gap = 8,
   options,
+  gap = 8,
+  alignment = "left",
+  alignmentOffset = 0,
   onSelect,
 }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const targetRef = useBackdropClick<HTMLDivElement>({
     callback: () => setIsOpen(false),
   });
+
+  const alignmentStyles = { top: `calc(100% + ${gap}px)` };
+  if (alignment === "left") {
+    Object.assign(alignmentStyles, { left: alignmentOffset });
+  } else {
+    Object.assign(alignmentStyles, { right: alignmentOffset });
+  }
 
   const handleAnchorClick = () => {
     setIsOpen(!isOpen);
@@ -35,12 +48,13 @@ export default function Dropdown({
       {isOpen && (
         <ul
           className={clsx(
-            "absolute left-0 rounded-xl",
+            "absolute rounded-xl",
             "border border-border-primary",
             "overflow-hidden",
-            "bg-background-primary"
+            "bg-background-primary",
+            "z-9999"
           )}
-          style={{ top: `calc(100% + ${gap}px)` }}
+          style={alignmentStyles}
         >
           {options.map((option) => (
             <li
