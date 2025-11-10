@@ -1,11 +1,8 @@
-import CheckIc from "@/assets/icons/ic-check.svg";
-import FolderIc from "@/assets/icons/ic-folder.svg";
-import ListIc from "@/assets/icons/ic-list.svg";
-import UnionIc from "@/assets/icons/ic-union.svg";
 import landing1small from "@/assets/images/landing-1-small.png";
 import landing2small from "@/assets/images/landing-2-small.png";
 import landing3small from "@/assets/images/landing-3-small.png";
 import landing4small from "@/assets/images/landing-4-small.png";
+import Icon from "@/components/icon";
 
 import Image from "next/image";
 
@@ -15,10 +12,9 @@ export default function Mobile() {
       <section className="mb-[30px]">
         <div className="relative h-[730px] bg-background-secondary">
           <div className="h-36">
-            <UnionIc
-              aria-label="네잎클로버"
-              className="absolute top-10 left-6"
-            />
+            <div className="absolute top-9 left-5">
+              <Icon name="union" size="medium" />
+            </div>
             <div className="pt-[70px] pb-[19px] pl-[39px]">
               <p className="text-md-m text-state-400">
                 함께 만들어가는 To do list
@@ -34,12 +30,11 @@ export default function Mobile() {
           <button className="absolute right-10 bottom-13">지금 시작하기</button>
         </div>
       </section>
-
       <section>
         <div className="h-[494px] bg-state-50 pl-[35px]">
           <div className="h-[181px]">
             <div className="flex flex-col gap-3 pt-[43px] pb-[19px]">
-              <FolderIc aria-label="네잎클로버" />
+              <Icon name="folder" size="small" />
               <p className="text-lg-b text-brand-primary">
                 칸반보드로 함께
                 <br /> 할 일 목록을 관리해요
@@ -55,12 +50,11 @@ export default function Mobile() {
           </div>
         </div>
       </section>
-
       <section>
         <div className="h-[494px] overflow-hidden bg-brand-primary pl-[18px]">
           <div className="h-[186px]">
             <div className="flex flex-col gap-3 pt-[43px] pb-[29px] pl-[17px]">
-              <CheckIc aria-label="체크" />
+              <Icon name="doneShadow" size="small" />
               <p className="text-[16px] font-bold text-text-inverse">
                 세부적으로 할 일들을
                 <br /> 간편하게 체크해요
@@ -76,12 +70,11 @@ export default function Mobile() {
           </div>
         </div>
       </section>
-
       <section>
         <div className="h-[494px] overflow-hidden bg-state-50 pl-[18px]">
           <div className="h-[207px]">
             <div className="flex flex-col gap-3 pt-[43px] pb-[50px] pl-[17px]">
-              <ListIc aria-label="리스트" />
+              <Icon name="commentShadow" size="small" />
               <p className="text-lg-b text-brand-primary">
                 할 일 공유를 넘어
                 <br /> 의견을 나누고 함께 결정해요

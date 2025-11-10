@@ -1,11 +1,8 @@
-import CheckIc from "@/assets/icons/ic-check.svg";
-import FolderIc from "@/assets/icons/ic-folder.svg";
-import ListIc from "@/assets/icons/ic-list.svg";
-import UnionIc from "@/assets/icons/ic-union.svg";
 import landing1medium from "@/assets/images/landing-1-medium.png";
 import landing2medium from "@/assets/images/landing-2-medium.png";
 import landing3medium from "@/assets/images/landing-3-medium.png";
 import landing4medium from "@/assets/images/landing-4-medium.png";
+import Icon from "@/components/icon";
 
 import Image from "next/image";
 
@@ -15,10 +12,9 @@ export default function Tablet() {
       <section>
         <div className="relative h-[960px] bg-background-secondary">
           <div className="h-[211px]">
-            <UnionIc
-              aria-label="네잎클로버"
-              className="absolute top-24 left-[37px]"
-            />
+            <div className="absolute top-24 left-[37px]">
+              <Icon name="union" size="medium" />
+            </div>
             <div className="pt-[131px] pb-[18px] pl-[60px]">
               <p className="text-lg-m text-state-400">
                 함께 만들어가는 To do list
@@ -38,7 +34,7 @@ export default function Tablet() {
         <div className="h-[790px] bg-state-50 pl-[31px]">
           <div className="h-[249px]">
             <div className="flex flex-col gap-3 pt-[73px] pb-[19px] pl-[31px]">
-              <FolderIc aria-label="네잎클로버" />
+              <Icon name="folder" size="medium" />
               <p className="text-2xl-b text-brand-primary">
                 칸반보드로 함께
                 <br /> 할 일 목록을 관리해요
@@ -58,7 +54,7 @@ export default function Tablet() {
         <div className="h-[680px] overflow-hidden bg-brand-primary pl-[45px]">
           <div className="h-[248px]">
             <div className="flex flex-col gap-3 pt-[49px] pb-[41px] pl-[26px]">
-              <CheckIc aria-label="체크" />
+              <Icon name="doneShadow" size="medium" />
               <p className="text-2xl-b text-text-inverse">
                 세부적으로 할 일들을
                 <br /> 간편하게 체크해요
@@ -79,7 +75,7 @@ export default function Tablet() {
         <div className="h-[790px] overflow-hidden bg-state-50 pl-[66px]">
           <div className="h-[333px]">
             <div className="flex flex-col gap-3 pt-24 pb-[79px] pl-[5px]">
-              <ListIc aria-label="리스트" />
+              <Icon name="commentShadow" size="medium" />
               <p className="text-2xl-b text-brand-primary">
                 할 일 공유를 넘어
                 <br /> 의견을 나누고 함께 결정해요
