@@ -31,7 +31,7 @@ export default function Sheet({
             </div>
           </div>
           <div className="mt-6 mb-8">{content}</div>
-          <div className="">{action}</div>
+          <div>{action}</div>
         </div>
       </div>
     </Modal>
