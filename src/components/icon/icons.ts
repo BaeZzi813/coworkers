@@ -216,7 +216,7 @@ const Icons: Record<
   },
   union: {
     large: UnionIcon48,
-    medium: UnionIcon36,
+    small: UnionIcon36,
   },
   folder: {
     large: FolderIcon48,

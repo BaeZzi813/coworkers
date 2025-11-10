@@ -66,7 +66,7 @@ export function Icon() {
       <IconComponent name="xmark" size="medium" />
       <IconComponent name="xmark" size="small" />
       <IconComponent name="union" size="large" />
-      <IconComponent name="union" size="medium" />
+      <IconComponent name="union" size="small" />
       <IconComponent name="folder" size="large" />
       <IconComponent name="folder" size="medium" />
       <IconComponent name="folder" size="small" />

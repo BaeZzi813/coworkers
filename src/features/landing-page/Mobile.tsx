@@ -6,16 +6,15 @@ import { Button } from "@/components/button";
 import Icon from "@/components/icon";
 
 import Image from "next/image";
-import Link from "next/link";
 
 export default function Mobile() {
   return (
     <>
       <section className="mb-[30px]">
-        <div className="relative h-[730px] bg-background-secondary">
-          <div className="h-36">
+        <div className="relative min-h-[730px] bg-background-secondary">
+          <div className="min-h-36">
             <div className="absolute top-9 left-5">
-              <Icon name="union" size="medium" />
+              <Icon name="union" size="small" />
             </div>
             <div className="pt-[70px] pb-[19px] pl-[39px]">
               <p className="text-md-m text-state-400">
@@ -27,16 +26,21 @@ export default function Mobile() {
             </div>
           </div>
           <div className="relative h-[586px]">
-            <Image src={landing1small} alt="랜딩이미지1 모바일" fill />
+            <Image
+              src={landing1small}
+              alt="랜딩이미지1 모바일"
+              fill
+              className="object-contain object-right"
+            />
           </div>
-          <Link href="/" className="absolute right-10 bottom-13 w-40">
+          <div className="absolute right-10 bottom-13 w-40">
             <Button title="지금 시작하기" />
-          </Link>
+          </div>
         </div>
       </section>
       <section>
-        <div className="h-[494px] bg-state-50 pl-[35px]">
-          <div className="h-[181px]">
+        <div className="min-h-[494px] bg-state-50 pl-[35px]">
+          <div className="min-h-[181px]">
             <div className="flex flex-col gap-3 pt-[43px] pb-[19px]">
               <Icon name="folder" size="small" />
               <p className="text-lg-b text-brand-primary">
@@ -50,13 +54,18 @@ export default function Mobile() {
             </div>
           </div>
           <div className="relative h-[269px] pb-11">
-            <Image src={landing2small} alt="랜딩이미지2 모바일" fill />
+            <Image
+              src={landing2small}
+              alt="랜딩이미지2 모바일"
+              fill
+              className="object-contain object-right"
+            />
           </div>
         </div>
       </section>
       <section>
-        <div className="h-[494px] overflow-hidden bg-brand-primary pl-[18px]">
-          <div className="h-[186px]">
+        <div className="min-h-[494px] overflow-hidden bg-brand-primary pl-[18px]">
+          <div className="min-h-[186px]">
             <div className="flex flex-col gap-3 pt-[43px] pb-[29px] pl-[17px]">
               <Icon name="doneShadow" size="small" />
               <p className="text-[16px] font-bold text-text-inverse">
@@ -70,13 +79,18 @@ export default function Mobile() {
             </div>
           </div>
           <div className="relative h-[331px]">
-            <Image src={landing3small} alt="랜딩이미지3 모바일" fill />
+            <Image
+              src={landing3small}
+              alt="랜딩이미지3 모바일"
+              fill
+              className="object-contain object-bottom-right"
+            />
           </div>
         </div>
       </section>
       <section>
-        <div className="h-[494px] overflow-hidden bg-state-50 pl-[18px]">
-          <div className="h-[207px]">
+        <div className="min-h-[494px] overflow-hidden bg-state-50 pl-[18px]">
+          <div className="min-h-[207px]">
             <div className="flex flex-col gap-3 pt-[43px] pb-[50px] pl-[17px]">
               <Icon name="commentShadow" size="small" />
               <p className="text-lg-b text-brand-primary">
@@ -89,8 +103,13 @@ export default function Mobile() {
               </p>
             </div>
           </div>
-          <div className="relative h-[287px] w-[390px]">
-            <Image src={landing4small} alt="랜딩이미지4 모바일" fill />
+          <div className="relative mx-auto h-[287px] w-[340px]">
+            <Image
+              src={landing4small}
+              alt="랜딩이미지4 모바일"
+              fill
+              className="object-contain"
+            />
           </div>
         </div>
       </section>
@@ -104,9 +123,9 @@ export default function Mobile() {
               팀원 모두와 같은 방향, 같은 속도로 나아가는 가장 쉬운 방법
             </p>
           </div>
-          <Link href="/" className="w-40">
+          <div className="w-40">
             <Button title="지금 시작하기" />
-          </Link>
+          </div>
         </div>
       </div>
     </>

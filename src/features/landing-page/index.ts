@@ -1,3 +1,3 @@
-export { default as Desktop } from "./Desktop";
-export { default as Mobile } from "./Mobile";
-export { default as Tablet } from "./Tablet";
+export { default as DesktopLanding } from "./Desktop";
+export { default as MobileLanding } from "./Mobile";
+export { default as TabletLanding } from "./Tablet";

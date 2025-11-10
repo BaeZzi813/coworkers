@@ -6,14 +6,13 @@ import { Button } from "@/components/button";
 import Icon from "@/components/icon";
 
 import Image from "next/image";
-import Link from "next/link";
 
 export default function Desktop() {
   return (
     <>
       <section>
-        <div className="flex h-[1080px] bg-background-secondary">
-          <div className="relative h-[1080px] w-[518px]">
+        <div className="flex min-h-[1080px] bg-background-secondary">
+          <div className="relative w-auto min-w-[518px]">
             <div className="absolute top-52 left-[76px]">
               <Icon name="union" size="large" />
             </div>
@@ -25,22 +24,23 @@ export default function Desktop() {
                 Coworkers
               </p>
             </div>
-            <Link
-              href="/"
-              className="absolute bottom-[228px] left-[106px] w-40"
-            >
+            <div className="absolute bottom-[228px] left-[106px] w-40">
               <Button title="지금 시작하기" />
-            </Link>
+            </div>
           </div>
-          <div className="relative h-[1080px] w-[1330px]">
-            <Image src={landing1large} alt="랜딩이미지1 모바일" fill />
+          <div className="relative w-[1330px]">
+            <Image
+              src={landing1large}
+              alt="랜딩이미지1 데스크탑"
+              fill
+              className="object-cover"
+            />
           </div>
         </div>
       </section>
-
       <section>
-        <div className="flex h-[800px] bg-state-50">
-          <div className="h-[202px] w-[563px] pt-48 pl-[180px]">
+        <div className="flex min-h-[800px] bg-state-50">
+          <div className="h-[202px] w-auto min-w-[563px] pt-48 pl-[180px]">
             <div className="flex flex-col gap-3">
               <Icon name="folder" size="large" />
               <p className="text-3xl-b text-brand-primary">
@@ -54,17 +54,18 @@ export default function Desktop() {
             </div>
           </div>
           <div className="relative mt-[114px] h-[600px] w-5xl">
-            <Image src={landing2large} alt="랜딩이미지2 모바일" fill />
+            <Image
+              src={landing2large}
+              alt="랜딩이미지2 데스크탑"
+              fill
+              className="object-cover"
+            />
           </div>
         </div>
       </section>
-
       <section>
-        <div className="flex h-[750px] overflow-hidden bg-brand-primary">
-          <div className="relative mt-[83px] ml-[165px] h-[667px] w-[982px]">
-            <Image src={landing3large} alt="랜딩이미지3 모바일" fill />
-          </div>
-          <div className="h-[202px] w-[702px] pt-[266px] pl-[117px]">
+        <div className="flex min-h-[750px] flex-row-reverse overflow-hidden bg-brand-primary">
+          <div className="h-[202px] w-auto min-w-[702px] pt-[266px] pl-[117px]">
             <div className="flex flex-col gap-3 pt-[49px] pb-[41px] pl-[26px]">
               <Icon name="doneShadow" size="large" />
               <p className="text-3xl-b text-text-inverse">
@@ -77,12 +78,19 @@ export default function Desktop() {
               </p>
             </div>
           </div>
+          <div className="relative mt-[83px] w-[982px]">
+            <Image
+              src={landing3large}
+              alt="랜딩이미지3 데스크탑"
+              fill
+              className="object-cover"
+            />
+          </div>
         </div>
       </section>
-
       <section>
-        <div className="flex h-[800px] overflow-hidden bg-state-50">
-          <div className="h-[800px] w-[705px]">
+        <div className="flex min-h-[800px] overflow-hidden bg-state-50">
+          <div className="h-[800px] w-auto min-w-[705px]">
             <div className="mt-48 ml-[180px] flex h-[202px] flex-col gap-3">
               <Icon name="commentShadow" size="large" />
               <p className="text-3xl-b text-brand-primary">
@@ -96,11 +104,15 @@ export default function Desktop() {
             </div>
           </div>
           <div className="relative h-[800px] w-[940px]">
-            <Image src={landing4large} alt="랜딩이미지4 모바일" fill />
+            <Image
+              src={landing4large}
+              alt="랜딩이미지4 데스크탑"
+              fill
+              className="object-cover"
+            />
           </div>
         </div>
       </section>
-
       <div className="flex h-[328px] flex-col items-center">
         <div className="mt-[76px] mb-28 flex h-[119px] flex-col items-center gap-7">
           <div className="flex flex-col items-center justify-center gap-3">
@@ -111,9 +123,9 @@ export default function Desktop() {
               팀원 모두와 같은 방향, 같은 속도로 나아가는 가장 쉬운 방법
             </p>
           </div>
-          <Link href="/" className="w-40">
+          <div className="w-40">
             <Button title="지금 시작하기" />
-          </Link>
+          </div>
         </div>
       </div>
     </>

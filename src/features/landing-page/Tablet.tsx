@@ -6,16 +6,15 @@ import { Button } from "@/components/button";
 import Icon from "@/components/icon";
 
 import Image from "next/image";
-import Link from "next/link";
 
 export default function Tablet() {
   return (
     <>
       <section>
-        <div className="relative h-[960px] bg-background-secondary">
-          <div className="h-[211px]">
+        <div className="relative min-h-[960px] bg-background-secondary">
+          <div className="min-h-[211px]">
             <div className="absolute top-24 left-[37px]">
-              <Icon name="union" size="medium" />
+              <Icon name="union" size="small" />
             </div>
             <div className="pt-[131px] pb-[18px] pl-[60px]">
               <p className="text-lg-m text-state-400">
@@ -27,16 +26,21 @@ export default function Tablet() {
             </div>
           </div>
           <div className="relative h-[749px]">
-            <Image src={landing1medium} alt="랜딩이미지1 모바일" fill />
+            <Image
+              src={landing1medium}
+              alt="랜딩이미지1 태블릿"
+              fill
+              className="object-contain object-right"
+            />
           </div>
-          <Link href="/" className="absolute right-10 bottom-13 w-40">
+          <div className="absolute right-10 bottom-13 w-40">
             <Button title="지금 시작하기" />
-          </Link>
+          </div>
         </div>
       </section>
       <section>
-        <div className="h-[790px] bg-state-50 pl-[31px]">
-          <div className="h-[249px]">
+        <div className="min-h-[790px] bg-state-50 pl-[31px]">
+          <div className="min-h-[249px]">
             <div className="flex flex-col gap-3 pt-[73px] pb-[19px] pl-[31px]">
               <Icon name="folder" size="medium" />
               <p className="text-2xl-b text-brand-primary">
@@ -50,13 +54,18 @@ export default function Tablet() {
             </div>
           </div>
           <div className="relative h-[460px] pb-11">
-            <Image src={landing2medium} alt="랜딩이미지2 모바일" fill />
+            <Image
+              src={landing2medium}
+              alt="랜딩이미지2 태블릿"
+              fill
+              className="object-contain object-right"
+            />
           </div>
         </div>
       </section>
       <section>
-        <div className="h-[680px] overflow-hidden bg-brand-primary pl-[45px]">
-          <div className="h-[248px]">
+        <div className="min-h-[680px] overflow-hidden bg-brand-primary pl-[45px]">
+          <div className="min-h-[248px]">
             <div className="flex flex-col gap-3 pt-[49px] pb-[41px] pl-[26px]">
               <Icon name="doneShadow" size="medium" />
               <p className="text-2xl-b text-text-inverse">
@@ -70,11 +79,15 @@ export default function Tablet() {
             </div>
           </div>
           <div className="relative h-[432px]">
-            <Image src={landing3medium} alt="랜딩이미지3 모바일" fill />
+            <Image
+              src={landing3medium}
+              alt="랜딩이미지3 태블릿"
+              fill
+              className="object-contain object-right"
+            />
           </div>
         </div>
       </section>
-
       <section>
         <div className="h-[790px] overflow-hidden bg-state-50 pl-[66px]">
           <div className="h-[333px]">
@@ -91,11 +104,15 @@ export default function Tablet() {
             </div>
           </div>
           <div className="relative mx-auto h-[457px] w-[540px]">
-            <Image src={landing4medium} alt="랜딩이미지4 모바일" fill />
+            <Image
+              src={landing4medium}
+              alt="랜딩이미지4 태블릿"
+              fill
+              className="object-contain"
+            />
           </div>
         </div>
       </section>
-
       <div className="flex h-[328px] flex-col items-center">
         <div className="mt-[76px] mb-28 flex h-[119px] flex-col items-center gap-7">
           <div className="flex flex-col items-center justify-center gap-3">
@@ -106,9 +123,9 @@ export default function Tablet() {
               팀원 모두와 같은 방향, 같은 속도로 나아가는 가장 쉬운 방법
             </p>
           </div>
-          <Link href="/" className="w-40">
+          <div className="w-40">
             <Button title="지금 시작하기" />
-          </Link>
+          </div>
         </div>
       </div>
     </>
