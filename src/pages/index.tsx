@@ -23,12 +23,10 @@ export default function Home() {
   }
 
   return (
-    <>
-      <div className="mx-auto h-lvh max-w-[1920px]">
-        {isMobile && <MobileLanding />}
-        {isTablet && <TabletLanding />}
-        {isDesktop && <DesktopLanding />}
-      </div>
-    </>
+    <div className="mx-auto h-lvh max-w-[1920px]">
+      {isMobile && <MobileLanding />}
+      {isTablet && <TabletLanding />}
+      {isDesktop && <DesktopLanding />}
+    </div>
   );
 }
