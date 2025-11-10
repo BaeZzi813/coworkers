@@ -2,9 +2,11 @@ import landing1medium from "@/assets/images/landing-1-medium.png";
 import landing2medium from "@/assets/images/landing-2-medium.png";
 import landing3medium from "@/assets/images/landing-3-medium.png";
 import landing4medium from "@/assets/images/landing-4-medium.png";
+import { Button } from "@/components/button";
 import Icon from "@/components/icon";
 
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Tablet() {
   return (
@@ -27,7 +29,9 @@ export default function Tablet() {
           <div className="relative h-[749px]">
             <Image src={landing1medium} alt="랜딩이미지1 모바일" fill />
           </div>
-          <button className="absolute right-10 bottom-13">지금 시작하기</button>
+          <Link href="/" className="absolute right-10 bottom-13 w-40">
+            <Button title="지금 시작하기" />
+          </Link>
         </div>
       </section>
       <section>
@@ -102,7 +106,9 @@ export default function Tablet() {
               팀원 모두와 같은 방향, 같은 속도로 나아가는 가장 쉬운 방법
             </p>
           </div>
-          <button>지금 시작하기</button>
+          <Link href="/" className="w-40">
+            <Button title="지금 시작하기" />
+          </Link>
         </div>
       </div>
     </>

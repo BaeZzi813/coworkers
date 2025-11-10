@@ -2,9 +2,11 @@ import landing1large from "@/assets/images/landing-1-large.png";
 import landing2large from "@/assets/images/landing-2-large.png";
 import landing3large from "@/assets/images/landing-3-large.png";
 import landing4large from "@/assets/images/landing-4-large.png";
+import { Button } from "@/components/button";
 import Icon from "@/components/icon";
 
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Desktop() {
   return (
@@ -23,9 +25,12 @@ export default function Desktop() {
                 Coworkers
               </p>
             </div>
-            <button className="absolute bottom-[228px] left-[106px]">
-              지금 시작하기
-            </button>
+            <Link
+              href="/"
+              className="absolute bottom-[228px] left-[106px] w-40"
+            >
+              <Button title="지금 시작하기" />
+            </Link>
           </div>
           <div className="relative h-[1080px] w-[1330px]">
             <Image src={landing1large} alt="랜딩이미지1 모바일" fill />
@@ -106,7 +111,9 @@ export default function Desktop() {
               팀원 모두와 같은 방향, 같은 속도로 나아가는 가장 쉬운 방법
             </p>
           </div>
-          <button>지금 시작하기</button>
+          <Link href="/" className="w-40">
+            <Button title="지금 시작하기" />
+          </Link>
         </div>
       </div>
     </>

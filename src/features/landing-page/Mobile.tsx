@@ -2,9 +2,11 @@ import landing1small from "@/assets/images/landing-1-small.png";
 import landing2small from "@/assets/images/landing-2-small.png";
 import landing3small from "@/assets/images/landing-3-small.png";
 import landing4small from "@/assets/images/landing-4-small.png";
+import { Button } from "@/components/button";
 import Icon from "@/components/icon";
 
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Mobile() {
   return (
@@ -27,7 +29,9 @@ export default function Mobile() {
           <div className="relative h-[586px]">
             <Image src={landing1small} alt="랜딩이미지1 모바일" fill />
           </div>
-          <button className="absolute right-10 bottom-13">지금 시작하기</button>
+          <Link href="/" className="absolute right-10 bottom-13 w-40">
+            <Button title="지금 시작하기" />
+          </Link>
         </div>
       </section>
       <section>
@@ -100,7 +104,9 @@ export default function Mobile() {
               팀원 모두와 같은 방향, 같은 속도로 나아가는 가장 쉬운 방법
             </p>
           </div>
-          <button>지금 시작하기</button>
+          <Link href="/" className="w-40">
+            <Button title="지금 시작하기" />
+          </Link>
         </div>
       </div>
     </>
