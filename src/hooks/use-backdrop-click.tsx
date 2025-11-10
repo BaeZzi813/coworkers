@@ -19,9 +19,9 @@ export function useBackdropClick<Element extends HTMLElement>({
       }
     }
 
-    document.addEventListener("mouseup", handleMouseUp);
+    document.addEventListener("click", handleMouseUp);
     return () => {
-      document.removeEventListener("mouseup", handleMouseUp);
+      document.removeEventListener("click", handleMouseUp);
     };
   }, [targetRef, callback]);
 
