@@ -26,11 +26,9 @@ export default function Sheet({
         <div className="flex flex-col">
           <div className="flex flex-col items-center gap-4">
             <div className="text-lg-m">{title}</div>
-            {message && (
-              <div className="text-md-m text-center whitespace-pre-wrap text-text-default">
-                {message}
-              </div>
-            )}
+            <div className="text-md-m text-center whitespace-pre-wrap text-text-default">
+              {message}
+            </div>
           </div>
           <div className="mt-6 mb-8">{content}</div>
           <div className="">{action}</div>
