@@ -1,3 +1,6 @@
+import { useResponsive } from "@/hooks/use-responsive";
+import clsx from "clsx";
+import { motion } from "motion/react";
 import { PropsWithChildren, ReactNode } from "react";
 import Modal from "./Modal";
 
@@ -20,9 +23,21 @@ export default function Sheet({
   content,
   action,
 }: Props) {
+  const { isMobile } = useResponsive();
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} onExit={onExit}>
-      <div className="w-[384px] rounded-3xl bg-background-primary px-6 pt-8 pb-8">
+      <motion.div
+        className={clsx(
+          "bg-background-primary px-6 pt-8 pb-8",
+          isMobile && "rounded-t-3xl",
+          isMobile || "w-[384px] rounded-3xl"
+        )}
+        initial={{ y: isMobile ? "100%" : 0 }}
+        animate={{ y: 0 }}
+        exit={{ y: isMobile ? "100%" : 0 }}
+        transition={{ damping: 0, duration: 0.25 }}
+      >
         <div className="flex flex-col">
           <div className="flex flex-col items-center gap-4">
             <div className="text-lg-m">{title}</div>
@@ -33,7 +48,7 @@ export default function Sheet({
           <div className="mt-6 mb-8">{content}</div>
           <div>{action}</div>
         </div>
-      </div>
+      </motion.div>
     </Modal>
   );
 }

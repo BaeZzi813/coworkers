@@ -1,4 +1,7 @@
 import Icon from "@/components/icon";
+import { useResponsive } from "@/hooks/use-responsive";
+import clsx from "clsx";
+import { motion } from "motion/react";
 import { ReactNode } from "react";
 import Modal from "./Modal";
 
@@ -23,9 +26,21 @@ export default function Alert({
   content,
   actions = [],
 }: Props) {
+  const { isMobile } = useResponsive();
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} onExit={onExit}>
-      <div className="w-[384px] rounded-3xl bg-background-primary px-4 pt-4 pb-8">
+      <motion.div
+        className={clsx(
+          "bg-background-primary px-4 pt-4 pb-8",
+          isMobile && "rounded-t-3xl",
+          isMobile || "w-[384px] rounded-3xl"
+        )}
+        initial={{ y: isMobile ? "100%" : 0 }}
+        animate={{ y: 0 }}
+        exit={{ y: isMobile ? "100%" : 0 }}
+        transition={{ damping: 0, duration: 0.25 }}
+      >
         <div className="flex h-6 justify-end">
           {onClose && (
             <button className="cursor-pointer" onClick={onClose}>
@@ -48,7 +63,7 @@ export default function Alert({
             {actions.map((action) => action)}
           </div>
         </div>
-      </div>
+      </motion.div>
     </Modal>
   );
 }
