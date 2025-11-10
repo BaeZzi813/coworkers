@@ -4,6 +4,8 @@
 @theme {
   --font-sans: "Pretendard", ui-sans-serif, system-ui, sans-serif;
 
+  --z-overlay: 9999;
+
   /* brand */
   --color-brand-primary: #5189fa;
   --color-brand-primary-hover: var(--color-interaction-hover);

@@ -63,7 +63,7 @@ export default function Dropdown({
             "border border-border-primary",
             "overflow-hidden",
             "bg-background-primary",
-            "z-9999"
+            "z-(--z-overlay)"
           )}
           style={alignmentStyles}
         >
