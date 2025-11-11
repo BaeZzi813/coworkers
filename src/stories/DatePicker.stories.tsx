@@ -1,7 +1,4 @@
-import {
-  DatePicker,
-  DateRangePicker,
-} from "@/features/tasklist/components/date-picker";
+import { DatePicker, DateRangePicker } from "@/features/date-picker";
 import type { Meta } from "@storybook/nextjs";
 import { endOfWeek, startOfWeek } from "date-fns";
 import { useState } from "react";
