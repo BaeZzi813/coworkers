@@ -4,14 +4,13 @@ import landing3large from "@/assets/images/landing-3-large.png";
 import landing4large from "@/assets/images/landing-4-large.png";
 import { Button } from "@/components/button";
 import Icon from "@/components/icon";
-
 import Image from "next/image";
 
-export default function Desktop() {
+export default function DesktopLanding() {
   return (
     <>
-      <section>
-        <div className="flex min-h-[1080px] bg-background-secondary">
+      <section className="w-full bg-background-secondary">
+        <div className="mx-auto flex min-h-[1080px] max-w-[1920px]">
           <div className="relative w-auto min-w-[518px]">
             <div className="absolute top-52 left-[76px]">
               <Icon name="union" size="large" />
@@ -33,13 +32,13 @@ export default function Desktop() {
               src={landing1large}
               alt="랜딩이미지1 데스크탑"
               fill
-              className="object-cover"
+              className="object-cover object-left"
             />
           </div>
         </div>
       </section>
-      <section>
-        <div className="flex min-h-[800px] bg-state-50">
+      <section className="w-full bg-state-50">
+        <div className="mx-auto flex min-h-[800px] max-w-[1920px]">
           <div className="h-[202px] w-auto min-w-[563px] pt-48 pl-[180px]">
             <div className="flex flex-col gap-3">
               <Icon name="folder" size="large" />
@@ -58,13 +57,13 @@ export default function Desktop() {
               src={landing2large}
               alt="랜딩이미지2 데스크탑"
               fill
-              className="object-cover"
+              className="object-cover object-left"
             />
           </div>
         </div>
       </section>
-      <section>
-        <div className="flex min-h-[750px] flex-row-reverse overflow-hidden bg-brand-primary">
+      <section className="w-full bg-brand-primary">
+        <div className="mx-auto flex min-h-[750px] max-w-[1920px] flex-row-reverse overflow-hidden">
           <div className="h-[202px] w-auto min-w-[702px] pt-[266px] pl-[117px]">
             <div className="flex flex-col gap-3 pt-[49px] pb-[41px] pl-[26px]">
               <Icon name="doneShadow" size="large" />
@@ -83,13 +82,13 @@ export default function Desktop() {
               src={landing3large}
               alt="랜딩이미지3 데스크탑"
               fill
-              className="object-cover"
+              className="object-cover object-right"
             />
           </div>
         </div>
       </section>
-      <section>
-        <div className="flex min-h-[800px] overflow-hidden bg-state-50">
+      <section className="w-full bg-state-50">
+        <div className="mx-auto flex min-h-[800px] max-w-[1920px] overflow-hidden">
           <div className="h-[800px] w-auto min-w-[705px]">
             <div className="mt-48 ml-[180px] flex h-[202px] flex-col gap-3">
               <Icon name="commentShadow" size="large" />
@@ -108,7 +107,7 @@ export default function Desktop() {
               src={landing4large}
               alt="랜딩이미지4 데스크탑"
               fill
-              className="object-cover"
+              className="object-cover object-left"
             />
           </div>
         </div>

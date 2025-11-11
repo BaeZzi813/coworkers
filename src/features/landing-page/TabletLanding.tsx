@@ -4,10 +4,9 @@ import landing3medium from "@/assets/images/landing-3-medium.png";
 import landing4medium from "@/assets/images/landing-4-medium.png";
 import { Button } from "@/components/button";
 import Icon from "@/components/icon";
-
 import Image from "next/image";
 
-export default function Tablet() {
+export default function TabletLanding() {
   return (
     <>
       <section>

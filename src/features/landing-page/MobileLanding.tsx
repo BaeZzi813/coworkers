@@ -4,10 +4,9 @@ import landing3small from "@/assets/images/landing-3-small.png";
 import landing4small from "@/assets/images/landing-4-small.png";
 import { Button } from "@/components/button";
 import Icon from "@/components/icon";
-
 import Image from "next/image";
 
-export default function Mobile() {
+export default function MobileLanding() {
   return (
     <>
       <section className="mb-[30px]">
