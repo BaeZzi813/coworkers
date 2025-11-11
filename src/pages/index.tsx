@@ -15,8 +15,8 @@ export default function Home() {
   }, []);
 
   const isMobile = useMediaQuery({ maxWidth: 744 });
-  const isTablet = useMediaQuery({ minWidth: 745, maxWidth: 1199 });
-  const isDesktop = useMediaQuery({ minWidth: 1200 });
+  const isTablet = useMediaQuery({ minWidth: 745, maxWidth: 1023 });
+  const isDesktop = useMediaQuery({ minWidth: 1024 });
 
   if (!mounted) {
     return null;
