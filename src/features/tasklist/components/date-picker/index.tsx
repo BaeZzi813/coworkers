@@ -2,6 +2,7 @@ import clsx from "clsx";
 import { ko } from "date-fns/locale";
 import { DayPicker, getDefaultClassNames } from "react-day-picker";
 import "react-day-picker/style.css";
+import DatePickerChevron from "./DatePickerChevron";
 
 interface DatePickerProps {
   selected?: Date;
@@ -29,6 +30,7 @@ export default function DatePicker({
         selected={selected}
         onSelect={onSelect}
         showOutsideDays
+        components={{ Chevron: DatePickerChevron }}
         style={
           {
             "--rdp-accent-color": "var(--color-brand-primary)",
