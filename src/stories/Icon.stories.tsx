@@ -61,6 +61,8 @@ export function Icon() {
       <IconComponent name="repeat" size="small" />
       <IconComponent name="secession" />
       <IconComponent name="thumbup" />
+      <IconComponent name="triangleDown" size="large" />
+      <IconComponent name="triangleDown" size="small" />
       <IconComponent name="visible" />
       <IconComponent name="xmark" size="large" />
       <IconComponent name="xmark" size="medium" />

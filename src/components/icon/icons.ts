@@ -56,6 +56,8 @@ import SecessionIcon from "@/assets/icons/ic-secession.svg";
 import ThumbupIcon from "@/assets/icons/ic-thumbup.svg";
 import UnionIcon36 from "@/assets/icons/ic-union-36.svg";
 import UnionIcon48 from "@/assets/icons/ic-union-48.svg";
+import TriangleDownIcon20 from "@/assets/icons/ic-triangle-down-20.svg";
+import TriangleDownIcon24 from "@/assets/icons/ic-triangle-down-24.svg";
 import VisibleIcon from "@/assets/icons/ic-visible.svg";
 import XmarkIcon12 from "@/assets/icons/ic-xmark-12.svg";
 import XmarkIcon18 from "@/assets/icons/ic-xmark-18.svg";
@@ -92,6 +94,7 @@ export type IconName =
   | "repeat"
   | "secession"
   | "thumbup"
+  | "triangleDown"
   | "visible"
   | "xmark"
   | "union"
@@ -205,6 +208,10 @@ const Icons: Record<
   },
   thumbup: {
     large: ThumbupIcon,
+  },
+  triangleDown: {
+    large: TriangleDownIcon24,
+    small: TriangleDownIcon20,
   },
   visible: {
     large: VisibleIcon,
