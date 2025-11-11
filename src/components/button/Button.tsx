@@ -91,6 +91,16 @@ function sizes({
   }
 }
 
+const iconColor: Record<Variant, string> = {
+  primary: clsx("stroke-icon-inverse", "fill-icon-inverse"),
+  outlinedPrimary: clsx(
+    "stroke-icon-brand hover:stroke-brand-primary-hover active:stroke-brand-primary-pressed disabled:stroke-interaction-inactive",
+    "fill-icon-brand hover:fill-brand-primary-hover active:fill-brand-primary-pressed disabled:fill-interaction-inactive"
+  ),
+  outlinedSecondary: clsx("stroke-icon-primary", "fill-icon-primary"),
+  danger: clsx("stroke-icon-inverse", "fill-icon-inverse"),
+};
+
 export default function Button({
   title,
   iconName,
@@ -109,7 +119,8 @@ export default function Button({
         backgrounds[variant],
         borders(variant, size, rounded),
         sizes({ size, isFullWidth }),
-        fonts(variant, size)
+        fonts(variant, size),
+        iconColor[variant]
       )}
       disabled={disabled}
       onClick={onClick}
