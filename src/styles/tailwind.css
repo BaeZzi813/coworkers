@@ -65,6 +65,9 @@
   --color-state-200: #e2e8f0;
   --color-state-300: #cbd5e1;
   --color-state-400: #94a3b8;
+
+  /* other colors */
+  --color-blue-50: #eef3ff;
 }
 
 @utility bg-brand-gradient {
