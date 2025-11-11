@@ -1,11 +1,16 @@
 import LogoFull from "@/assets/images/logo-full.svg";
 import Logo from "@/assets/images/logo.svg";
 import Icon from "@/components/icon";
+import { getUserGroups } from "@/features/group/apis";
+import { useQuery } from "@tanstack/react-query";
 import clsx from "clsx";
 import { motion } from "motion/react";
+import Link from "next/link";
 import { useState } from "react";
 import Avatar from "../avatar";
-import NavigationLink from "./NavigationLink";
+import { Button } from "../button";
+import SidebarMenu from "./SidebarMenu";
+import UserGroupList from "./UserGroupList";
 
 function sidebarWidth(isFolded: boolean) {
   return isFolded ? 72 : 270;
@@ -35,28 +40,7 @@ export default function Sidebar() {
         <LogoImage isFolded={isFolded} />
         <FoldButton isFolded={isFolded} onClick={handleFoldClick} />
       </header>
-      <div
-        className={clsx(
-          "flex grow flex-col py-6",
-          isFolded ? "items-center" : "px-4"
-        )}
-      >
-        {/* TODO: 로그아웃 상태에서 숨김 필요 */}
-        <NavigationLink
-          href="/boards"
-          iconName="board"
-          title="자유게시판"
-          compact={isFolded}
-          active={true}
-        />
-        <NavigationLink
-          href="/boards"
-          iconName="board"
-          title="자유게시판"
-          compact={isFolded}
-          active={false}
-        />
-      </div>
+      <Content isFolded={isFolded} />
       <footer className={clsx("pb-6", isFolded || "px-4")}>
         <div className="border-t border-border-primary pt-5">
           {/* TODO: 로그아웃 상태에서는 info에 undefined/null이 전달되어 '로그인'으로 표시 */}
@@ -96,6 +80,51 @@ function FoldButton({
       />
     </button>
   );
+}
+
+function Content({ isFolded }: { isFolded: boolean }) {
+  const { data: groups } = useQuery({
+    queryKey: ["user", "groups"],
+    queryFn: getUserGroups,
+  });
+
+  return (
+    <div
+      className={clsx(
+        "flex grow flex-col py-6",
+        isFolded ? "items-center" : "px-4"
+      )}
+    >
+      {groups && (
+        <div className="flex flex-col gap-2">
+          <UserGroupList groups={groups} compact={isFolded} />
+          {isFolded || (
+            <div className="">
+              <Button
+                variant="outlinedPrimary"
+                title="팀 추가하기"
+                iconName="plus"
+                size="small"
+              />
+              <Separator />
+            </div>
+          )}
+        </div>
+      )}
+      <Link href="/boards">
+        <SidebarMenu
+          iconName="board"
+          title="자유게시판"
+          compact={isFolded}
+          active={false}
+        />
+      </Link>
+    </div>
+  );
+}
+
+function Separator() {
+  return <div className="mt-6 mb-3 h-px w-full bg-border-primary" />;
 }
 
 function Profile({
