@@ -128,10 +128,10 @@ export default function Button({
       <div className="flex items-center gap-2">
         {iconName && (
           <div className="size-4">
-            <Icon name={iconName} />
+            <Icon name={iconName} size="small" />
           </div>
         )}
-        <div className="flex items-center justify-center gap-1">{title}</div>
+        <span className="whitespace-nowrap">{title}</span>
       </div>
     </button>
   );
