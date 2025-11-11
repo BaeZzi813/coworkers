@@ -1,7 +1,7 @@
 export const BREAKPOINT = {
   mobile: 375,
   tablet: 745,
-  desktop: 1200,
+  desktop: 1024,
 } as const;
 
 export const BREAKPOINT_QUERY_STRING = {
