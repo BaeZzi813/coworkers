@@ -4,6 +4,8 @@
 @theme {
   --font-sans: "Pretendard", ui-sans-serif, system-ui, sans-serif;
 
+  --z-overlay: 9999;
+  
   /* Breakpoints */
   --breakpoint-mobile: 375px;
   --breakpoint-tablet: 745px;
