@@ -6,6 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import clsx from "clsx";
 import { motion } from "motion/react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import Avatar from "../avatar";
 import { Button } from "../button";
@@ -83,6 +84,8 @@ function FoldButton({
 }
 
 function Content({ isFolded }: { isFolded: boolean }) {
+  const router = useRouter();
+
   const { data: groups } = useQuery({
     queryKey: ["user", "groups"],
     queryFn: getUserGroups,
@@ -97,7 +100,11 @@ function Content({ isFolded }: { isFolded: boolean }) {
     >
       {groups && (
         <div className="flex flex-col gap-2">
-          <UserGroupList groups={groups} compact={isFolded} />
+          <UserGroupList
+            groups={groups}
+            compact={isFolded}
+            activeGroupId={Number(router.query.teamId)}
+          />
           {isFolded || (
             <div className="">
               <Button
@@ -116,7 +123,7 @@ function Content({ isFolded }: { isFolded: boolean }) {
           iconName="board"
           title="자유게시판"
           compact={isFolded}
-          active={false}
+          active={router.pathname === "/boards"}
         />
       </Link>
     </div>
