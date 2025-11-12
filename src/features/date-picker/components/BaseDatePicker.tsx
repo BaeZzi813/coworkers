@@ -21,7 +21,7 @@ export default function BaseDatePicker({
   rdpClassNames,
   className,
 }: BaseDatePickerProps) {
-  const cx = getDefaultClassNames();
+  const defaultClassNames = getDefaultClassNames();
 
   return (
     <div className={clsx("relative flex w-[250px] justify-center", className)}>
@@ -48,11 +48,14 @@ export default function BaseDatePicker({
           } as React.CSSProperties
         }
         classNames={{
-          root: clsx(cx.root, "w-full text-md-r text-text-primary"),
-          nav: clsx(cx.nav, "justify-between w-full"),
+          root: clsx(
+            defaultClassNames.root,
+            "w-full text-md-r text-text-primary"
+          ),
+          nav: clsx(defaultClassNames.nav, "justify-between w-full"),
           month_caption: "flex items-center justify-center h-[34px] text-md-m",
-          months: clsx(cx.chevron, "max-w-full w-full"),
-          month_grid: clsx(cx.month_grid, "w-full"),
+          months: clsx(defaultClassNames.chevron, "max-w-full w-full"),
+          month_grid: clsx(defaultClassNames.month_grid, "w-full"),
           weekday: "text-text-disabled text-md-m w-8 h-8 text-center",
           outside: "text-text-disabled",
           ...rdpClassNames,
