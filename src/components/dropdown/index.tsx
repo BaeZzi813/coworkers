@@ -2,9 +2,9 @@ import { useBackdropClick } from "@/hooks/use-backdrop-click";
 import clsx from "clsx";
 import { CSSProperties, ReactNode, useState } from "react";
 
-type Alignment = "left" | "right" | "fill";
+type Alignment = "top" | "bottom" | "left" | "right" | "fill";
 
-type Direction = "top" | "bottom";
+type Direction = "top" | "bottom" | "left" | "right";
 
 export interface DropdownOption {
   label: string;
@@ -21,6 +21,8 @@ interface Props {
   onSelect: (option: DropdownOption | string) => void;
 }
 
+type Edge = Pick<CSSProperties, "top" | "left" | "right" | "bottom">;
+
 function layoutStyles({
   gap,
   direction,
@@ -32,7 +34,7 @@ function layoutStyles({
   alignment: Alignment;
   alignmentOffset: number;
 }) {
-  const styles: Pick<CSSProperties, "top" | "left" | "right" | "bottom"> = {};
+  const styles: Edge = {};
 
   switch (direction) {
     case "top":
@@ -41,17 +43,40 @@ function layoutStyles({
     case "bottom":
       styles.top = `calc(100% + ${gap}px)`;
       break;
-  }
-  switch (alignment) {
     case "left":
-      styles.left = alignmentOffset;
+      styles.right = `calc(100% + ${gap}px)`;
       break;
     case "right":
-      styles.right = alignmentOffset;
+      styles.left = `calc(100% + ${gap}px)`;
+      break;
+  }
+
+  switch (alignment) {
+    case "top":
+      if (direction === "left" || direction === "right") {
+        styles.top = alignmentOffset;
+      }
+      break;
+    case "bottom":
+      if (direction === "left" || direction === "right") {
+        styles.bottom = alignmentOffset;
+      }
+      break;
+    case "left":
+      if (direction === "top" || direction === "bottom") {
+        styles.left = alignmentOffset;
+      }
+      break;
+    case "right":
+      if (direction === "top" || direction === "bottom") {
+        styles.right = alignmentOffset;
+      }
       break;
     case "fill":
-      styles.left = 0;
-      styles.right = 0;
+      if (direction === "top" || direction === "bottom") {
+        styles.left = 0;
+        styles.right = 0;
+      }
       break;
   }
 
