@@ -21,8 +21,7 @@ export default function TeamHeader({
     { label: "삭제하기", value: "delete" },
   ];
 
-  const handleSelect = (option: DropdownOption | string) => {
-    if (typeof option === "string") return;
+  const handleSelect = (option: DropdownOption) => {
     switch (option.value) {
       case "edit":
         onEdit?.();
@@ -60,7 +59,7 @@ export default function TeamHeader({
           }
           options={options}
           alignment="left"
-          onSelect={handleSelect}
+          onSelect={(option) => handleSelect(option as DropdownOption)}
         />
       )}
     </header>
