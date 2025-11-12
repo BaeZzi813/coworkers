@@ -11,10 +11,10 @@ export default function Home() {
   if (!isMobile && !isTablet && !isDesktop) return null;
 
   return (
-    <main className="min-h-screen w-full">
+    <div className="w-full">
       {isMobile && <MobileLanding />}
       {isTablet && <TabletLanding />}
       {isDesktop && <DesktopLanding />}
-    </main>
+    </div>
   );
 }
