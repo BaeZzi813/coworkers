@@ -3,6 +3,7 @@ import Logo from "@/assets/images/logo.svg";
 import { useAuthStore } from "@/stores/auth-store";
 import Icon from "../icon";
 import NavigationBarProfile from "./NavigationBarProfile";
+import ProfileMenu from "./ProfileMenu";
 
 export default function NavigationBar() {
   const loggedIn = useAuthStore((state) => state.loggedIn);
@@ -17,7 +18,7 @@ export default function NavigationBar() {
             </button>
             <Logo />
           </div>
-          <NavigationBarProfile />
+          <ProfileMenu anchor={<NavigationBarProfile />} alignment="right" />
         </div>
       ) : (
         <LogoFullSmall />

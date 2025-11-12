@@ -23,6 +23,10 @@ export default function SidebarProfile({ isFolded, userInfo }: Props) {
       <div className="flex w-full cursor-pointer justify-center">
         <ProfileMenu
           anchor={<Avatar source={userInfo.imageUrl} size="medium" />}
+          gap={16}
+          direction="right"
+          alignment="bottom"
+          alignmentOffset={16}
         />
       </div>
     );
@@ -42,7 +46,15 @@ export default function SidebarProfile({ isFolded, userInfo }: Props) {
     </div>
   );
 
-  return <ProfileMenu anchor={profile} />;
+  return (
+    <ProfileMenu
+      anchor={profile}
+      gap={16}
+      direction="right"
+      alignment="bottom"
+      alignmentOffset={16}
+    />
+  );
 }
 
 function EmptyProfile({ isFolded }: { isFolded: boolean }) {
