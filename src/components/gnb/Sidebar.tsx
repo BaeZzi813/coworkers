@@ -22,7 +22,11 @@ function sidebarWidthClassName(isFolded: boolean) {
   return isFolded ? `w-[72px]` : `w-[270px]`;
 }
 
-export default function Sidebar() {
+interface Props {
+  className?: string;
+}
+
+export default function Sidebar({ className }: Props) {
   const [isFolded, setIsFolded] = useSidebarStore(
     useShallow((state) => [state.isFold, state.toggle])
   );
@@ -35,7 +39,8 @@ export default function Sidebar() {
     <motion.nav
       className={clsx(
         "flex h-dvh shrink-0 flex-col border-r border-border-primary bg-background-primary text-text-primary",
-        sidebarWidthClassName(isFolded)
+        sidebarWidthClassName(isFolded),
+        className
       )}
       animate={{ width: sidebarWidth(isFolded) }}
       transition={{ ease: "easeInOut", duration: 0.1 }}

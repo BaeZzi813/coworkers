@@ -4,8 +4,8 @@ import { PropsWithChildren } from "react";
 export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <div className="flex">
-      <Sidebar />
-      <main className="grow overflow-x-hidden">{children}</main>
+      <Sidebar className="relative z-10" />
+      <main className="grow">{children}</main>
     </div>
   );
 }
