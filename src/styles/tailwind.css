@@ -2,9 +2,10 @@
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
 
 @theme {
+  /* custom tokens */
   --font-sans: "Pretendard", ui-sans-serif, system-ui, sans-serif;
-
   --z-overlay: 9999;
+  --shadow-card: 0px 15px 50px -12px rgba(0, 0, 0, 0.05);
 
   /* Breakpoints */
   --breakpoint-mobile: 375px;
@@ -73,90 +74,92 @@
 @utility bg-brand-gradient {
   background-image: var(--brand-gradient);
 }
+@utility shadow-card {
+  box-shadow: var(--shadow-card);
+}
 
-@layer utilities {
-  .text-4xl-m {
-    @apply text-[40px] leading-12 font-medium;
-  }
-  .text-3xl-b {
-    @apply text-[32px] leading-[38px] font-bold;
-  }
-  .text-3xl-s {
-    @apply text-[32px] leading-[38px] font-semibold;
-  }
-  .text-2xl-b {
-    @apply text-2xl leading-7 font-bold;
-  }
-  .text-2xl-s {
-    @apply text-2xl leading-7 font-semibold;
-  }
-  .text-2xl-m {
-    @apply text-2xl leading-7 font-medium;
-  }
-  .text-2xl-r {
-    @apply text-2xl leading-7 font-normal;
-  }
-  .text-xl-b {
-    @apply text-xl leading-6 font-bold;
-  }
-  .text-xl-s {
-    @apply text-xl leading-6 font-semibold;
-  }
-  .text-xl-m {
-    @apply text-xl leading-6 font-medium;
-  }
-  .text-xl-r {
-    @apply text-xl leading-6 font-normal;
-  }
-  .text-2lg-b {
-    @apply text-[18px] leading-[21px] font-bold;
-  }
-  .text-2lg-s {
-    @apply text-[18px] leading-[21px] font-semibold;
-  }
-  .text-2lg-m {
-    @apply text-[18px] leading-[21px] font-medium;
-  }
-  .text-2lg-r {
-    @apply text-[18px] leading-[21px] font-normal;
-  }
-  .text-lg-b {
-    @apply text-base leading-[19px] font-bold;
-  }
-  .text-lg-s {
-    @apply text-base leading-[19px] font-semibold;
-  }
-  .text-lg-m {
-    @apply text-base leading-[19px] font-medium;
-  }
-  .text-lg-r {
-    @apply text-base leading-[19px] font-normal;
-  }
-  .text-md-b {
-    @apply text-sm leading-[17px] font-bold;
-  }
-  .text-md-s {
-    @apply text-sm leading-[17px] font-semibold;
-  }
-  .text-md-m {
-    @apply text-sm leading-[17px] font-medium;
-  }
-  .text-md-r {
-    @apply text-sm leading-[17px] font-normal;
-  }
-  .text-sm-s {
-    @apply text-[13px] leading-4 font-semibold;
-  }
-  .text-sm-m {
-    @apply text-[13px] leading-4 font-medium;
-  }
-  .text-xs-s {
-    @apply text-xs leading-3.5 font-semibold;
-  }
-  .text-xs-m {
-    @apply text-xs leading-3.5 font-medium;
-  }
-  .text-xs-r {
-    @apply text-xs leading-3.5 font-normal;
-  }
+/* font */
+@utility text-4xl-m {
+  @apply text-[40px] leading-12 font-medium;
+}
+@utility text-3xl-b {
+  @apply text-[32px] leading-[38px] font-bold;
+}
+@utility text-3xl-s {
+  @apply text-[32px] leading-[38px] font-semibold;
+}
+@utility text-2xl-b {
+  @apply text-2xl leading-7 font-bold;
+}
+@utility text-2xl-s {
+  @apply text-2xl leading-7 font-semibold;
+}
+@utility text-2xl-m {
+  @apply text-2xl leading-7 font-medium;
+}
+@utility text-2xl-r {
+  @apply text-2xl leading-7 font-normal;
+}
+@utility text-xl-b {
+  @apply text-xl leading-6 font-bold;
+}
+@utility text-xl-s {
+  @apply text-xl leading-6 font-semibold;
+}
+@utility text-xl-m {
+  @apply text-xl leading-6 font-medium;
+}
+@utility text-xl-r {
+  @apply text-xl leading-6 font-normal;
+}
+@utility text-2lg-b {
+  @apply text-[18px] leading-[21px] font-bold;
+}
+@utility text-2lg-s {
+  @apply text-[18px] leading-[21px] font-semibold;
+}
+@utility text-2lg-m {
+  @apply text-[18px] leading-[21px] font-medium;
+}
+@utility text-2lg-r {
+  @apply text-[18px] leading-[21px] font-normal;
+}
+@utility text-lg-b {
+  @apply text-base leading-[19px] font-bold;
+}
+@utility text-lg-s {
+  @apply text-base leading-[19px] font-semibold;
+}
+@utility text-lg-m {
+  @apply text-base leading-[19px] font-medium;
+}
+@utility text-lg-r {
+  @apply text-base leading-[19px] font-normal;
+}
+@utility text-md-b {
+  @apply text-sm leading-[17px] font-bold;
+}
+@utility text-md-s {
+  @apply text-sm leading-[17px] font-semibold;
+}
+@utility text-md-m {
+  @apply text-sm leading-[17px] font-medium;
+}
+@utility text-md-r {
+  @apply text-sm leading-[17px] font-normal;
+}
+@utility text-sm-s {
+  @apply text-[13px] leading-4 font-semibold;
+}
+@utility text-sm-m {
+  @apply text-[13px] leading-4 font-medium;
+}
+@utility text-xs-s {
+  @apply text-xs leading-3.5 font-semibold;
+}
+@utility text-xs-m {
+  @apply text-xs leading-3.5 font-medium;
+}
+@utility text-xs-r {
+  @apply text-xs leading-3.5 font-normal;
 }
