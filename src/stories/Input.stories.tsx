@@ -7,7 +7,7 @@ import type { ComponentPropsWithoutRef } from "react";
 
 const trailingVariants = {
   none: null,
-  button: <Button title="확인" size="small" isFullWidth={false} />,
+  button: <Button title="버튼" size="small" isFullWidth={false} />,
   visible: <VisibleIcon width={24} height={24} />,
   invisible: <InvisibleIcon width={24} height={24} />,
   both: (
@@ -78,7 +78,7 @@ function mapVariants({
   };
 }
 
-export const Default: Story = {
+export const Input: Story = {
   render: (args) => (
     <div className="flex w-xl flex-col items-center gap-4">
       <InputComponent {...mapVariants(args)} />
