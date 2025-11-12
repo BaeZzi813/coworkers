@@ -30,7 +30,7 @@ export default function DateRangePicker({
           !!(range?.from && range?.to && day > range.from && day < range.to),
         range_end: (day) => !!(range?.to && isSameDay(day, range.to)),
       }}
-      classNames={{
+      rdpClassNames={{
         range_start: "bg-brand-primary/50 rounded-l-lg",
         range_middle: "bg-brand-primary/30 rounded-none",
         range_end: "bg-brand-primary/50 rounded-r-lg",

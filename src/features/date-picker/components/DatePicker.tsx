@@ -17,7 +17,7 @@ export default function DatePicker({
       selected={selected}
       onSelect={onSelect}
       className={className}
-      classNames={{
+      rdpClassNames={{
         selected:
           "bg-brand-primary text-background-primary text-md-m rounded-lg",
         today: clsx(

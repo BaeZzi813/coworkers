@@ -9,7 +9,7 @@ interface BaseDatePickerProps {
   onDayClick?: (date: Date) => void;
   onSelect?: (date?: Date) => void;
   modifiers?: Record<string, (day: Date) => boolean>;
-  classNames?: Record<string, string>;
+  rdpClassNames?: Record<string, string>;
   className?: string;
 }
 
@@ -18,7 +18,7 @@ export default function BaseDatePicker({
   onDayClick,
   onSelect,
   modifiers,
-  classNames,
+  rdpClassNames,
   className,
 }: BaseDatePickerProps) {
   const cx = getDefaultClassNames();
@@ -55,7 +55,7 @@ export default function BaseDatePicker({
           month_grid: clsx(cx.month_grid, "w-full"),
           weekday: "text-text-disabled text-md-m w-8 h-8 text-center",
           outside: "text-text-disabled",
-          ...classNames,
+          ...rdpClassNames,
         }}
       />
     </div>
