@@ -2,12 +2,13 @@ import LogoFull from "@/assets/images/logo-full.svg";
 import Logo from "@/assets/images/logo.svg";
 import Icon from "@/components/icon";
 import { getUserGroups } from "@/features/group/apis";
+import { useSidebarStore } from "@/stores/sidebar-store";
 import { useQuery } from "@tanstack/react-query";
 import clsx from "clsx";
 import { motion } from "motion/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useShallow } from "zustand/shallow";
 import Avatar from "../avatar";
 import { Button } from "../button";
 import SidebarMenu from "./SidebarMenu";
@@ -22,10 +23,12 @@ function sidebarWidthClassName(isFolded: boolean) {
 }
 
 export default function Sidebar() {
-  const [isFolded, setIsFolded] = useState(false);
+  const [isFolded, setIsFolded] = useSidebarStore(
+    useShallow((state) => [state.isFold, state.toggle])
+  );
 
   const handleFoldClick = () => {
-    setIsFolded(!isFolded);
+    setIsFolded();
   };
 
   return (
