@@ -1,4 +1,7 @@
-import { DatePicker, DateRangePicker } from "@/features/date-picker";
+import {
+  DatePicker as DatePickerComponent,
+  DateRangePicker as DateRangePickerComponent,
+} from "@/features/date-picker";
 import type { Meta } from "@storybook/nextjs";
 import { endOfWeek, startOfWeek } from "date-fns";
 import { useState } from "react";
@@ -6,27 +9,27 @@ import { DateRange } from "react-day-picker";
 
 const meta = {
   title: "Components/DatePicker",
-  component: DatePicker,
+  component: DatePickerComponent,
   parameters: {
     layout: "centered",
   },
-} satisfies Meta<typeof DatePicker>;
+} satisfies Meta<typeof DatePickerComponent>;
 
 export default meta;
 
 // 단일 날짜 선택
-export function DatePickerStory() {
+export function DatePicker() {
   const [selected, setSelected] = useState<Date>();
 
-  return <DatePicker selected={selected} onSelect={setSelected} />;
+  return <DatePickerComponent selected={selected} onSelect={setSelected} />;
 }
 
 // 주간 범위 선택
-export const DateRangePickerStory = () => {
+export const DateRangePicker = () => {
   const [range, setRange] = useState<DateRange | undefined>({
     from: startOfWeek(new Date(), { weekStartsOn: 1 }),
     to: endOfWeek(new Date(), { weekStartsOn: 1 }),
   });
 
-  return <DateRangePicker range={range} onChange={setRange} />;
+  return <DateRangePickerComponent range={range} onChange={setRange} />;
 };
