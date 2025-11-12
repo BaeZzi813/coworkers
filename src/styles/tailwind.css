@@ -2,9 +2,10 @@
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
 
 @theme {
+  /* custom tokens */
   --font-sans: "Pretendard", ui-sans-serif, system-ui, sans-serif;
-
   --z-overlay: 9999;
+  --shadow-card: 0px 15px 50px -12px rgba(0, 0, 0, 0.05);
 
   /* Breakpoints */
   --breakpoint-mobile: 375px;
@@ -72,6 +73,9 @@
 
 @utility bg-brand-gradient {
   background-image: var(--brand-gradient);
+}
+@utility shadow-card {
+  box-shadow: var(--shadow-card);
 }
 
 /* font */
