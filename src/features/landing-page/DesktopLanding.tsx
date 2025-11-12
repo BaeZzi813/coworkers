@@ -10,7 +10,7 @@ export default function DesktopLanding() {
   return (
     <>
       <section className="w-full bg-background-secondary">
-        <div className="mx-auto flex min-h-[1080px] max-w-[1920px]">
+        <div className="mx-auto flex min-h-[1080px] max-w-[1833px]">
           <div className="relative w-auto min-w-[518px]">
             <div className="absolute top-52 left-[76px]">
               <Icon name="union" size="large" />
@@ -38,7 +38,7 @@ export default function DesktopLanding() {
         </div>
       </section>
       <section className="w-full bg-state-50">
-        <div className="mx-auto flex min-h-[800px] max-w-[1920px]">
+        <div className="mx-auto flex min-h-[800px] max-w-[1833px]">
           <div className="h-[202px] w-auto min-w-[563px] pt-48 pl-[180px]">
             <div className="flex flex-col gap-3">
               <Icon name="folder" size="large" />
@@ -63,7 +63,7 @@ export default function DesktopLanding() {
         </div>
       </section>
       <section className="w-full bg-brand-primary">
-        <div className="mx-auto flex min-h-[750px] max-w-[1920px] flex-row-reverse overflow-hidden">
+        <div className="mx-auto flex min-h-[750px] max-w-[1833px] flex-row-reverse overflow-hidden">
           <div className="h-[202px] w-auto min-w-[702px] pt-[266px] pl-[117px]">
             <div className="flex flex-col gap-3 pt-[49px] pb-[41px] pl-[26px]">
               <Icon name="doneShadow" size="large" />
@@ -88,7 +88,7 @@ export default function DesktopLanding() {
         </div>
       </section>
       <section className="w-full bg-state-50">
-        <div className="mx-auto flex min-h-[800px] max-w-[1920px] overflow-hidden">
+        <div className="mx-auto flex min-h-[800px] max-w-[1833px] overflow-hidden">
           <div className="h-[800px] w-auto min-w-[705px]">
             <div className="mt-48 ml-[180px] flex h-[202px] flex-col gap-3">
               <Icon name="commentShadow" size="large" />

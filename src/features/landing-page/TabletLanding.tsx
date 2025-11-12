@@ -24,13 +24,15 @@ export default function TabletLanding() {
               </p>
             </div>
           </div>
-          <div className="relative h-[749px]">
-            <Image
-              src={landing1medium}
-              alt="랜딩이미지1 태블릿"
-              fill
-              className="object-contain object-right"
-            />
+          <div className="flex h-[749px] w-full justify-end">
+            <div className="relative h-full w-[649px]">
+              <Image
+                src={landing1medium}
+                alt="랜딩이미지1 태블릿"
+                fill
+                className="object-cover"
+              />
+            </div>
           </div>
           <div className="absolute right-10 bottom-13 w-40">
             <Button title="지금 시작하기" />
@@ -52,13 +54,15 @@ export default function TabletLanding() {
               </p>
             </div>
           </div>
-          <div className="relative h-[460px] pb-11">
-            <Image
-              src={landing2medium}
-              alt="랜딩이미지2 태블릿"
-              fill
-              className="object-contain object-right"
-            />
+          <div className="flex h-[460px] w-full justify-end">
+            <div className="relative h-full w-[641px] pb-11">
+              <Image
+                src={landing2medium}
+                alt="랜딩이미지2 태블릿"
+                fill
+                className="object-cover"
+              />
+            </div>
           </div>
         </div>
       </section>
@@ -77,13 +81,15 @@ export default function TabletLanding() {
               </p>
             </div>
           </div>
-          <div className="relative h-[432px]">
-            <Image
-              src={landing3medium}
-              alt="랜딩이미지3 태블릿"
-              fill
-              className="object-contain object-right"
-            />
+          <div className="flex h-[432px] w-full items-end justify-end">
+            <div className="w- relative h-full w-[627px]">
+              <Image
+                src={landing3medium}
+                alt="랜딩이미지3 태블릿"
+                fill
+                className="object-cover"
+              />
+            </div>
           </div>
         </div>
       </section>
