@@ -3,9 +3,9 @@ import { PropsWithChildren } from "react";
 
 export default function RootLayout({ children }: PropsWithChildren) {
   return (
-    <div className="flex h-screen">
+    <div className="flex">
       <Sidebar className="relative z-10" />
-      <main className="grow overflow-y-scroll">{children}</main>
+      <main className="grow">{children}</main>
     </div>
   );
 }
