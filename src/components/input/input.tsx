@@ -22,10 +22,11 @@ interface Props
   trailing?: ReactNode; //프롭스로 아이콘이나 버튼 등을 받고 사이즈도 프롭스로 커스텀
   trailingClassName?: string;
   trailingPadding?: string;
+  hasError?: boolean; //텍스트필드 에러 프롭스
 }
 
 const baseClasses =
-  "w-full rounded-xl border border-state-300 bg-background-primary text-text-primary placeholder:text-text-default focus:border-brand-primary focus:outline-none focus:ring-2 focus:ring-brand-primary transition disabled:border-state-200 disabled:bg-state-50 disabled:text-text-disabled";
+  "w-full rounded-xl border bg-background-primary text-text-primary placeholder:text-text-default focus:outline-none focus:ring-2 transition disabled:border-state-200 disabled:bg-state-50 disabled:text-text-disabled";
 
 const wrapperClasses = "relative flex items-center";
 
@@ -39,24 +40,33 @@ const horizontalPadding: Record<Size, string> = {
   small: "px-3",
 };
 
+function colorClass(hasError: boolean | undefined) {
+  return hasError
+    ? "border-status-danger focus:border-status-danger focus:ring-status-danger"
+    : "border-state-300 focus:border-brand-primary focus:ring-brand-primary";
+}
+
 function inputSize({
   size,
   contentPadding,
-  Trailing,
+  hasTrailing,
   trailingPadding,
   className,
+  hasError,
 }: {
   size: Size;
   contentPadding?: string;
-  Trailing: boolean;
+  hasTrailing: boolean;
   trailingPadding?: string;
   className?: string;
+  hasError?: boolean;
 }) {
   return clsx(
     baseClasses,
     heightClasses[size],
+    colorClass(hasError),
     contentPadding ?? horizontalPadding[size],
-    Trailing ? (trailingPadding ?? "pr-12") : null,
+    hasTrailing ? (trailingPadding ?? "pr-12") : null,
     className
   );
 }
@@ -72,16 +82,16 @@ function Input({
   trailing,
   trailingClassName,
   trailingPadding,
+  hasError,
   className,
   ...rest
 }: InputComponentProps) {
-  const Trailing = Boolean(trailing);
-
   const inputClassName = inputSize({
     size: sizeProp,
     contentPadding,
-    Trailing,
+    hasTrailing: Boolean(trailing),
     trailingPadding,
+    hasError,
     className,
   });
 
@@ -94,7 +104,7 @@ function Input({
         className={inputClassName}
         {...rest}
       />
-      {Trailing ? (
+      {trailing && (
         <div
           className={clsx(
             "absolute right-3 flex items-center",
@@ -103,7 +113,7 @@ function Input({
         >
           {trailing}
         </div>
-      ) : null}
+      )}
     </div>
   );
 }
