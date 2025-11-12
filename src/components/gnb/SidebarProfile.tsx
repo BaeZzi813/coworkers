@@ -1,5 +1,6 @@
 import Avatar from "@/components/avatar";
 import clsx from "clsx";
+import ProfileMenu from "./ProfileMenu";
 
 interface UserInfo {
   imageUrl?: string;
@@ -20,12 +21,16 @@ export default function SidebarProfile({ isFolded, userInfo }: Props) {
   if (isFolded) {
     return (
       <div className="flex w-full cursor-pointer justify-center">
-        <Avatar source={userInfo.imageUrl} size="medium" />
+        <ProfileMenu
+          anchor={<Avatar source={userInfo.imageUrl} size="medium" />}
+        />
       </div>
     );
   }
 
-  return (
+  const profile = isFolded ? (
+    <Avatar source={userInfo.imageUrl} size="medium" />
+  ) : (
     <div className="flex cursor-pointer items-center gap-3">
       <Avatar source={userInfo.imageUrl} size="large" />
       <div className="flex flex-col items-start gap-0.5">
@@ -36,6 +41,8 @@ export default function SidebarProfile({ isFolded, userInfo }: Props) {
       </div>
     </div>
   );
+
+  return <ProfileMenu anchor={profile} />;
 }
 
 function EmptyProfile({ isFolded }: { isFolded: boolean }) {
