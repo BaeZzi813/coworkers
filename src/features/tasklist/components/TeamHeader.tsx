@@ -1,35 +1,34 @@
 import BgTeamPattern from "@/assets/images/bg-team-pattern.png";
 import Dropdown, { DropdownOption } from "@/components/dropdown";
 import Icon from "@/components/icon";
-import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
-import { getGroupInfo } from "../apis";
 
-export default function TeamHeader() {
+interface TeamHeaderProps {
+  teamName: string;
+  isAdmin?: boolean;
+  onEdit?: () => void;
+  onDelete?: () => void;
+}
+
+export default function TeamHeader({
+  teamName,
+  isAdmin = false,
+  onEdit,
+  onDelete,
+}: TeamHeaderProps) {
   const options: DropdownOption[] = [
     { label: "수정하기", value: "edit" },
     { label: "삭제하기", value: "delete" },
   ];
 
-  const { data } = useQuery({
-    queryKey: ["groupInfo"],
-    queryFn: getGroupInfo,
-  });
-
-  const teamName = data?.name;
-  const currentUserId = 10; // 로그인된 유저 mockData (10:admin/11:member)
-  const isAdmin = data?.members?.some(
-    (member) => member.role === "ADMIN" && member.userId === currentUserId
-  );
-
   const handleSelect = (option: DropdownOption | string) => {
     if (typeof option === "string") return;
     switch (option.value) {
       case "edit":
-        console.log("팀 정보 수정");
+        onEdit?.();
         break;
       case "delete":
-        console.log("팀 삭제");
+        onDelete?.();
         break;
     }
   };
