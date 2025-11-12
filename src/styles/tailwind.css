@@ -5,7 +5,7 @@
   --font-sans: "Pretendard", ui-sans-serif, system-ui, sans-serif;
 
   --z-overlay: 9999;
-  
+
   /* Breakpoints */
   --breakpoint-mobile: 375px;
   --breakpoint-tablet: 745px;
@@ -65,6 +65,9 @@
   --color-state-200: #e2e8f0;
   --color-state-300: #cbd5e1;
   --color-state-400: #94a3b8;
+
+  /* other colors */
+  --color-blue-50: #eef3ff;
 }
 
 @utility bg-brand-gradient {

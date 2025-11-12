@@ -1,3 +1,4 @@
+import RootLayout from "@/layouts/RootLayout";
 import ReactQueryProvider from "@/providers/ReactQueryProvider";
 import "@/styles/globals.css";
 import "@/styles/tailwind.css";
@@ -20,7 +21,9 @@ function Providers({
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <Providers reactQueryState={pageProps.dehydratedState}>
-      <Component {...pageProps} />
+      <RootLayout>
+        <Component {...pageProps} />
+      </RootLayout>
     </Providers>
   );
 }
