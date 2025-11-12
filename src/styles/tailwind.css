@@ -4,6 +4,13 @@
 @theme {
   --font-sans: "Pretendard", ui-sans-serif, system-ui, sans-serif;
 
+  --z-overlay: 9999;
+  
+  /* Breakpoints */
+  --breakpoint-mobile: 375px;
+  --breakpoint-tablet: 745px;
+  --breakpoint-desktop: 1024px;
+
   /* brand */
   --color-brand-primary: #5189fa;
   --color-brand-primary-hover: var(--color-interaction-hover);

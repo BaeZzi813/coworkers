@@ -18,13 +18,22 @@ import ChevronRightIcon16 from "@/assets/icons/ic-chevron-right-16.svg";
 import ChevronRightIcon24 from "@/assets/icons/ic-chevron-right-24.svg";
 import ClockIcon12 from "@/assets/icons/ic-clock-12.svg";
 import ClockIcon16 from "@/assets/icons/ic-clock-16.svg";
+import CommentShadowIcon28 from "@/assets/icons/ic-comment-shadow-28.svg";
+import CommentShadowIcon40 from "@/assets/icons/ic-comment-shadow-40.svg";
+import CommentShadowIcon48 from "@/assets/icons/ic-comment-shadow-48.svg";
 import CommentIcon from "@/assets/icons/ic-comment.svg";
+import DoneShadowIcon28 from "@/assets/icons/ic-done-shadow-28.svg";
+import DoneShadowIcon40 from "@/assets/icons/ic-done-shadow-40.svg";
+import DoneShadowIcon48 from "@/assets/icons/ic-done-shadow-48.svg";
 import DotsIcon16 from "@/assets/icons/ic-dots-16.svg";
 import DotsIcon24 from "@/assets/icons/ic-dots-24.svg";
 import ExpandIcon24 from "@/assets/icons/ic-expand-24.svg";
 import ExpandIcon28 from "@/assets/icons/ic-expand-28.svg";
 import FoldIcon24 from "@/assets/icons/ic-fold-24.svg";
 import FoldIcon28 from "@/assets/icons/ic-fold-28.svg";
+import FolderIcon28 from "@/assets/icons/ic-folder-28.svg";
+import FolderIcon40 from "@/assets/icons/ic-folder-40.svg";
+import FolderIcon48 from "@/assets/icons/ic-folder-48.svg";
 import GearIcon20 from "@/assets/icons/ic-gear-20.svg";
 import GearIcon24 from "@/assets/icons/ic-gear-24.svg";
 import HeartIcon16 from "@/assets/icons/ic-heart-16.svg";
@@ -45,6 +54,10 @@ import RepeatIcon12 from "@/assets/icons/ic-repeat-12.svg";
 import RepeatIcon16 from "@/assets/icons/ic-repeat-16.svg";
 import SecessionIcon from "@/assets/icons/ic-secession.svg";
 import ThumbupIcon from "@/assets/icons/ic-thumbup.svg";
+import UnionIcon36 from "@/assets/icons/ic-union-36.svg";
+import UnionIcon48 from "@/assets/icons/ic-union-48.svg";
+import TriangleDownIcon20 from "@/assets/icons/ic-triangle-down-20.svg";
+import TriangleDownIcon24 from "@/assets/icons/ic-triangle-down-24.svg";
 import VisibleIcon from "@/assets/icons/ic-visible.svg";
 import XmarkIcon12 from "@/assets/icons/ic-xmark-12.svg";
 import XmarkIcon18 from "@/assets/icons/ic-xmark-18.svg";
@@ -81,8 +94,13 @@ export type IconName =
   | "repeat"
   | "secession"
   | "thumbup"
+  | "triangleDown"
   | "visible"
-  | "xmark";
+  | "xmark"
+  | "union"
+  | "folder"
+  | "doneShadow"
+  | "commentShadow";
 
 const Icons: Record<
   IconName,
@@ -191,6 +209,10 @@ const Icons: Record<
   thumbup: {
     large: ThumbupIcon,
   },
+  triangleDown: {
+    large: TriangleDownIcon24,
+    small: TriangleDownIcon20,
+  },
   visible: {
     large: VisibleIcon,
   },
@@ -198,6 +220,25 @@ const Icons: Record<
     large: XmarkIcon24,
     medium: XmarkIcon18,
     small: XmarkIcon12,
+  },
+  union: {
+    large: UnionIcon48,
+    small: UnionIcon36,
+  },
+  folder: {
+    large: FolderIcon48,
+    medium: FolderIcon40,
+    small: FolderIcon28,
+  },
+  doneShadow: {
+    large: DoneShadowIcon48,
+    medium: DoneShadowIcon40,
+    small: DoneShadowIcon28,
+  },
+  commentShadow: {
+    large: CommentShadowIcon48,
+    medium: CommentShadowIcon40,
+    small: CommentShadowIcon28,
   },
 } as const;
 

@@ -61,10 +61,23 @@ export function Icon() {
       <IconComponent name="repeat" size="small" />
       <IconComponent name="secession" />
       <IconComponent name="thumbup" />
+      <IconComponent name="triangleDown" size="large" />
+      <IconComponent name="triangleDown" size="small" />
       <IconComponent name="visible" />
       <IconComponent name="xmark" size="large" />
       <IconComponent name="xmark" size="medium" />
       <IconComponent name="xmark" size="small" />
+      <IconComponent name="union" size="large" />
+      <IconComponent name="union" size="small" />
+      <IconComponent name="folder" size="large" />
+      <IconComponent name="folder" size="medium" />
+      <IconComponent name="folder" size="small" />
+      <IconComponent name="doneShadow" size="large" />
+      <IconComponent name="doneShadow" size="medium" />
+      <IconComponent name="doneShadow" size="small" />
+      <IconComponent name="commentShadow" size="large" />
+      <IconComponent name="commentShadow" size="medium" />
+      <IconComponent name="commentShadow" size="small" />
     </div>
   );
 }
