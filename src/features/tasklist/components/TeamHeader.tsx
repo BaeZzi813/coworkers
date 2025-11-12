@@ -1,13 +1,26 @@
 import BgTeamPattern from "@/assets/images/bg-team-pattern.png";
 import Dropdown, { DropdownOption } from "@/components/dropdown";
 import Icon from "@/components/icon";
+import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
+import { getGroupInfo } from "../apis";
 
 export default function TeamHeader() {
   const options: DropdownOption[] = [
     { label: "수정하기", value: "edit" },
     { label: "삭제하기", value: "delete" },
   ];
+
+  const { data } = useQuery({
+    queryKey: ["groupInfo"],
+    queryFn: getGroupInfo,
+  });
+
+  const teamName = data?.name;
+  const currentUserId = 10; // 로그인된 유저 mockData (10:admin/11:member)
+  const isAdmin = data?.members?.some(
+    (member) => member.role === "ADMIN" && member.userId === currentUserId
+  );
 
   const handleSelect = (option: DropdownOption | string) => {
     if (typeof option === "string") return;
@@ -25,7 +38,7 @@ export default function TeamHeader() {
     <>
       <header className="flex h-7 w-full max-w-[1120px] items-center justify-start rounded-xl bg-none shadow-[0px_15px_50px_-12px_rgba(0,0,0,0.05)] outline-border-primary desktop:h-16 desktop:justify-between desktop:bg-background-primary desktop:px-7 desktop:py-4 desktop:outline">
         <h1 className="text-lg-b text-text-primary tablet:text-2xl-b">
-          {"경영관리팀"}
+          {teamName}
         </h1>
 
         <Image
@@ -37,19 +50,21 @@ export default function TeamHeader() {
           className="mr-2.5 ml-auto hidden desktop:block"
         />
 
-        <Dropdown
-          anchor={
-            <button
-              aria-label="팀 설정 열기"
-              className="ml-2 cursor-pointer py-1"
-            >
-              <Icon name="gear" size="large" />
-            </button>
-          }
-          options={options}
-          alignment="left"
-          onSelect={handleSelect}
-        />
+        {isAdmin && (
+          <Dropdown
+            anchor={
+              <button
+                aria-label="팀 설정 열기"
+                className="ml-2 cursor-pointer py-1"
+              >
+                <Icon name="gear" size="large" />
+              </button>
+            }
+            options={options}
+            alignment="left"
+            onSelect={handleSelect}
+          />
+        )}
       </header>
     </>
   );
