@@ -82,7 +82,7 @@ export default function TabletLanding() {
             </div>
           </div>
           <div className="flex h-[432px] w-full items-end justify-end">
-            <div className="w- relative h-full w-[627px]">
+            <div className="relative h-full w-[627px]">
               <Image
                 src={landing3medium}
                 alt="랜딩이미지3 태블릿"
