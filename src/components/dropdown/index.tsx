@@ -1,8 +1,10 @@
 import { useBackdropClick } from "@/hooks/use-backdrop-click";
 import clsx from "clsx";
-import { ReactNode, useState } from "react";
+import { CSSProperties, ReactNode, useState } from "react";
 
 type Alignment = "left" | "right" | "fill";
+
+type Direction = "top" | "bottom";
 
 export interface DropdownOption {
   label: string;
@@ -13,15 +15,54 @@ interface Props {
   anchor: ReactNode;
   options: DropdownOption[] | string[];
   gap?: number;
+  direction?: Direction;
   alignment?: Alignment;
   alignmentOffset?: number;
   onSelect: (option: DropdownOption | string) => void;
+}
+
+function layoutStyles({
+  gap,
+  direction,
+  alignment,
+  alignmentOffset,
+}: {
+  gap: number;
+  direction: Direction;
+  alignment: Alignment;
+  alignmentOffset: number;
+}) {
+  const styles: Pick<CSSProperties, "top" | "left" | "right" | "bottom"> = {};
+
+  switch (direction) {
+    case "top":
+      styles.bottom = `calc(100% + ${gap}px)`;
+      break;
+    case "bottom":
+      styles.top = `calc(100% + ${gap}px)`;
+      break;
+  }
+  switch (alignment) {
+    case "left":
+      styles.left = alignmentOffset;
+      break;
+    case "right":
+      styles.right = alignmentOffset;
+      break;
+    case "fill":
+      styles.left = 0;
+      styles.right = 0;
+      break;
+  }
+
+  return styles;
 }
 
 export default function Dropdown({
   anchor,
   options,
   gap = 8,
+  direction = "bottom",
   alignment = "left",
   alignmentOffset = 0,
   onSelect,
@@ -30,19 +71,6 @@ export default function Dropdown({
   const targetRef = useBackdropClick<HTMLDivElement>({
     callback: () => setIsOpen(false),
   });
-
-  const alignmentStyles = { top: `calc(100% + ${gap}px)` };
-  switch (alignment) {
-    case "left":
-      Object.assign(alignmentStyles, { left: alignmentOffset });
-      break;
-    case "right":
-      Object.assign(alignmentStyles, { right: alignmentOffset });
-      break;
-    case "fill":
-      Object.assign(alignmentStyles, { left: 0, right: 0 });
-      break;
-  }
 
   const handleAnchorClick = () => {
     setIsOpen(!isOpen);
@@ -65,7 +93,7 @@ export default function Dropdown({
             "bg-background-primary",
             "z-(--z-overlay)"
           )}
-          style={alignmentStyles}
+          style={layoutStyles({ gap, direction, alignment, alignmentOffset })}
         >
           {options.map((option) => {
             const key = typeof option === "string" ? option : option.value;
