@@ -3,11 +3,12 @@ import VisibleIcon from "@/assets/icons/ic-visible.svg";
 import { Button } from "@/components/button";
 import { Input as InputComponent } from "@/components/input";
 import type { Meta, StoryObj } from "@storybook/nextjs";
+<<<<<<< HEAD
 import type { ComponentPropsWithoutRef } from "react";
 
 const trailingVariants = {
   none: null,
-  button: <Button title="버튼" size="small" isFullWidth={false} />,
+  button: <Button title="변경하기" size="small" isFullWidth={false} />,
   visible: <VisibleIcon width={24} height={24} />,
   invisible: <InvisibleIcon width={24} height={24} />,
   both: (
@@ -30,6 +31,9 @@ type InputArgs = ComponentPropsWithoutRef<typeof InputComponent> & {
   trailingVariant?: keyof typeof trailingVariants;
 };
 
+=======
+
+>>>>>>> 3e599f0 (feat [codeif-fe18-4-3 #12] 인풋 옵션(텍스트, 패스워드, 버튼) 제작)
 const meta = {
   title: "Components/Input",
   component: InputComponent,
@@ -39,24 +43,35 @@ const meta = {
   argTypes: {
     size: {
       control: { type: "radio" },
+<<<<<<< HEAD
       options: ["large", "small"],
+=======
+      options: ["pc", "mobile", "modal"],
+>>>>>>> 3e599f0 (feat [codeif-fe18-4-3 #12] 인풋 옵션(텍스트, 패스워드, 버튼) 제작)
     },
     type: {
       control: { type: "radio" },
-      options: ["text", "password"],
+      options: ["text", "email", "password"],
     },
     placeholder: {
       control: { type: "text" },
     },
+<<<<<<< HEAD
     trailingVariant: {
       control: { type: "radio" },
       options: ["none", "button", "visible", "invisible"],
+=======
+    variant: {
+      control: { type: "radio" },
+      options: ["default", "password", "passwordChange"],
+>>>>>>> 3e599f0 (feat [codeif-fe18-4-3 #12] 인풋 옵션(텍스트, 패스워드, 버튼) 제작)
     },
   },
   args: {
     placeholder: "이메일을 입력하세요.",
     size: "large",
     type: "text",
+<<<<<<< HEAD
     trailingVariant: "none",
   },
 } satisfies Meta<InputArgs>;
@@ -78,10 +93,34 @@ function mapVariants({
   };
 }
 
+export const Default: Story = {
+  render: (args) => {
+    const size = args.size ?? "large";
+    const widthClass = size === "small" ? "w-[300px]" : "w-[460px]";
+
+    return (
+      <div className={`flex flex-col items-center gap-4 ${widthClass}`}>
+        <InputComponent {...mapVariants(args)} />
+      </div>
+    );
+  },
+=======
+    variant: "default",
+  },
+} satisfies Meta<typeof InputComponent>;
+
+export default meta;
+
+type Story = StoryObj<typeof meta>;
+
 export const Input: Story = {
+  args: {
+    size: "pc",
+  },
   render: (args) => (
     <div className="flex w-xl flex-col items-center gap-4">
-      <InputComponent {...mapVariants(args)} />
+      <InputComponent {...args} />
     </div>
   ),
+>>>>>>> 3e599f0 (feat [codeif-fe18-4-3 #12] 인풋 옵션(텍스트, 패스워드, 버튼) 제작)
 };

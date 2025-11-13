@@ -6,15 +6,19 @@ import {
 import { useResponsive } from "@/hooks/use-responsive";
 
 export default function Home() {
+<<<<<<< HEAD
+  return <h1 className="text-4xl text-red-500">Home</h1>;
+=======
   const { isMobile, isTablet, isDesktop } = useResponsive();
 
   if (!isMobile && !isTablet && !isDesktop) return null;
 
   return (
-    <main className="min-h-screen w-full">
+    <div className="w-full">
       {isMobile && <MobileLanding />}
       {isTablet && <TabletLanding />}
       {isDesktop && <DesktopLanding />}
-    </main>
+    </div>
   );
+>>>>>>> 3e705de882c5385d87adc75bc127bd73d48a371e
 }
