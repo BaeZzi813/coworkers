@@ -3,6 +3,7 @@ import VisibleIcon from "@/assets/icons/ic-visible.svg";
 import { Button } from "@/components/button";
 import { Input as InputComponent } from "@/components/input";
 import type { Meta, StoryObj } from "@storybook/nextjs";
+<<<<<<< HEAD
 import type { ComponentPropsWithoutRef } from "react";
 
 const trailingVariants = {
@@ -30,6 +31,9 @@ type InputArgs = ComponentPropsWithoutRef<typeof InputComponent> & {
   trailingVariant?: keyof typeof trailingVariants;
 };
 
+=======
+
+>>>>>>> 3e599f0 (feat [codeif-fe18-4-3 #12] 인풋 옵션(텍스트, 패스워드, 버튼) 제작)
 const meta = {
   title: "Components/Input",
   component: InputComponent,
@@ -39,7 +43,11 @@ const meta = {
   argTypes: {
     size: {
       control: { type: "radio" },
+<<<<<<< HEAD
       options: ["large", "small"],
+=======
+      options: ["pc", "mobile", "modal"],
+>>>>>>> 3e599f0 (feat [codeif-fe18-4-3 #12] 인풋 옵션(텍스트, 패스워드, 버튼) 제작)
     },
     type: {
       control: { type: "radio" },
@@ -48,15 +56,22 @@ const meta = {
     placeholder: {
       control: { type: "text" },
     },
+<<<<<<< HEAD
     trailingVariant: {
       control: { type: "radio" },
       options: ["none", "button", "visible", "invisible"],
+=======
+    variant: {
+      control: { type: "radio" },
+      options: ["default", "password", "passwordChange"],
+>>>>>>> 3e599f0 (feat [codeif-fe18-4-3 #12] 인풋 옵션(텍스트, 패스워드, 버튼) 제작)
     },
   },
   args: {
     placeholder: "이메일을 입력하세요.",
     size: "large",
     type: "text",
+<<<<<<< HEAD
     trailingVariant: "none",
   },
 } satisfies Meta<InputArgs>;
@@ -89,4 +104,23 @@ export const Default: Story = {
       </div>
     );
   },
+=======
+    variant: "default",
+  },
+} satisfies Meta<typeof InputComponent>;
+
+export default meta;
+
+type Story = StoryObj<typeof meta>;
+
+export const Input: Story = {
+  args: {
+    size: "pc",
+  },
+  render: (args) => (
+    <div className="flex w-xl flex-col items-center gap-4">
+      <InputComponent {...args} />
+    </div>
+  ),
+>>>>>>> 3e599f0 (feat [codeif-fe18-4-3 #12] 인풋 옵션(텍스트, 패스워드, 버튼) 제작)
 };
