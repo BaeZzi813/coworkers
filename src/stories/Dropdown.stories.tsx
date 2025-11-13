@@ -12,6 +12,7 @@ const meta = {
 
 export default meta;
 
+<<<<<<< HEAD
 export function Dropdown() {
   return (
     <div className="flex flex-col gap-4">
@@ -22,25 +23,56 @@ export function Dropdown() {
       />
       <DropdownComponent
         anchor={<Button title="Align Right" isFullWidth={false} />}
+=======
+export function DropdownOnTop() {
+  return (
+    <div className="flex flex-col gap-4">
+      <DropdownComponent
+        anchor={<Button title="Top Left" isFullWidth={false} />}
+        options={["Option 1", "Option 2", "Option 3"]}
+        direction="top"
+        alignment="left"
+        onSelect={(option) => console.log(option)}
+      />
+      <DropdownComponent
+        anchor={<Button title="Top Right" isFullWidth={false} />}
+>>>>>>> origin/develop
         options={[
           { value: "option-1", label: "Option 1" },
           { value: "option-2", label: "Option 2" },
           { value: "option-3", label: "Option 3" },
         ]}
+<<<<<<< HEAD
+=======
+        direction="top"
+>>>>>>> origin/develop
         alignment="right"
         onSelect={(option) => console.log(option)}
       />
       <DropdownComponent
         anchor={
+<<<<<<< HEAD
           <Button title="Align fill with long anchor" isFullWidth={false} />
         }
         options={["Option 1", "Option 2", "Option 3"]}
+=======
+          <Button title="Top fill with long anchor" isFullWidth={false} />
+        }
+        options={["Option 1", "Option 2", "Option 3"]}
+        direction="top"
+>>>>>>> origin/develop
         alignment="fill"
         onSelect={(option) => console.log(option)}
       />
       <DropdownComponent
+<<<<<<< HEAD
         anchor={<Button title="Align offset" isFullWidth={false} />}
         options={["Option 1", "Option 2", "Option 3"]}
+=======
+        anchor={<Button title="Top offset" isFullWidth={false} />}
+        options={["Option 1", "Option 2", "Option 3"]}
+        direction="top"
+>>>>>>> origin/develop
         alignment="right"
         alignmentOffset={-24}
         onSelect={(option) => console.log(option)}
@@ -48,3 +80,146 @@ export function Dropdown() {
     </div>
   );
 }
+<<<<<<< HEAD
+=======
+
+export function DropdownOnBottom() {
+  return (
+    <div className="flex flex-col gap-4">
+      <DropdownComponent
+        anchor={<Button title="Bottom Left" isFullWidth={false} />}
+        options={["Option 1", "Option 2", "Option 3"]}
+        direction="bottom"
+        alignment="left"
+        onSelect={(option) => console.log(option)}
+      />
+      <DropdownComponent
+        anchor={<Button title="Bottom Right" isFullWidth={false} />}
+        options={[
+          { value: "option-1", label: "Option 1" },
+          { value: "option-2", label: "Option 2" },
+          { value: "option-3", label: "Option 3" },
+        ]}
+        direction="bottom"
+        alignment="right"
+        onSelect={(option) => console.log(option)}
+      />
+      <DropdownComponent
+        anchor={
+          <Button title="Bottom fill with long anchor" isFullWidth={false} />
+        }
+        options={["Option 1", "Option 2", "Option 3"]}
+        direction="bottom"
+        alignment="fill"
+        onSelect={(option) => console.log(option)}
+      />
+      <DropdownComponent
+        anchor={<Button title="Bottom offset" isFullWidth={false} />}
+        options={["Option 1", "Option 2", "Option 3"]}
+        direction="bottom"
+        alignment="right"
+        alignmentOffset={-24}
+        onSelect={(option) => console.log(option)}
+      />
+    </div>
+  );
+}
+
+export function DropdownOnLeft() {
+  return (
+    <div className="flex flex-col gap-4">
+      <DropdownComponent
+        anchor={<Button title="Left Top" isFullWidth={false} />}
+        options={["Option 1", "Option 2", "Option 3"]}
+        direction="left"
+        alignment="top"
+        onSelect={(option) => console.log(option)}
+      />
+      <DropdownComponent
+        anchor={<Button title="Left Bottom" isFullWidth={false} />}
+        options={[
+          { value: "option-1", label: "Option 1" },
+          { value: "option-2", label: "Option 2" },
+          { value: "option-3", label: "Option 3" },
+        ]}
+        direction="left"
+        alignment="bottom"
+        onSelect={(option) => console.log(option)}
+      />
+      <DropdownComponent
+        anchor={<Button title="Left Top Offset" isFullWidth={false} />}
+        options={[
+          { value: "option-1", label: "Option 1" },
+          { value: "option-2", label: "Option 2" },
+          { value: "option-3", label: "Option 3" },
+        ]}
+        direction="left"
+        alignment="top"
+        alignmentOffset={-24}
+        onSelect={(option) => console.log(option)}
+      />
+      <DropdownComponent
+        anchor={<Button title="Left Bottom Offset" isFullWidth={false} />}
+        options={[
+          { value: "option-1", label: "Option 1" },
+          { value: "option-2", label: "Option 2" },
+          { value: "option-3", label: "Option 3" },
+        ]}
+        direction="left"
+        alignment="bottom"
+        alignmentOffset={-24}
+        onSelect={(option) => console.log(option)}
+      />
+    </div>
+  );
+}
+
+export function DropdownOnRight() {
+  return (
+    <div className="flex flex-col gap-4">
+      <DropdownComponent
+        anchor={<Button title="Right Top" isFullWidth={false} />}
+        options={["Option 1", "Option 2", "Option 3"]}
+        direction="right"
+        alignment="top"
+        onSelect={(option) => console.log(option)}
+      />
+      <DropdownComponent
+        anchor={<Button title="Right Bottom" isFullWidth={false} />}
+        options={[
+          { value: "option-1", label: "Option 1" },
+          { value: "option-2", label: "Option 2" },
+          { value: "option-3", label: "Option 3" },
+        ]}
+        direction="right"
+        alignment="bottom"
+        onSelect={(option) => console.log(option)}
+      />
+      <DropdownComponent
+        anchor={<Button title="Right Top Offset" isFullWidth={false} />}
+        options={[
+          { value: "option-1", label: "Option 1" },
+          { value: "option-2", label: "Option 2" },
+          { value: "option-3", label: "Option 3" },
+        ]}
+        direction="right"
+        alignment="top"
+        alignmentOffset={-24}
+        onSelect={(option) => console.log(option)}
+      />
+      <DropdownComponent
+        anchor={<Button title="Right Bottom Offset" isFullWidth={false} />}
+        options={[
+          { value: "option-1", label: "Option 1" },
+          { value: "option-2", label: "Option 2" },
+          { value: "option-3", label: "Option 3" },
+        ]}
+        direction="right"
+        alignment="bottom"
+        alignmentOffset={-24}
+        onSelect={(option) => console.log(option)}
+      />
+    </div>
+  );
+}
+>>>>>>> origin/develop
