@@ -15,7 +15,17 @@ interface Props extends PropsWithChildren<OverlayProps> {
   className?: string;
 }
 
-const ANIMATION_DURATION = 0.25;
+export const ANIMATION_DURATION = 0.25;
+
+export function handleOverlayClose({
+  onClose,
+  onExit,
+}: Pick<OverlayProps, "onClose" | "onExit">) {
+  onClose();
+  if (onExit) {
+    setTimeout(onExit, ANIMATION_DURATION * 1000);
+  }
+}
 
 export default function Overlay({
   overlayKey,
