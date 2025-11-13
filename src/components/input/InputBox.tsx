@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { useRef, useState } from "react";
+import { ChangeEventHandler, useRef, useState } from "react";
 
 type Size = "large" | "small";
 
@@ -8,6 +8,7 @@ interface Props {
   placeholder?: string;
   size?: Size;
   height?: number;
+  onChange?: ChangeEventHandler<HTMLTextAreaElement>;
 }
 
 const typography: Record<Size, string> = {
@@ -20,6 +21,7 @@ export default function InputBox({
   placeholder,
   size = "large",
   height,
+  onChange,
 }: Props) {
   const ref = useRef<HTMLTextAreaElement>(null);
   const [focused, setFocused] = useState(false);
@@ -49,6 +51,7 @@ export default function InputBox({
         ref={ref}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
+        onChange={onChange}
       />
     </div>
   );
