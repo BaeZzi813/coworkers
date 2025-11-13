@@ -1,5 +1,6 @@
 import AlertIcon20 from "@/assets/icons/ic-alert-20.svg";
 import AlertIcon24 from "@/assets/icons/ic-alert-24.svg";
+import ArrowUpIcon from "@/assets/icons/ic-arrow-up-16.svg";
 import BoardIcon20 from "@/assets/icons/ic-board-20.svg";
 import BoardIcon24 from "@/assets/icons/ic-board-24.svg";
 import CalendarIcon12 from "@/assets/icons/ic-calendar-12.svg";
@@ -69,6 +70,7 @@ import { IconSize } from "./types";
 
 export type IconName =
   | "alert"
+  | "arrowUp"
   | "board"
   | "calendar"
   | "checkCompact"
@@ -112,6 +114,9 @@ const Icons: Record<
   alert: {
     large: AlertIcon24,
     small: AlertIcon20,
+  },
+  arrowUp: {
+    large: ArrowUpIcon,
   },
   board: {
     large: BoardIcon24,
