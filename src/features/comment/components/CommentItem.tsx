@@ -22,6 +22,7 @@ export interface CommentItemProps {
   updatedAt: string;
   onEdit?: (id: number, content: string) => void;
   onDelete?: (id: number) => void;
+  className?: string;
 }
 
 export default function CommentItem({
@@ -33,6 +34,7 @@ export default function CommentItem({
   createdAt,
   onEdit,
   onDelete,
+  className,
 }: CommentItemProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [editContent, setEditContent] = useState(content);
