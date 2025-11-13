@@ -1,13 +1,11 @@
 import Icon from "@/components/icon";
+import { type OverlayProps } from "@/components/overlay";
 import { useResponsive } from "@/hooks/use-responsive";
 import { motion } from "motion/react";
 import { ReactNode } from "react";
 import Modal from "./Modal";
 
-interface Props {
-  isOpen: boolean;
-  onClose?: () => void;
-  onExit?: () => void;
+interface Props extends OverlayProps {
   header?: ReactNode;
   title: string;
   message?: string;
@@ -50,7 +48,7 @@ export default function Alert({
           <div className="flex flex-col items-center gap-2">
             <div className="text-lg-m">{title}</div>
             {message && (
-              <div className="text-md-m text-center whitespace-pre-wrap">
+              <div className="text-center text-md-m whitespace-pre-wrap">
                 {message}
               </div>
             )}

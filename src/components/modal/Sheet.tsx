@@ -1,12 +1,10 @@
+import { type OverlayProps } from "@/components/overlay";
 import { useResponsive } from "@/hooks/use-responsive";
 import { motion } from "motion/react";
 import { PropsWithChildren, ReactNode } from "react";
 import Modal from "./Modal";
 
-interface Props {
-  isOpen: boolean;
-  onClose?: () => void;
-  onExit?: () => void;
+interface Props extends OverlayProps {
   title: string;
   message: string;
   content: ReactNode;
@@ -36,7 +34,7 @@ export default function Sheet({
         <div className="flex flex-col">
           <div className="flex flex-col items-center gap-4">
             <div className="text-lg-m">{title}</div>
-            <div className="text-md-m text-center whitespace-pre-wrap text-text-default">
+            <div className="text-center text-md-m whitespace-pre-wrap text-text-default">
               {message}
             </div>
           </div>
@@ -54,7 +52,7 @@ function SheetSection({
 }: PropsWithChildren<{ title: string }>) {
   return (
     <div>
-      <div className="text-lg-m mb-4 text-text-primary">{title}</div>
+      <div className="mb-4 text-lg-m text-text-primary">{title}</div>
       {children}
     </div>
   );
