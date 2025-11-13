@@ -7,7 +7,7 @@ import type { ComponentPropsWithoutRef } from "react";
 
 const trailingVariants = {
   none: null,
-  button: <Button title="버튼" size="small" isFullWidth={false} />,
+  button: <Button title="변경하기" size="small" isFullWidth={false} />,
   visible: <VisibleIcon width={24} height={24} />,
   invisible: <InvisibleIcon width={24} height={24} />,
   both: (
@@ -28,6 +28,8 @@ const trailingPaddingMap = {
 
 type InputArgs = ComponentPropsWithoutRef<typeof InputComponent> & {
   trailingVariant?: keyof typeof trailingVariants;
+  showError?: boolean;
+  errorMessage?: string;
 };
 
 const meta = {
@@ -43,7 +45,7 @@ const meta = {
     },
     type: {
       control: { type: "radio" },
-      options: ["text", "password"],
+      options: ["text", "email", "password"],
     },
     placeholder: {
       control: { type: "text" },
@@ -52,12 +54,20 @@ const meta = {
       control: { type: "radio" },
       options: ["none", "button", "visible", "invisible"],
     },
+    showError: {
+      control: { type: "boolean" },
+    },
+    errorMessage: {
+      control: { type: "text" },
+    },
   },
   args: {
     placeholder: "이메일을 입력하세요.",
     size: "large",
     type: "text",
     trailingVariant: "none",
+    showError: false,
+    errorMessage: "올바른 이메일을 입력해주세요.",
   },
 } satisfies Meta<InputArgs>;
 
@@ -67,6 +77,8 @@ type Story = StoryObj<InputArgs>;
 
 function mapVariants({
   trailingVariant = "none",
+  showError,
+  errorMessage,
   ...rest
 }: Partial<InputArgs>): ComponentPropsWithoutRef<typeof InputComponent> {
   const trailing = trailingVariants[trailingVariant];
@@ -78,10 +90,24 @@ function mapVariants({
   };
 }
 
-export const Input: Story = {
-  render: (args) => (
-    <div className="flex w-xl flex-col items-center gap-4">
-      <InputComponent {...mapVariants(args)} />
-    </div>
-  ),
+export const Default: Story = {
+  render: (args) => {
+    const size = args.size ?? "large";
+    const widthClass = size === "small" ? "w-[300px]" : "w-[460px]";
+    const { showError, errorMessage } = args;
+    const inputArgs = mapVariants(args);
+
+    return (
+      <div className={`flex flex-col items-center gap-4 ${widthClass}`}>
+        <div className="flex w-full flex-col gap-2">
+          <InputComponent {...inputArgs} isError={showError} />
+          {showError ? (
+            <p className="text-sm-m text-status-danger" role="alert">
+              {errorMessage}
+            </p>
+          ) : null}
+        </div>
+      </div>
+    );
+  },
 };
