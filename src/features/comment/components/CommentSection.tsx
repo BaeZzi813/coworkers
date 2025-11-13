@@ -1,7 +1,7 @@
-import { CommentItemProps } from "@/features/comment/components/CommentItem";
-import CommentList from "@/features/comment/components/CommentList";
-import CommentPost from "@/features/comment/components/CommentPost";
 import clsx from "clsx";
+import { CommentItemProps } from "./CommentItem";
+import CommentList from "./CommentList";
+import CommentPost from "./CommentPost";
 
 interface CommentSectionProps {
   comments: CommentItemProps[];
