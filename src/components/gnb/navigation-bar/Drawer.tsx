@@ -1,9 +1,6 @@
 import { Button } from "@/components/button";
 import Icon from "@/components/icon";
-import Overlay, {
-  handleOverlayClose,
-  OverlayProps,
-} from "@/components/overlay";
+import Overlay, { OverlayProps } from "@/components/overlay";
 import { getUserGroups } from "@/features/group/apis";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "motion/react";
@@ -47,11 +44,10 @@ export default function Drawer({
         transition={{ duration: 0.25 }}
         onClick={handleContentClick}
       >
-        <header
-          className="mb-7 flex cursor-pointer justify-end px-4"
-          onClick={() => handleOverlayClose({ onClose, onExit })}
-        >
-          <Icon name="xmark" />
+        <header className="mb-7 flex justify-end px-4">
+          <button className="cursor-pointer" onClick={onClose}>
+            <Icon name="xmark" />
+          </button>
         </header>
         <div className="px-2">
           {groups && (
