@@ -1,5 +1,5 @@
 import Icon from "@/components/icon";
-import { type OverlayProps } from "@/components/overlay";
+import { handleOverlayClose, type OverlayProps } from "@/components/overlay";
 import { useResponsive } from "@/hooks/use-responsive";
 import { motion } from "motion/react";
 import { ReactNode } from "react";
@@ -37,11 +37,12 @@ export default function Alert({
         transition={{ damping: 0, duration: 0.25 }}
       >
         <div className="flex h-6 justify-end">
-          {onClose && (
-            <button className="cursor-pointer" onClick={onClose}>
-              <Icon name="xmark" />
-            </button>
-          )}
+          <button
+            className="cursor-pointer"
+            onClick={() => handleOverlayClose({ onClose, onExit })}
+          >
+            <Icon name="xmark" />
+          </button>
         </div>
         <div className="mx-8 flex flex-col">
           {header && <div className="mb-4 self-center">{header}</div>}
