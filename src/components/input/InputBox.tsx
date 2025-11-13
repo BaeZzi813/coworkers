@@ -31,8 +31,8 @@ export default function InputBox({
   return (
     <div
       className={clsx(
-        "h-20 cursor-text rounded-xl border border-border-primary px-4 py-3",
-        focused && "border-brand-primary"
+        "h-20 cursor-text rounded-xl border px-4 py-3",
+        focused ? "border-brand-primary" : "border-border-primary"
       )}
       style={{ height }}
       onClick={handleOuterClick}
