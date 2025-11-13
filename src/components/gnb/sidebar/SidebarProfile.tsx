@@ -1,6 +1,6 @@
 import Avatar from "@/components/avatar";
 import clsx from "clsx";
-import ProfileMenu from "./ProfileMenu";
+import ProfileMenu from "../common/ProfileMenu";
 
 interface UserInfo {
   imageUrl?: string;

@@ -3,9 +3,9 @@ import Logo from "@/assets/images/logo.svg";
 import Icon from "@/components/icon";
 import { useAuthStore } from "@/stores/auth-store";
 import { overlay } from "overlay-kit";
+import ProfileMenu from "../common/ProfileMenu";
 import Drawer from "./Drawer";
 import NavigationBarProfile from "./NavigationBarProfile";
-import ProfileMenu from "./ProfileMenu";
 
 export default function NavigationBar() {
   const loggedIn = useAuthStore((state) => state.loggedIn);

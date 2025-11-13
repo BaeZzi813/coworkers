@@ -1,3 +1,5 @@
+import { Button } from "@/components/button";
+import Icon from "@/components/icon";
 import Overlay, {
   handleOverlayClose,
   OverlayProps,
@@ -8,10 +10,8 @@ import { motion } from "motion/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { PropsWithChildren } from "react";
-import { Button } from "../button";
-import Icon from "../icon";
-import SidebarMenu from "./SidebarMenu";
-import UserGroupList from "./UserGroupList";
+import SidebarMenu from "../common/SidebarMenu";
+import UserGroupList from "../common/UserGroupList";
 
 export default function Drawer({
   isOpen,

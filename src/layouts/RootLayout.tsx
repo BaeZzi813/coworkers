@@ -1,5 +1,4 @@
-import { Sidebar } from "@/components/gnb";
-import NavigationBar from "@/components/gnb/NavigationBar";
+import { NavigationBar, Sidebar } from "@/components/gnb";
 import { useResponsive } from "@/hooks/use-responsive";
 import { PropsWithChildren } from "react";
 
@@ -8,7 +7,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
 
   if (isMobile) {
     return (
-      <div className="">
+      <div>
         <NavigationBar />
         <main>{children}</main>
       </div>
