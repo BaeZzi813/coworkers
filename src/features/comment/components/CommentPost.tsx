@@ -75,7 +75,7 @@ export default function CommentPost({
           aria-label="댓글 등록"
           onClick={handleSubmit}
           disabled={!content.trim()}
-          className="ml-2 flex h-6 w-6 cursor-pointer items-center justify-center rounded-full bg-icon-brand text-white hover:bg-interaction-hover disabled:cursor-auto disabled:bg-icon-primary"
+          className="ml-2 flex h-6 w-6 shrink-0 cursor-pointer items-center justify-center rounded-full bg-icon-brand text-white hover:bg-interaction-hover disabled:cursor-auto disabled:bg-icon-primary"
         >
           <Icon name="arrowUp" />
         </button>
