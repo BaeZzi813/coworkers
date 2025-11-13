@@ -11,7 +11,7 @@ interface User {
   image?: string;
 }
 
-interface CommentItemProps {
+export interface CommentItemProps {
   id: number;
   user?: User;
   writer?: User;
