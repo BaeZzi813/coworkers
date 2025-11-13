@@ -1,0 +1,54 @@
+[
+  {
+    "user": {
+      "image": "",
+      "nickname": "민영",
+      "id": 5
+    },
+    "userId": 5,
+    "taskId": 101,
+    "updatedAt": "2025-11-13T16:51:40.211Z",
+    "createdAt": "2025-11-13T15:20:10.000Z",
+    "content": "오늘 오후까지 검토 완료하겠습니다!",
+    "id": 11
+  },
+  {
+    "user": {
+      "image": "",
+      "nickname": "철수",
+      "id": 2
+    },
+    "userId": 2,
+    "taskId": 101,
+    "updatedAt": "2025-11-13T14:10:30.211Z",
+    "createdAt": "2025-11-13T14:10:30.211Z",
+    "content": "추가 자료 필요하시면 말씀해주세요.",
+    "id": 12
+  },
+  {
+    "user": {
+      "image": "",
+      "nickname": "고은",
+      "id": 3
+    },
+    "userId": 3,
+    "taskId": 101,
+    "updatedAt": "2025-11-13T13:05:12.211Z",
+    "createdAt": "2025-11-13T13:05:12.211Z",
+    "content": "수정사항 반영해서 다시 올렸습니다!",
+    "id": 13
+  },
+  {
+    "user": {
+      "image": "",
+      "nickname": "민수",
+      "id": 4
+    },
+    "userId": 4,
+    "taskId": 101,
+    "updatedAt": "2025-11-13T12:01:00.211Z",
+    "createdAt": "2025-11-13T12:01:00.211Z",
+    "content": "확인했습니다! 문제 없어요.",
+    "id": 14
+  }
+]
