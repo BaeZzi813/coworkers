@@ -70,11 +70,16 @@ export default function CommentItem({
   return (
     <div
       className={clsx(
-        "w-full border-b border-gray-100",
-        isEditing ? "bg-state-50" : "bg-white"
+        isEditing ? "my-4 border-none bg-state-50" : "bg-background-primary",
+        className
       )}
     >
-      <div className="flex w-full items-start gap-4 px-4 py-3">
+      <div
+        className={clsx(
+          "flex w-full items-start gap-4 border-t border-gray-100 py-3",
+          isEditing && "border-none"
+        )}
+      >
         <Avatar source={author.image ?? ""} size="medium" />
 
         <div className="flex flex-1 items-start justify-between">
