@@ -135,7 +135,7 @@ export default function CommentItem({
                 </button>
               }
               options={options}
-              alignment="left"
+              alignment="right"
               onSelect={(option) => handleSelect(option as DropdownOption)}
             />
           )}
