@@ -8,6 +8,7 @@ interface Props {
   placeholder?: string;
   size?: Size;
   height?: number;
+  minHeight?: number;
   onChange?: ChangeEventHandler<HTMLTextAreaElement>;
 }
 
@@ -21,6 +22,7 @@ export default function InputBox({
   placeholder,
   size = "large",
   height,
+  minHeight,
   onChange,
 }: Props) {
   const ref = useRef<HTMLTextAreaElement>(null);
@@ -36,7 +38,7 @@ export default function InputBox({
         "cursor-text rounded-xl border px-4 py-3",
         focused ? "border-brand-primary" : "border-border-primary"
       )}
-      style={{ height }}
+      style={{ height, minHeight }}
       onClick={handleOuterClick}
     >
       <textarea

@@ -16,7 +16,11 @@ export function InputBox() {
 
   return (
     <div className="flex w-[300px] flex-col gap-4 text-text-primary placeholder:text-text-default">
-      <InputBoxComponent size="large" placeholder="내용을 입력하세요" />
+      <InputBoxComponent
+        size="large"
+        placeholder="내용을 입력하세요"
+        minHeight={100}
+      />
       <InputBoxComponent
         size="small"
         height={200}
