@@ -7,7 +7,7 @@ import type { ComponentPropsWithoutRef } from "react";
 
 const trailingVariants = {
   none: null,
-  button: <Button title="확인" size="small" isFullWidth={false} />,
+  button: <Button title="변경하기" size="small" isFullWidth={false} />,
   visible: <VisibleIcon width={24} height={24} />,
   invisible: <InvisibleIcon width={24} height={24} />,
   both: (
@@ -43,7 +43,7 @@ const meta = {
     },
     type: {
       control: { type: "radio" },
-      options: ["text", "password"],
+      options: ["text", "email", "password"],
     },
     placeholder: {
       control: { type: "text" },
@@ -79,9 +79,14 @@ function mapVariants({
 }
 
 export const Default: Story = {
-  render: (args) => (
-    <div className="flex w-xl flex-col items-center gap-4">
-      <InputComponent {...mapVariants(args)} />
-    </div>
-  ),
+  render: (args) => {
+    const size = args.size ?? "large";
+    const widthClass = size === "small" ? "w-[300px]" : "w-[460px]";
+
+    return (
+      <div className={`flex flex-col items-center gap-4 ${widthClass}`}>
+        <InputComponent {...mapVariants(args)} />
+      </div>
+    );
+  },
 };
