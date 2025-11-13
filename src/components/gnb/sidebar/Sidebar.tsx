@@ -10,6 +10,7 @@ import { motion } from "motion/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useShallow } from "zustand/shallow";
+import Separator from "../common/Separator";
 import SidebarMenu from "../common/SidebarMenu";
 import UserGroupList from "../common/UserGroupList";
 import SidebarProfile from "./SidebarProfile";
@@ -136,8 +137,4 @@ function Content({ isFolded }: { isFolded: boolean }) {
       </Link>
     </div>
   );
-}
-
-function Separator() {
-  return <div className="mt-6 mb-3 h-px w-full bg-border-primary" />;
 }

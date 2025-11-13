@@ -10,6 +10,7 @@ import { motion } from "motion/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { PropsWithChildren } from "react";
+import Separator from "../common/Separator";
 import SidebarMenu from "../common/SidebarMenu";
 import UserGroupList from "../common/UserGroupList";
 
@@ -62,7 +63,7 @@ export default function Drawer({
                   iconName="plus"
                   size="small"
                 />
-                <div className="mt-6 mb-3 h-px w-full bg-border-primary" />
+                <Separator />
               </div>
             </div>
           )}
