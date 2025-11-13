@@ -23,6 +23,7 @@ export interface CommentItemProps {
   onEdit?: (id: number, content: string) => void;
   onDelete?: (id: number) => void;
   className?: string;
+  px?: number;
 }
 
 export default function CommentItem({
@@ -35,6 +36,7 @@ export default function CommentItem({
   onEdit,
   onDelete,
   className,
+  px,
 }: CommentItemProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [editContent, setEditContent] = useState(content);
@@ -75,6 +77,7 @@ export default function CommentItem({
         isEditing ? "my-4 border-none bg-state-50" : "bg-background-primary",
         className
       )}
+      style={{ paddingLeft: px, paddingRight: px }}
     >
       <div
         className={clsx(

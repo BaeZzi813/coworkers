@@ -1,15 +1,20 @@
 import Avatar from "@/components/avatar";
 import Icon from "@/components/icon";
-import { ChangeEvent, KeyboardEvent, useRef, useState } from "react";
+import clsx from "clsx";
+import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 
 interface CommentPostProps {
   profileImage?: string;
   onSubmit?: (content: string) => void;
+  className?: string;
+  px?: number;
 }
 
 export default function CommentPost({
   profileImage,
   onSubmit,
+  className,
+  px,
 }: CommentPostProps) {
   const [content, setContent] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -43,8 +48,15 @@ export default function CommentPost({
     resizeTextarea(textareaRef.current, { resize: false });
   };
 
+  useEffect(() => {
+    resizeTextarea(textareaRef.current);
+  }, []);
+
   return (
-    <div className="flex w-full items-start gap-4">
+    <div
+      className={clsx("flex w-full items-start gap-4", className)}
+      style={{ paddingLeft: px, paddingRight: px }}
+    >
       <div className="mt-2">
         <Avatar source={profileImage ?? ""} size="medium" />
       </div>
