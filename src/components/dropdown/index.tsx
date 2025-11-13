@@ -34,53 +34,25 @@ function layoutStyles({
   alignment: Alignment;
   alignmentOffset: number;
 }) {
-  const styles: Edge = {};
+  const directionValue = `calc(100% + ${gap}px)`;
+  const directionStyles: Record<Direction, Edge> = {
+    top: { bottom: directionValue },
+    bottom: { top: directionValue },
+    left: { right: directionValue },
+    right: { left: directionValue },
+  };
 
-  switch (direction) {
-    case "top":
-      styles.bottom = `calc(100% + ${gap}px)`;
-      break;
-    case "bottom":
-      styles.top = `calc(100% + ${gap}px)`;
-      break;
-    case "left":
-      styles.right = `calc(100% + ${gap}px)`;
-      break;
-    case "right":
-      styles.left = `calc(100% + ${gap}px)`;
-      break;
-  }
+  const isHorizontalDirection = direction === "left" || direction === "right";
+  const isVerticalDirection = direction === "top" || direction === "bottom";
+  const alignmentStyles: Record<Alignment, Edge> = {
+    top: isHorizontalDirection ? { top: alignmentOffset } : {},
+    bottom: isHorizontalDirection ? { bottom: alignmentOffset } : {},
+    left: isVerticalDirection ? { left: alignmentOffset } : {},
+    right: isVerticalDirection ? { right: alignmentOffset } : {},
+    fill: isVerticalDirection ? { left: 0, right: 0 } : {},
+  };
 
-  switch (alignment) {
-    case "top":
-      if (direction === "left" || direction === "right") {
-        styles.top = alignmentOffset;
-      }
-      break;
-    case "bottom":
-      if (direction === "left" || direction === "right") {
-        styles.bottom = alignmentOffset;
-      }
-      break;
-    case "left":
-      if (direction === "top" || direction === "bottom") {
-        styles.left = alignmentOffset;
-      }
-      break;
-    case "right":
-      if (direction === "top" || direction === "bottom") {
-        styles.right = alignmentOffset;
-      }
-      break;
-    case "fill":
-      if (direction === "top" || direction === "bottom") {
-        styles.left = 0;
-        styles.right = 0;
-      }
-      break;
-  }
-
-  return styles;
+  return { ...directionStyles[direction], ...alignmentStyles[alignment] };
 }
 
 export default function Dropdown({
