@@ -9,7 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import { motion } from "motion/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { PropsWithChildren } from "react";
+import { MouseEvent, PropsWithChildren } from "react";
 import Separator from "../common/Separator";
 import SidebarMenu from "../common/SidebarMenu";
 import UserGroupList from "../common/UserGroupList";
@@ -26,6 +26,10 @@ export default function Drawer({
     queryFn: getUserGroups,
   });
 
+  const handleContentClick = (event: MouseEvent) => {
+    event.stopPropagation();
+  };
+
   return (
     <Overlay
       overlayKey="drawer"
@@ -41,6 +45,7 @@ export default function Drawer({
         animate={{ translateX: 0 }}
         exit={{ translateX: -204 }}
         transition={{ duration: 0.25 }}
+        onClick={handleContentClick}
       >
         <header
           className="mb-7 flex cursor-pointer justify-end px-4"
