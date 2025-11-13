@@ -3,7 +3,7 @@ import type { PropsWithChildren, ReactNode, Ref } from "react";
 import { InputHTMLAttributes } from "react";
 
 type Size = "large" | "small";
-type InputType = "text" | "password";
+type InputType = "text" | "email" | "password";
 
 type PropsWithChildrenAndRef<
   P = unknown,
@@ -22,7 +22,7 @@ interface Props
   trailing?: ReactNode; //프롭스로 아이콘이나 버튼 등을 받고 사이즈도 프롭스로 커스텀
   trailingClassName?: string;
   trailingPadding?: string;
-  hasError?: boolean; //텍스트필드 에러 프롭스
+  isError?: boolean; //텍스트필드 에러 프롭스
 }
 
 const baseClasses =
@@ -40,8 +40,8 @@ const horizontalPadding: Record<Size, string> = {
   small: "px-3",
 };
 
-function colorClass(hasError: boolean | undefined) {
-  return hasError
+function colorClass(isError: boolean | undefined) {
+  return isError
     ? "border-status-danger focus:border-status-danger focus:ring-status-danger"
     : "border-state-300 focus:border-brand-primary focus:ring-brand-primary";
 }
@@ -52,19 +52,19 @@ function inputSize({
   hasTrailing,
   trailingPadding,
   className,
-  hasError,
+  isError,
 }: {
   size: Size;
   contentPadding?: string;
   hasTrailing: boolean;
   trailingPadding?: string;
   className?: string;
-  hasError?: boolean;
+  isError?: boolean;
 }) {
   return clsx(
     baseClasses,
     heightClasses[size],
-    colorClass(hasError),
+    colorClass(isError),
     contentPadding ?? horizontalPadding[size],
     hasTrailing ? (trailingPadding ?? "pr-12") : null,
     className
@@ -75,23 +75,23 @@ type InputComponentProps = PropsWithChildrenAndRef<Props, HTMLInputElement>;
 
 function Input({
   ref,
-  size: sizeProp = "large",
+  size = "large",
   placeholder = "",
   type = "text",
   contentPadding,
   trailing,
   trailingClassName,
   trailingPadding,
-  hasError,
+  isError,
   className,
   ...rest
 }: InputComponentProps) {
   const inputClassName = inputSize({
-    size: sizeProp,
+    size,
     contentPadding,
     hasTrailing: Boolean(trailing),
     trailingPadding,
-    hasError,
+    isError,
     className,
   });
 
