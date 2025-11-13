@@ -77,6 +77,19 @@
 @utility shadow-card {
   box-shadow: var(--shadow-card);
 }
+@utility custom-scroll-bar {
+  &::-webkit-scrollbar {
+    width: 4px;
+    height: 8px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--color-state-300);
+    border-radius: 2px;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-state-400);
+  }
+}
 
 /* font */
 @utility text-4xl-m {
