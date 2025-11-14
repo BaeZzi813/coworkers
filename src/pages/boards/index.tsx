@@ -42,8 +42,10 @@ export default function BoardsPage() {
 
   return (
     <>
-      <section className="mx-auto w-[343px] tablet:w-[620px] desktop:w-[1120px]">
-        <SearchBar value={query} onChange={setQuery} />
+      <section className="border-t border-border-primary tablet:border-t-0">
+        <div className="mx-auto mt-[25px] mb-5 w-[343px] tablet:mt-[77px] tablet:mb-[29px] tablet:w-[620px] desktop:mt-[87px] desktop:w-[1120px]">
+          <SearchBar value={query} onChange={setQuery} />
+        </div>
       </section>
       <section className="min-h-screen bg-background-secondary">
         <div className="mx-auto flex w-[340px] flex-col gap-5 tablet:w-[620px] desktop:w-[1120px]">
