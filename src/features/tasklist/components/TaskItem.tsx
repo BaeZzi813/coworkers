@@ -4,6 +4,7 @@ import Icon from "@/components/icon";
 import { useResponsive } from "@/hooks/use-responsive";
 import { Task } from "@/types/task";
 import clsx from "clsx";
+import { useRef } from "react";
 
 interface TaskItemProps {
   title: string;
@@ -12,6 +13,7 @@ interface TaskItemProps {
 }
 
 export default function TaskItem({ title, tasks, onClick }: TaskItemProps) {
+  const ignoreItemRef = useRef(false);
   const { isDesktop } = useResponsive();
 
   const totalCount = tasks.length;
@@ -23,12 +25,22 @@ export default function TaskItem({ title, tasks, onClick }: TaskItemProps) {
   ];
 
   const handleSelect = (option: DropdownOption) => {
+    ignoreItemRef.current = true;
+
     switch (option.value) {
       case "edit":
         break;
       case "delete":
         break;
     }
+  };
+
+  const handleItemClick = () => {
+    if (ignoreItemRef.current) {
+      ignoreItemRef.current = false;
+      return;
+    }
+    onClick?.();
   };
 
   return (
@@ -38,7 +50,7 @@ export default function TaskItem({ title, tasks, onClick }: TaskItemProps) {
         isDesktop &&
           "h-[54px] cursor-pointer rounded-xl border border-border-primary pr-3 pl-5"
       )}
-      onClick={onClick}
+      onClick={handleItemClick}
     >
       <span className="text-sm-s desktop:text-md-s">{title}</span>
       <div className="desktop:ml-auto">
@@ -47,13 +59,16 @@ export default function TaskItem({ title, tasks, onClick }: TaskItemProps) {
       {isDesktop && (
         <Dropdown
           anchor={
-            <button
+            <div
+              role="button"
               aria-label="댓글 설정 열기"
               className="cursor-pointer py-1.5"
-              onClick={(e) => e.stopPropagation()}
+              onClick={() => {
+                ignoreItemRef.current = true;
+              }}
             >
               <Icon name="dots" size="large" />
-            </button>
+            </div>
           }
           options={options}
           alignment="right"
