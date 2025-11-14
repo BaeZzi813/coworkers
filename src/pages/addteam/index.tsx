@@ -9,6 +9,11 @@ export default function AddTeamPage() {
   const { isMobile } = useResponsive();
   const [teamName, setTeamName] = useState("");
 
+  const handleFileChange = (file: File) => {
+    // TODO: File upload
+    console.log(file);
+  };
+
   const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
     setTeamName(event.target.value);
   };
@@ -21,7 +26,7 @@ export default function AddTeamPage() {
         footer="팀 이름은 회사명이나 모임 이름 등으로 설정하면 좋아요."
       >
         <div className="flex flex-col items-center">
-          <TeamEditAvatar />
+          <TeamEditAvatar onChange={handleFileChange} />
           <div className="mt-6 flex w-full flex-col gap-3">
             <label htmlFor="team-name" className="text-md-m tablet:text-lg-m">
               팀 이름
@@ -34,7 +39,11 @@ export default function AddTeamPage() {
               onChange={handleNameChange}
             />
           </div>
-          <Button className="mt-10" title="생성하기" disabled={!teamName.trim()}/>
+          <Button
+            className="mt-10"
+            title="생성하기"
+            disabled={!teamName.trim()}
+          />
         </div>
       </TeamEditContainer>
     </div>
