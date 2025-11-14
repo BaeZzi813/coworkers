@@ -12,18 +12,6 @@ const meta = {
 
 export default meta;
 
-<<<<<<< HEAD
-export function Dropdown() {
-  return (
-    <div className="flex flex-col gap-4">
-      <DropdownComponent
-        anchor={<Button title="Align Left" isFullWidth={false} />}
-        options={["Option 1", "Option 2", "Option 3"]}
-        onSelect={(option) => console.log(option)}
-      />
-      <DropdownComponent
-        anchor={<Button title="Align Right" isFullWidth={false} />}
-=======
 export function DropdownOnTop() {
   return (
     <div className="flex flex-col gap-4">
@@ -36,43 +24,28 @@ export function DropdownOnTop() {
       />
       <DropdownComponent
         anchor={<Button title="Top Right" isFullWidth={false} />}
->>>>>>> origin/develop
         options={[
           { value: "option-1", label: "Option 1" },
           { value: "option-2", label: "Option 2" },
           { value: "option-3", label: "Option 3" },
         ]}
-<<<<<<< HEAD
-=======
         direction="top"
->>>>>>> origin/develop
         alignment="right"
         onSelect={(option) => console.log(option)}
       />
       <DropdownComponent
         anchor={
-<<<<<<< HEAD
-          <Button title="Align fill with long anchor" isFullWidth={false} />
-        }
-        options={["Option 1", "Option 2", "Option 3"]}
-=======
           <Button title="Top fill with long anchor" isFullWidth={false} />
         }
         options={["Option 1", "Option 2", "Option 3"]}
         direction="top"
->>>>>>> origin/develop
         alignment="fill"
         onSelect={(option) => console.log(option)}
       />
       <DropdownComponent
-<<<<<<< HEAD
-        anchor={<Button title="Align offset" isFullWidth={false} />}
-        options={["Option 1", "Option 2", "Option 3"]}
-=======
         anchor={<Button title="Top offset" isFullWidth={false} />}
         options={["Option 1", "Option 2", "Option 3"]}
         direction="top"
->>>>>>> origin/develop
         alignment="right"
         alignmentOffset={-24}
         onSelect={(option) => console.log(option)}
@@ -80,8 +53,6 @@ export function DropdownOnTop() {
     </div>
   );
 }
-<<<<<<< HEAD
-=======
 
 export function DropdownOnBottom() {
   return (
@@ -222,4 +193,3 @@ export function DropdownOnRight() {
     </div>
   );
 }
->>>>>>> origin/develop

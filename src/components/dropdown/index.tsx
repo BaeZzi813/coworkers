@@ -1,16 +1,10 @@
 import { useBackdropClick } from "@/hooks/use-backdrop-click";
 import clsx from "clsx";
-<<<<<<< HEAD
-import { ReactNode, useState } from "react";
-
-type Alignment = "left" | "right" | "fill";
-=======
 import { CSSProperties, ReactNode, useState } from "react";
 
 type Alignment = "top" | "bottom" | "left" | "right" | "fill";
 
 type Direction = "top" | "bottom" | "left" | "right";
->>>>>>> origin/develop
 
 export interface DropdownOption {
   label: string;
@@ -21,17 +15,12 @@ interface Props {
   anchor: ReactNode;
   options: DropdownOption[] | string[];
   gap?: number;
-<<<<<<< HEAD
-=======
   direction?: Direction;
->>>>>>> origin/develop
   alignment?: Alignment;
   alignmentOffset?: number;
   onSelect: (option: DropdownOption | string) => void;
 }
 
-<<<<<<< HEAD
-=======
 type Edge = Pick<CSSProperties, "top" | "left" | "right" | "bottom">;
 
 function layoutStyles({
@@ -66,15 +55,11 @@ function layoutStyles({
   return { ...directionStyles[direction], ...alignmentStyles[alignment] };
 }
 
->>>>>>> origin/develop
 export default function Dropdown({
   anchor,
   options,
   gap = 8,
-<<<<<<< HEAD
-=======
   direction = "bottom",
->>>>>>> origin/develop
   alignment = "left",
   alignmentOffset = 0,
   onSelect,
@@ -84,22 +69,6 @@ export default function Dropdown({
     callback: () => setIsOpen(false),
   });
 
-<<<<<<< HEAD
-  const alignmentStyles = { top: `calc(100% + ${gap}px)` };
-  switch (alignment) {
-    case "left":
-      Object.assign(alignmentStyles, { left: alignmentOffset });
-      break;
-    case "right":
-      Object.assign(alignmentStyles, { right: alignmentOffset });
-      break;
-    case "fill":
-      Object.assign(alignmentStyles, { left: 0, right: 0 });
-      break;
-  }
-
-=======
->>>>>>> origin/develop
   const handleAnchorClick = () => {
     setIsOpen(!isOpen);
   };
@@ -121,11 +90,7 @@ export default function Dropdown({
             "bg-background-primary",
             "z-(--z-overlay)"
           )}
-<<<<<<< HEAD
-          style={alignmentStyles}
-=======
           style={layoutStyles({ gap, direction, alignment, alignmentOffset })}
->>>>>>> origin/develop
         >
           {options.map((option) => {
             const key = typeof option === "string" ? option : option.value;
