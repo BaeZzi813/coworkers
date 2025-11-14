@@ -80,6 +80,7 @@ export function Icon() {
       <IconComponent name="commentShadow" size="large" />
       <IconComponent name="commentShadow" size="medium" />
       <IconComponent name="commentShadow" size="small" />
+      <IconComponent name="best" />
     </div>
   );
 }
