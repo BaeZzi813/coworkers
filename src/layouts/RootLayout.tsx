@@ -15,9 +15,9 @@ export default function RootLayout({ children }: PropsWithChildren) {
   }
 
   return (
-    <div className="flex">
+    <div className="flex h-screen">
       <Sidebar className="relative z-10" />
-      <main className="grow">{children}</main>
+      <main className="grow overflow-x-hidden">{children}</main>
     </div>
   );
 }

@@ -39,7 +39,7 @@ export default function Sidebar({ className }: Props) {
   return (
     <motion.nav
       className={clsx(
-        "flex h-dvh shrink-0 flex-col border-r border-border-primary bg-background-primary text-text-primary",
+        "flex shrink-0 flex-col border-r border-border-primary bg-background-primary text-text-primary",
         sidebarWidthClassName(isFolded),
         className
       )}
