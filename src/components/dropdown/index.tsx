@@ -98,7 +98,7 @@ export default function Dropdown({
             return (
               <li
                 key={key}
-                className="text-lg-r cursor-pointer px-6 py-3.5 whitespace-nowrap hover:bg-background-tertiary"
+                className="cursor-pointer px-6 py-3.5 text-lg-r whitespace-nowrap hover:bg-background-tertiary"
                 onClick={() => handleOptionClick(option)}
               >
                 {label}
