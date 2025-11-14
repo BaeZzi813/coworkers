@@ -26,15 +26,8 @@ export default function Overlay({
   onClose,
   onExit,
 }: Props) {
-  const handleClose = () => {
-    onClose();
-    if (onExit) {
-      setTimeout(onExit, ANIMATION_DURATION * 1000);
-    }
-  };
-
   return createPortal(
-    <AnimatePresence>
+    <AnimatePresence onExitComplete={onExit}>
       {isOpen && (
         <motion.div
           key={overlayKey ?? "overlay"}
@@ -43,7 +36,7 @@ export default function Overlay({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: ANIMATION_DURATION }}
-          onClick={handleClose}
+          onClick={onClose}
         >
           {children}
         </motion.div>

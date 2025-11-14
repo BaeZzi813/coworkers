@@ -2,9 +2,9 @@ import { useBackdropClick } from "@/hooks/use-backdrop-click";
 import clsx from "clsx";
 import { CSSProperties, ReactNode, useState } from "react";
 
-type Alignment = "top" | "bottom" | "left" | "right" | "fill";
+export type Alignment = "top" | "bottom" | "left" | "right" | "fill";
 
-type Direction = "top" | "bottom" | "left" | "right";
+export type Direction = "top" | "bottom" | "left" | "right";
 
 export interface DropdownOption {
   label: string;

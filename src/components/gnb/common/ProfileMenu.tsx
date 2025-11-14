@@ -1,11 +1,25 @@
+import Dropdown, {
+  Alignment,
+  Direction,
+  DropdownOption,
+} from "@/components/dropdown";
 import { ReactNode } from "react";
-import Dropdown, { DropdownOption } from "../dropdown";
 
 interface Props {
   anchor: ReactNode;
+  gap?: number;
+  alignment?: Alignment;
+  direction?: Direction;
+  alignmentOffset?: number;
 }
 
-export default function ProfileMenu({ anchor }: Props) {
+export default function ProfileMenu({
+  anchor,
+  gap,
+  alignment,
+  direction,
+  alignmentOffset,
+}: Props) {
   const options: DropdownOption[] = [
     { label: "마이 히스토리", value: "myhistory" },
     { label: "계정 설정", value: "mypage" },
@@ -21,10 +35,10 @@ export default function ProfileMenu({ anchor }: Props) {
     <Dropdown
       anchor={anchor}
       options={options}
-      gap={16}
-      direction="right"
-      alignment="bottom"
-      alignmentOffset={16}
+      gap={gap}
+      direction={direction}
+      alignment={alignment}
+      alignmentOffset={alignmentOffset}
       onSelect={(option) => handleSelect(option as DropdownOption)}
     />
   );

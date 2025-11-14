@@ -1,5 +1,6 @@
 import LogoFull from "@/assets/images/logo-full.svg";
 import Logo from "@/assets/images/logo.svg";
+import { Button } from "@/components/button";
 import Icon from "@/components/icon";
 import { getUserGroups } from "@/features/group/apis";
 import { useSidebarStore } from "@/stores/sidebar-store";
@@ -9,10 +10,10 @@ import { motion } from "motion/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useShallow } from "zustand/shallow";
-import { Button } from "../button";
-import SidebarMenu from "./SidebarMenu";
+import Separator from "../common/Separator";
+import SidebarMenu from "../common/SidebarMenu";
+import UserGroupList from "../common/UserGroupList";
 import SidebarProfile from "./SidebarProfile";
-import UserGroupList from "./UserGroupList";
 
 function sidebarWidth(isFolded: boolean) {
   return isFolded ? 72 : 270;
@@ -38,7 +39,7 @@ export default function Sidebar({ className }: Props) {
   return (
     <motion.nav
       className={clsx(
-        "flex h-dvh shrink-0 flex-col border-r border-border-primary bg-background-primary text-text-primary",
+        "flex shrink-0 flex-col border-r border-border-primary bg-background-primary text-text-primary",
         sidebarWidthClassName(isFolded),
         className
       )}
@@ -114,7 +115,7 @@ function Content({ isFolded }: { isFolded: boolean }) {
             activeGroupId={Number(router.query.teamId)}
           />
           {isFolded || (
-            <div className="">
+            <div>
               <Button
                 variant="outlinedPrimary"
                 title="팀 추가하기"
@@ -136,8 +137,4 @@ function Content({ isFolded }: { isFolded: boolean }) {
       </Link>
     </div>
   );
-}
-
-function Separator() {
-  return <div className="mt-6 mb-3 h-px w-full bg-border-primary" />;
 }

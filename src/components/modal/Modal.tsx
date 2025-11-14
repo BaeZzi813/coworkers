@@ -1,7 +1,7 @@
 import Overlay, { type OverlayProps } from "@/components/overlay";
 import { useResponsive } from "@/hooks/use-responsive";
 import clsx from "clsx";
-import { PropsWithChildren } from "react";
+import { MouseEvent, PropsWithChildren } from "react";
 
 export default function Modal({
   isOpen,
@@ -10,6 +10,10 @@ export default function Modal({
   onExit,
 }: PropsWithChildren<OverlayProps>) {
   const { isMobile } = useResponsive();
+
+  const handleContentClick = (event: MouseEvent) => {
+    event.stopPropagation();
+  };
 
   return (
     <Overlay
@@ -20,7 +24,10 @@ export default function Modal({
       onClose={onClose}
       onExit={onExit}
     >
-      <div className={clsx(isMobile && "fixed right-0 bottom-0 left-0")}>
+      <div
+        className={clsx(isMobile && "fixed right-0 bottom-0 left-0")}
+        onClick={handleContentClick}
+      >
         {children}
       </div>
     </Overlay>

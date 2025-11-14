@@ -53,6 +53,8 @@ export function Icon() {
       <IconComponent name="magnifier" size="small" />
       <IconComponent name="menu" />
       <IconComponent name="pencil" />
+      <IconComponent name="person" size="large" />
+      <IconComponent name="person" size="small" />
       <IconComponent name="plus" size="large" />
       <IconComponent name="plus" size="small" />
       <IconComponent name="progressDone" size="large" />

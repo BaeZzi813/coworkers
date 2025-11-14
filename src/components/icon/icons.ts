@@ -46,6 +46,8 @@ import MagnifierIcon24 from "@/assets/icons/ic-magnifier-24.svg";
 import MagnifierIcon32 from "@/assets/icons/ic-magnifier-32.svg";
 import MenuIcon from "@/assets/icons/ic-menu.svg";
 import PencilIcon from "@/assets/icons/ic-pencil.svg";
+import Person24 from "@/assets/icons/ic-person-24.svg";
+import Person40 from "@/assets/icons/ic-person-40.svg";
 import PlusIcon16 from "@/assets/icons/ic-plus-16.svg";
 import PlusIcon24 from "@/assets/icons/ic-plus-24.svg";
 import ProgressDoneIcon16 from "@/assets/icons/ic-progress-done-16.svg";
@@ -54,10 +56,10 @@ import RepeatIcon12 from "@/assets/icons/ic-repeat-12.svg";
 import RepeatIcon16 from "@/assets/icons/ic-repeat-16.svg";
 import SecessionIcon from "@/assets/icons/ic-secession.svg";
 import ThumbupIcon from "@/assets/icons/ic-thumbup.svg";
-import UnionIcon36 from "@/assets/icons/ic-union-36.svg";
-import UnionIcon48 from "@/assets/icons/ic-union-48.svg";
 import TriangleDownIcon20 from "@/assets/icons/ic-triangle-down-20.svg";
 import TriangleDownIcon24 from "@/assets/icons/ic-triangle-down-24.svg";
+import UnionIcon36 from "@/assets/icons/ic-union-36.svg";
+import UnionIcon48 from "@/assets/icons/ic-union-48.svg";
 import VisibleIcon from "@/assets/icons/ic-visible.svg";
 import XmarkIcon12 from "@/assets/icons/ic-xmark-12.svg";
 import XmarkIcon18 from "@/assets/icons/ic-xmark-18.svg";
@@ -89,6 +91,7 @@ export type IconName =
   | "magnifier"
   | "menu"
   | "pencil"
+  | "person"
   | "plus"
   | "progressDone"
   | "repeat"
@@ -190,6 +193,10 @@ const Icons: Record<
   },
   pencil: {
     large: PencilIcon,
+  },
+  person: {
+    large: Person40,
+    small: Person24,
   },
   plus: {
     large: PlusIcon24,
