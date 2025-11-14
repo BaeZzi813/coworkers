@@ -7,7 +7,7 @@ interface SearchBarProps {
 
 export default function SearchBar({ value, onChange }: SearchBarProps) {
   return (
-    <div className="relative mt-[25px] mb-5 flex h-[92px] w-[343px] flex-col gap-5 tablet:mt-[77px] tablet:mb-[29px] tablet:h-14 tablet:w-[620px] tablet:flex-row tablet:items-center tablet:justify-between desktop:mt-[87px] desktop:w-[1120px]">
+    <div className="relative flex h-[92px] w-[343px] flex-col gap-5 tablet:h-14 tablet:w-[620px] tablet:flex-row tablet:items-center tablet:justify-between desktop:w-[1120px]">
       <div className="text-xl-b text-text-primary tablet:text-2xl-b">
         자유게시판
       </div>
