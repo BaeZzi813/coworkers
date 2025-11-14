@@ -11,7 +11,7 @@ interface Props {
   onChange?: (file: File) => void;
 }
 
-export default function TeamEditAvatar({ source, onChange }: Props) {
+export default function TeamEditImageInput({ source, onChange }: Props) {
   const { isMobile } = useResponsive();
   const [previewUrl, setPreviewUrl] = useState<string>();
 
