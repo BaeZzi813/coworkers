@@ -3,6 +3,7 @@ import Logo from "@/assets/images/logo.svg";
 import { Button } from "@/components/button";
 import Icon from "@/components/icon";
 import { getUserGroups } from "@/features/group/apis";
+import { useResponsive } from "@/hooks/use-responsive";
 import { useSidebarStore } from "@/stores/sidebar-store";
 import { useQuery } from "@tanstack/react-query";
 import clsx from "clsx";
@@ -28,12 +29,13 @@ interface Props {
 }
 
 export default function Sidebar({ className }: Props) {
-  const [isFolded, setIsFolded] = useSidebarStore(
-    useShallow((state) => [state.isFold, state.toggle])
+  const [isFolded, toggle, setFold] = useSidebarStore(
+    useShallow((state) => [state.isFold, state.toggle, state.setFold])
   );
+  useResponsive({ onTablet: setFold });
 
   const handleFoldClick = () => {
-    setIsFolded();
+    toggle();
   };
 
   return (
