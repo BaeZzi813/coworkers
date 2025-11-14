@@ -4,14 +4,12 @@ import { useId, type ComponentPropsWithRef } from "react";
 
 interface TextFieldProps extends ComponentPropsWithRef<typeof Input> {
   errorMessage?: string;
-  showError?: boolean;
   containerClassName?: string;
   messageClassName?: string;
 }
 
 function TextField({
   errorMessage,
-  showError,
   containerClassName,
   messageClassName,
   id,
@@ -23,36 +21,45 @@ function TextField({
   const inputId = id ?? generatedId;
   const messageId = `${inputId}-message`;
 
-  const shouldShowError = showError ?? Boolean(errorMessage);
+  const isError = errorMessage != null && errorMessage.trim() !== "";
   const { ["aria-describedby"]: ariaDescribedBy, ...restInputProps } =
     inputProps;
-  const describedByValue = shouldShowError
+  const describedByValue = isError
     ? [ariaDescribedBy, messageId].filter(Boolean).join(" ").trim() || undefined
     : ariaDescribedBy;
 
   const spacingClassName = size === "small" ? "gap-3" : "gap-2";
+  const messagePaddingClassName = size === "small" ? "pr-[6px]" : "pr-2";
 
   return (
     <div
-      className={clsx("flex flex-col", spacingClassName, containerClassName)}
+      className={clsx(
+        "flex w-full flex-col",
+        spacingClassName,
+        containerClassName
+      )}
     >
       <Input
         {...restInputProps}
         id={inputId}
         size={size}
         ref={inputRef}
-        isError={shouldShowError}
+        isError={isError}
         aria-describedby={describedByValue}
       />
-      {shouldShowError && errorMessage ? (
+      {isError && (
         <p
           id={messageId}
-          className={clsx("text-sm-m text-status-danger", messageClassName)}
+          className={clsx(
+            "w-full text-sm-m text-status-danger",
+            messagePaddingClassName,
+            messageClassName
+          )}
           role="alert"
         >
           {errorMessage}
         </p>
-      ) : null}
+      )}
     </div>
   );
 }

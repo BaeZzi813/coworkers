@@ -2,6 +2,7 @@ import InvisibleIcon from "@/assets/icons/ic-invisible.svg";
 import VisibleIcon from "@/assets/icons/ic-visible.svg";
 import { Button } from "@/components/button";
 import { Input as InputComponent } from "@/components/input";
+import TextField from "@/components/input/TextField";
 import type { Meta, StoryObj } from "@storybook/nextjs";
 import type { ComponentPropsWithoutRef } from "react";
 
@@ -28,7 +29,6 @@ const trailingPaddingMap = {
 
 type InputArgs = ComponentPropsWithoutRef<typeof InputComponent> & {
   trailingVariant?: keyof typeof trailingVariants;
-  showError?: boolean;
   errorMessage?: string;
 };
 
@@ -54,9 +54,6 @@ const meta = {
       control: { type: "radio" },
       options: ["none", "button", "visible", "invisible"],
     },
-    showError: {
-      control: { type: "boolean" },
-    },
     errorMessage: {
       control: { type: "text" },
     },
@@ -66,8 +63,7 @@ const meta = {
     size: "large",
     type: "text",
     trailingVariant: "none",
-    showError: false,
-    errorMessage: "올바른 이메일을 입력해주세요.",
+    errorMessage: undefined,
   },
 } satisfies Meta<InputArgs>;
 
@@ -77,8 +73,6 @@ type Story = StoryObj<InputArgs>;
 
 function mapVariants({
   trailingVariant = "none",
-  showError,
-  errorMessage,
   ...rest
 }: Partial<InputArgs>): ComponentPropsWithoutRef<typeof InputComponent> {
   const trailing = trailingVariants[trailingVariant];
@@ -94,19 +88,12 @@ export const Default: Story = {
   render: (args) => {
     const size = args.size ?? "large";
     const widthClass = size === "small" ? "w-[300px]" : "w-[460px]";
-    const { showError, errorMessage } = args;
+    const { errorMessage } = args;
     const inputArgs = mapVariants(args);
 
     return (
       <div className={`flex flex-col items-center gap-4 ${widthClass}`}>
-        <div className="flex w-full flex-col gap-2">
-          <InputComponent {...inputArgs} isError={showError} />
-          {showError ? (
-            <p className="text-sm-m text-status-danger" role="alert">
-              {errorMessage}
-            </p>
-          ) : null}
-        </div>
+        <TextField {...inputArgs} errorMessage={errorMessage} />
       </div>
     );
   },
