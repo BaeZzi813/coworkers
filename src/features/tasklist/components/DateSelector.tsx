@@ -39,7 +39,6 @@ export default function DateSelector({
         onOpenCalendar={() => setOpenCalendar((prev) => !prev)}
       />
 
-      {/* 임시 DatePicker overlay */}
       {openCalendar && (
         <div className="absolute top-8 right-0 z-999 rounded-xl border border-border-primary bg-background-primary p-2 shadow-lg">
           <DatePicker

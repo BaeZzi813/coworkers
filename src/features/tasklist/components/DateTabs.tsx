@@ -14,7 +14,6 @@ const WEEKDAYS = ["일", "월", "화", "수", "목", "금", "토"];
 const SLOT_COUNT = 7;
 const CENTER_INDEX = Math.floor(SLOT_COUNT / 2);
 
-// selectedDate 중앙 기준 7칸 생성
 function getSlotDates(selected: Date) {
   return Array.from({ length: SLOT_COUNT }, (_, i) => {
     const date = new Date(selected);
