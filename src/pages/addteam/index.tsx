@@ -3,9 +3,15 @@ import { Input } from "@/components/input";
 import TeamEditAvatar from "@/features/team/components/TeamEditAvatar";
 import TeamEditContainer from "@/features/team/components/TeamEditContainer";
 import { useResponsive } from "@/hooks/use-responsive";
+import { ChangeEvent, useState } from "react";
 
 export default function AddTeamPage() {
   const { isMobile } = useResponsive();
+  const [teamName, setTeamName] = useState("");
+
+  const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setTeamName(event.target.value);
+  };
 
   return (
     <div className="flex h-full items-center bg-background-secondary px-4">
@@ -22,11 +28,13 @@ export default function AddTeamPage() {
             </label>
             <Input
               id="team-name"
+              value={teamName}
               placeholder="팀 이름을 입력해주세요."
               size={isMobile ? "small" : "large"}
+              onChange={handleNameChange}
             />
           </div>
-          <Button className="mt-10" title="생성하기" />
+          <Button className="mt-10" title="생성하기" disabled={!teamName.trim()}/>
         </div>
       </TeamEditContainer>
     </div>
