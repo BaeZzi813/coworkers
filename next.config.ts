@@ -30,6 +30,15 @@ const nextConfig: NextConfig = {
     return config;
   },
   reactStrictMode: true,
+  images: {
+    domains: ["fastly.picsum.photos"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "fastly.picsum.photos",
+      },
+    ],
+  },
 };
 
 export default nextConfig;

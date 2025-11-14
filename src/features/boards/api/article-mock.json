@@ -1,0 +1,105 @@
+{
+  "totalCount": 10,
+  "list": [
+    {
+      "id": 1,
+      "title": "커피 머신 고장 신고합니다 ☕️",
+      "image": "https://fastly.picsum.photos/id/789/200/300.jpg?hmac=nu1PpKsVA8Td2PEYonJWrmrriU-Km5XoKoEZQ-Tq-6E",
+      "likeCount": 982,
+      "content": "커피 마시고 싶어요..",
+      "writer": { "id": 1, "nickname": "우지원" },
+      "createdAt": "2025-11-10T08:20:15.000Z",
+      "updatedAt": "2025-11-10T08:20:15.000Z"
+    },
+    {
+      "id": 2,
+      "title": "지하 1층 자판기 돈 먹었습니다 😭",
+      "image": "https://fastly.picsum.photos/id/929/200/300.jpg?hmac=cDiAv5Denc7xEb3NN4q1-CKp6ryrG-3uLdj2XhA90WU",
+      "likeCount": 312,
+      "content": "자판기 고쳐주세요~~~",
+      "writer": { "id": 2, "nickname": "이수빈" },
+      "createdAt": "2025-11-09T12:45:50.000Z",
+      "updatedAt": "2025-11-09T12:45:50.000Z"
+    },
+    {
+      "id": 3,
+      "title": "엘리베이터 버튼 안 눌려요 🔘",
+      "image": "https://fastly.picsum.photos/id/141/200/300.jpg?hmac=d8Mh3TnTbeViVLDauKiTRsNX8KAY5RGDbXDwEuecPko",
+      "likeCount": 644,
+      "content": "계단으로 올라오느라 힘들어요",
+      "writer": { "id": 3, "nickname": "정민재" },
+      "createdAt": "2025-11-08T10:13:40.000Z",
+      "updatedAt": "2025-11-08T10:13:40.000Z"
+    },
+    {
+      "id": 4,
+      "title": "회의실 예약 시스템 오류 🔄",
+      "image": "https://fastly.picsum.photos/id/159/200/300.jpg?hmac=CC6862WSVsX6F74hcV30UzS4czPi0LO6zPJDaEaQeFU",
+      "likeCount": 487,
+      "content": "당분간 예약은 수기로 작성부탁드려요",
+      "writer": { "id": 4, "nickname": "박서연" },
+      "createdAt": "2025-11-07T14:30:00.000Z",
+      "updatedAt": "2025-11-07T14:30:00.000Z"
+    },
+    {
+      "id": 5,
+      "title": "복사기 용지 걸렸습니다 🧾",
+      "image": "https://fastly.picsum.photos/id/552/200/300.jpg?hmac=vNqEVcCpFi9r0PtJUobWpEy8qdHJyxLm9IFELJPWKXc",
+      "likeCount": 193,
+      "content": "업체 번호 알고 계신 분 있으신가요~?",
+      "writer": { "id": 5, "nickname": "김태훈" },
+      "createdAt": "2025-11-06T09:05:25.000Z",
+      "updatedAt": "2025-11-06T09:05:25.000Z"
+    },
+    {
+      "id": 6,
+      "title": "공기청정기 필터 교체 요청 💨",
+      "image": "https://fastly.picsum.photos/id/478/200/300.jpg?hmac=9XTsWr649TEW4EJf8V09OflQrYWLvD63zeYkUNJ8Aq4",
+      "likeCount": 225,
+      "content": "사무실 공기가 너무 탁해요",
+      "writer": { "id": 6, "nickname": "최예린" },
+      "createdAt": "2025-11-05T11:22:31.000Z",
+      "updatedAt": "2025-11-05T11:22:31.000Z"
+    },
+    {
+      "id": 7,
+      "title": "냉장고 문이 안 닫혀요 🧊",
+      "image": "https://fastly.picsum.photos/id/121/200/300.jpg?hmac=2fXySXN_YXZfcWVqSvYNuH7podc4E9cEj89RqtBW238",
+      "likeCount": 511,
+      "content": "안에 있던 음식들 폐기 예정입니다!",
+      "writer": { "id": 7, "nickname": "홍지훈" },
+      "createdAt": "2025-11-04T15:10:45.000Z",
+      "updatedAt": "2025-11-04T15:10:45.000Z"
+    },
+    {
+      "id": 8,
+      "title": "프로젝터 연결이 안 됩니다 📽️",
+      "image": "https://fastly.picsum.photos/id/862/200/300.jpg?hmac=eu7Z4fgzcdsbc3tA4GZZVHdkM3dtNIu2A--ZHUQEK_g",
+      "likeCount": 733,
+      "content": "미팅하는데 불편함을 겪고 있어요 참고하세요!",
+      "writer": { "id": 8, "nickname": "이하늘" },
+      "createdAt": "2025-11-03T08:00:10.000Z",
+      "updatedAt": "2025-11-03T08:00:10.000Z"
+    },
+    {
+      "id": 9,
+      "title": "전등이 깜빡입니다 💡",
+      "image": "https://fastly.picsum.photos/id/96/200/300.jpg?hmac=q257RPq4_aD8wno1Mkb4eP37WQzxDcNNLPu_HBwKdag",
+      "likeCount": 259,
+      "content": "눈이 나갈 거 같아요",
+      "writer": { "id": 9, "nickname": "정유나" },
+      "createdAt": "2025-11-02T19:40:55.000Z",
+      "updatedAt": "2025-11-02T19:40:55.000Z"
+    },
+    {
+      "id": 10,
+      "title": "출입카드 인식이 안돼요 🔐",
+      "image": "https://fastly.picsum.photos/id/467/200/300.jpg?hmac=sQK5ibuk2pXpFclSCs5TxY7X9hsRsRbb4r5JhWqRErc",
+      "likeCount": 876,
+      "content": "재등록 하는 법 아시는 분 계신가요~?",
+      "writer": { "id": 10, "nickname": "윤도현" },
+      "createdAt": "2025-11-01T17:25:00.000Z",
+      "updatedAt": "2025-11-01T17:25:00.000Z"
+    }
+  ]
+}
