@@ -37,6 +37,7 @@ export default function CommentItem({
 }: CommentItemProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [editContent, setEditContent] = useState(content);
+  const isEdited = createdAt !== updatedAt;
 
   const currentUserId = 5; // 테스트용 임시 id
   const isMine = currentUserId === userId;
@@ -125,6 +126,9 @@ export default function CommentItem({
             ) : (
               <p className="text-md-m text-state-400">
                 {new Date(createdAt).toLocaleDateString("ko-KR")}
+                {isEdited && (
+                  <span className="ml-0.5 text-xs-r opacity-70">(수정됨)</span>
+                )}
               </p>
             )}
           </div>
