@@ -3,6 +3,7 @@ import Dropdown, {
   Direction,
   DropdownOption,
 } from "@/components/dropdown";
+import { useRouter } from "next/router";
 import { ReactNode } from "react";
 
 interface Props {
@@ -20,6 +21,8 @@ export default function ProfileMenu({
   direction,
   alignmentOffset,
 }: Props) {
+  const router = useRouter();
+
   const options: DropdownOption[] = [
     { label: "마이 히스토리", value: "myhistory" },
     { label: "계정 설정", value: "mypage" },
@@ -28,7 +31,20 @@ export default function ProfileMenu({
   ];
 
   const handleSelect = (option: DropdownOption) => {
-    console.log("Selected option:", option);
+    switch (option.value) {
+      case "myhistory":
+        console.log("Go to my history");
+        break;
+      case "mypage":
+        console.log("Go to my page");
+        break;
+      case "joinTeam":
+        router.push("/jointeam");
+        break;
+      case "logout":
+        console.log("Go to logout");
+        break;
+    }
   };
 
   return (
