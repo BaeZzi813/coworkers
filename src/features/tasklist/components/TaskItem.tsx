@@ -64,9 +64,7 @@ export default function TaskItem({ title, tasks, onClick }: TaskItemProps) {
               role="button"
               aria-label="댓글 설정 열기"
               className="cursor-pointer py-1.5"
-              onClick={() => {
-                isDropdownClickRef.current = true;
-              }}
+              onClick={handleDropdownClick}
             >
               <Icon name="dots" size="large" />
             </div>
