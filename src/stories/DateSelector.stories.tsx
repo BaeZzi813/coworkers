@@ -20,7 +20,7 @@ export function DateSelector() {
     <div className="w-[500px]">
       <DateSelectorComponent
         selectedDate={selectedDate}
-        onSelectDate={setSelectedDate}
+        onSelect={setSelectedDate}
       />
 
       <div className="mt-4 rounded-md bg-gray-100 p-3">

@@ -5,21 +5,21 @@ import DateTabs from "./DateTabs";
 
 interface DateSelectorProps {
   selectedDate: Date;
-  onSelectDate: (date: Date) => void;
+  onSelect: (date: Date) => void;
 }
 
 export default function DateSelector({
   selectedDate,
-  onSelectDate,
+  onSelect,
 }: DateSelectorProps) {
-  const [openCalendar, setOpenCalendar] = useState(false);
+  const [isCalendarOpen, setisCalendarOpen] = useState(false);
 
   const handlePrevMonth = () => {
     const date = new Date(selectedDate);
     date.setMonth(date.getMonth() - 1);
     date.setDate(1);
 
-    onSelectDate(date);
+    onSelect(date);
   };
 
   const handleNextMonth = () => {
@@ -27,7 +27,7 @@ export default function DateSelector({
     date.setMonth(date.getMonth() + 1);
     date.setDate(1);
 
-    onSelectDate(date);
+    onSelect(date);
   };
 
   return (
@@ -36,24 +36,24 @@ export default function DateSelector({
         selectedDate={selectedDate}
         onPrev={handlePrevMonth}
         onNext={handleNextMonth}
-        onOpenCalendar={() => setOpenCalendar((prev) => !prev)}
+        onCalendarOpen={() => setisCalendarOpen((prev) => !prev)}
       />
 
-      {openCalendar && (
+      {isCalendarOpen && (
         <div className="absolute top-8 right-0 z-999 rounded-xl border border-border-primary bg-background-primary p-2 shadow-lg">
           <DatePicker
             selected={selectedDate}
             onSelect={(date) => {
               if (date) {
-                onSelectDate(date);
+                onSelect(date);
               }
-              setOpenCalendar(false);
+              setisCalendarOpen(false);
             }}
           />
         </div>
       )}
 
-      <DateTabs selectedDate={selectedDate} onSelect={onSelectDate} />
+      <DateTabs selectedDate={selectedDate} onSelect={onSelect} />
     </div>
   );
 }

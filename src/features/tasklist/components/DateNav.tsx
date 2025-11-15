@@ -4,14 +4,14 @@ interface DateNavProps {
   selectedDate: Date;
   onPrev: () => void;
   onNext: () => void;
-  onOpenCalendar?: () => void;
+  onCalendarOpen?: () => void;
 }
 
 export default function DateNav({
   selectedDate,
   onPrev,
   onNext,
-  onOpenCalendar,
+  onCalendarOpen,
 }: DateNavProps) {
   const year = selectedDate.getFullYear();
   const month = selectedDate.getMonth() + 1;
@@ -40,7 +40,7 @@ export default function DateNav({
         </button>
 
         <button
-          onClick={onOpenCalendar}
+          onClick={onCalendarOpen}
           aria-label="날짜 선택창 열기"
           className="flex h-6 w-6 cursor-pointer items-center justify-center rounded-full bg-background-secondary hover:bg-gray-300"
         >
