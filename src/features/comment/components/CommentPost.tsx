@@ -7,14 +7,14 @@ interface CommentPostProps {
   profileImage?: string;
   onSubmit?: (content: string) => void;
   className?: string;
-  px?: number;
+  horizontalPadding?: number;
 }
 
 export default function CommentPost({
   profileImage,
   onSubmit,
   className,
-  px,
+  horizontalPadding,
 }: CommentPostProps) {
   const [content, setContent] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -55,7 +55,10 @@ export default function CommentPost({
   return (
     <div
       className={clsx("flex w-full items-start gap-4", className)}
-      style={{ paddingLeft: px, paddingRight: px }}
+      style={{
+        paddingLeft: horizontalPadding,
+        paddingRight: horizontalPadding,
+      }}
     >
       <div className="mt-2">
         <Avatar source={profileImage ?? ""} size="medium" />

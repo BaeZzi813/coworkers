@@ -6,7 +6,7 @@ interface CommentListProps {
   onEdit?: (id: number, content: string) => void;
   onDelete?: (id: number) => void;
   className?: string;
-  px?: number;
+  horizontalPadding?: number;
 }
 
 export default function CommentList({
@@ -14,7 +14,7 @@ export default function CommentList({
   onEdit,
   onDelete,
   className,
-  px,
+  horizontalPadding,
 }: CommentListProps) {
   return (
     <div className={clsx("flex w-full flex-col", className)}>
@@ -24,7 +24,7 @@ export default function CommentList({
           {...comment}
           onEdit={onEdit}
           onDelete={onDelete}
-          px={px}
+          horizontalPadding={horizontalPadding}
         />
       ))}
     </div>

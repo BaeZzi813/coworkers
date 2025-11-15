@@ -9,7 +9,7 @@ interface CommentSectionProps {
   onEdit?: (id: number, content: string) => void;
   onDelete?: (id: number) => void;
   className?: string;
-  px?: number;
+  horizontalPadding?: number;
 }
 
 export default function CommentSection({
@@ -18,19 +18,25 @@ export default function CommentSection({
   onEdit,
   onDelete,
   className,
-  px,
+  horizontalPadding,
 }: CommentSectionProps) {
   return (
     <section className={clsx("flex flex-col gap-4", className)}>
-      <h2 className="text-2xl-b" style={{ paddingLeft: px, paddingRight: px }}>
+      <h2
+        className="text-2xl-b"
+        style={{
+          paddingLeft: horizontalPadding,
+          paddingRight: horizontalPadding,
+        }}
+      >
         댓글<span className="ml-1 text-brand-primary">{comments.length}</span>
       </h2>
-      <CommentPost onSubmit={onSubmit} px={px} />
+      <CommentPost onSubmit={onSubmit} horizontalPadding={horizontalPadding} />
       <CommentList
         comments={comments}
         onEdit={onEdit}
         onDelete={onDelete}
-        px={px}
+        horizontalPadding={horizontalPadding}
       />
     </section>
   );
