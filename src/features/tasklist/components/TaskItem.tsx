@@ -13,7 +13,7 @@ interface TaskItemProps {
 }
 
 export default function TaskItem({ title, tasks, onClick }: TaskItemProps) {
-  const ignoreItemRef = useRef(false);
+  const isDropdownClickRef = useRef(false);
   const { isDesktop } = useResponsive();
 
   const totalCount = tasks.length;
@@ -25,7 +25,7 @@ export default function TaskItem({ title, tasks, onClick }: TaskItemProps) {
   ];
 
   const handleSelect = (option: DropdownOption) => {
-    ignoreItemRef.current = true;
+    isDropdownClickRef.current = true;
 
     switch (option.value) {
       case "edit":
@@ -36,8 +36,8 @@ export default function TaskItem({ title, tasks, onClick }: TaskItemProps) {
   };
 
   const handleItemClick = () => {
-    if (ignoreItemRef.current) {
-      ignoreItemRef.current = false;
+    if (isDropdownClickRef.current) {
+      isDropdownClickRef.current = false;
       return;
     }
     onClick?.();
@@ -64,7 +64,7 @@ export default function TaskItem({ title, tasks, onClick }: TaskItemProps) {
               aria-label="댓글 설정 열기"
               className="cursor-pointer py-1.5"
               onClick={() => {
-                ignoreItemRef.current = true;
+                isDropdownClickRef.current = true;
               }}
             >
               <Icon name="dots" size="large" />
