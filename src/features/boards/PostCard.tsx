@@ -1,33 +1,17 @@
 import Icon from "@/components/icon";
-import Formatter from "@/utils/formatter";
+import { Article } from "@/types/article";
+import { formatDate } from "@/utils/formatDate";
 import clsx from "clsx";
 import Image from "next/image";
 
-interface Writer {
-  id: number;
-  nickname: string;
-}
-
 interface PostCardProps {
   isPopular?: boolean;
-  image?: string;
-  title: string;
-  content?: string;
-  likeCount: number;
-  createdAt: string;
-  writer: Writer;
+  article: Article;
 }
 
-export default function PostCard({
-  isPopular,
-  image,
-  title,
-  writer,
-  createdAt,
-  content,
-  likeCount,
-}: PostCardProps) {
-  const formattedDate = Formatter(createdAt);
+export default function PostCard({ isPopular, article }: PostCardProps) {
+  const { title, content, writer, createdAt, likeCount, image } = article;
+  const formattedDate = formatDate(createdAt);
   return (
     <div
       className={clsx(
@@ -45,7 +29,7 @@ export default function PostCard({
         <div className="flex h-20 w-[308px] justify-between tablet:h-[88px] tablet:w-[572px] desktop:w-[504px]">
           <div className="flex flex-col gap-2">
             <h3 className="text-lg-b tablet:text-2lg-b">{title}</h3>
-            <p className="text-sm-m tablet:text-md-r">{content}</p>
+            <p className="line-clamp-2 text-sm-m tablet:text-md-r">{content}</p>
           </div>
           {image && (
             <div className="relative h-20 w-20 tablet:w-[88px] desktop:h-[88px]">

@@ -1,4 +1,4 @@
-export default function Formatter(ISO: string) {
+export function formatDate(ISO: string) {
   const date = new Date(ISO);
   const formatter = new Intl.DateTimeFormat("ko-KR", {
     year: "numeric",
