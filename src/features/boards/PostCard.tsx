@@ -1,4 +1,5 @@
 import Icon from "@/components/icon";
+import Formatter from "@/utils/formatter";
 import clsx from "clsx";
 import Image from "next/image";
 
@@ -26,16 +27,7 @@ export default function PostCard({
   content,
   likeCount,
 }: PostCardProps) {
-  const date = new Date(createdAt);
-  const formatter = new Intl.DateTimeFormat("ko-KR", {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  });
-  const formattedDate = formatter
-    .format(date)
-    .replace(/\s/g, "")
-    .replace(/\.$/, "");
+  const formattedDate = Formatter(createdAt);
   return (
     <div
       className={clsx(
@@ -44,7 +36,7 @@ export default function PostCard({
       )}
     >
       {isPopular && (
-        <div className="flex h-7 w-16 items-center justify-center rounded-[1000px] bg-background-secondary px-1 py-1.5 text-brand-primary">
+        <div className="flex h-7 w-16 items-center justify-center rounded-full bg-background-secondary px-1 py-1.5 text-brand-primary">
           <Icon name="best" />
           인기
         </div>

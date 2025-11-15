@@ -19,7 +19,7 @@ export default function SearchBar({ value, onChange }: SearchBarProps) {
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder="검색어를 입력해주세요"
-        className="h-12 w-[343px] rounded-[1000px] border-2 border-brand-primary pl-12 focus:outline-none tablet:h-14 tablet:w-[420px]"
+        className="h-12 w-[343px] rounded-full border-2 border-brand-primary pl-12 focus:outline-none tablet:h-14 tablet:w-[420px]"
       />
     </div>
   );

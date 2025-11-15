@@ -47,9 +47,9 @@ export default function BoardsPage() {
           <SearchBar value={query} onChange={setQuery} />
         </div>
       </section>
-      <section className="min-h-screen bg-background-secondary">
+      <section className="min-h-screen">
         <div className="mx-auto flex w-[340px] flex-col gap-5 tablet:w-[620px] desktop:w-[1120px]">
-          <div className="mt-4 flex items-center justify-end">
+          <div className="flex items-center justify-end">
             <Select
               placeholder="최신순"
               size="large"
