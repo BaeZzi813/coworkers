@@ -24,8 +24,12 @@ export default function TaskItem({ title, tasks, onClick }: TaskItemProps) {
     { label: "삭제하기", value: "delete" },
   ];
 
-  const handleSelect = (option: DropdownOption) => {
+  const handleDropdownClick = () => {
     isDropdownClickRef.current = true;
+  };
+
+  const handleSelect = (option: DropdownOption) => {
+    handleDropdownClick();
 
     switch (option.value) {
       case "edit":
@@ -36,10 +40,7 @@ export default function TaskItem({ title, tasks, onClick }: TaskItemProps) {
   };
 
   const handleItemClick = () => {
-    if (isDropdownClickRef.current) {
-      isDropdownClickRef.current = false;
-      return;
-    }
+    handleDropdownClick();
     onClick?.();
   };
 
