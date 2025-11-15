@@ -1,10 +1,10 @@
 import clsx from "clsx";
-import CommentItem, { CommentItemProps } from "./CommentItem";
+import CommentItem, { Comment } from "./CommentItem";
 
 interface CommentListProps {
-  comments: CommentItemProps[];
-  onEdit?: (id: number, content: string) => void;
-  onDelete?: (id: number) => void;
+  comments: Comment[];
+  onEdit?: (commentId: number, newContent: string) => void;
+  onDelete?: (commentId: number) => void;
   className?: string;
   horizontalPadding?: number;
 }
@@ -20,7 +20,7 @@ export default function CommentList({
     <div className={clsx("flex w-full flex-col", className)}>
       {comments.map((comment) => (
         <CommentItem
-          key={comment.id}
+          key={comment.commentId}
           {...comment}
           onEdit={onEdit}
           onDelete={onDelete}

@@ -5,34 +5,31 @@ import Icon from "@/components/icon";
 import clsx from "clsx";
 import { useState } from "react";
 
-interface User {
-  id: number;
-  nickname: string;
-  image?: string;
-}
-
-export interface CommentItemProps {
-  id: number;
-  user?: User;
-  writer?: User;
-  userId?: number;
-  taskId?: number;
+export interface Comment {
+  commentId: number;
+  userId: number;
+  name: string;
+  profileImageUrl?: string;
   content: string;
   createdAt: string;
   updatedAt: string;
-  onEdit?: (id: number, content: string) => void;
-  onDelete?: (id: number) => void;
+}
+
+export interface CommentItemProps extends Comment {
+  onEdit?: (commentId: number, newContent: string) => void;
+  onDelete?: (commentId: number) => void;
   className?: string;
   horizontalPadding?: number;
 }
 
 export default function CommentItem({
-  id,
-  user,
-  writer,
+  commentId,
   userId,
+  profileImageUrl,
+  name,
   content,
   createdAt,
+  updatedAt,
   onEdit,
   onDelete,
   className,
@@ -40,6 +37,9 @@ export default function CommentItem({
 }: CommentItemProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [editContent, setEditContent] = useState(content);
+
+  const currentUserId = 5; // 테스트용 임시 id
+  const isMine = currentUserId === userId;
 
   const options: DropdownOption[] = [
     { label: "수정하기", value: "edit" },
@@ -52,13 +52,13 @@ export default function CommentItem({
         setIsEditing(true);
         break;
       case "delete":
-        onDelete?.(id);
+        handleDelete();
         break;
     }
   };
 
-  const handleEditClick = (id: number, editContent: string) => {
-    onEdit?.(id, editContent);
+  const handleEditSubmit = () => {
+    onEdit?.(commentId, editContent);
     setIsEditing(false);
   };
   const handleEditCancel = () => {
@@ -66,10 +66,9 @@ export default function CommentItem({
     setIsEditing(false);
   };
 
-  const currentUserId = 5; // 테스트용 임시 id
-  const isMine = currentUserId === userId;
-  const author = user ?? writer;
-  if (!author) return null;
+  const handleDelete = () => {
+    onDelete?.(commentId);
+  };
 
   return (
     <div
@@ -88,11 +87,11 @@ export default function CommentItem({
           isEditing && "border-none"
         )}
       >
-        <Avatar source={author.image ?? ""} size="medium" />
+        <Avatar source={profileImageUrl ?? ""} size="medium" />
 
         <div className="flex flex-1 items-start justify-between">
           <div className="flex flex-1 flex-col gap-1">
-            <p className="text-md-b text-text-primary">{author.nickname}</p>
+            <p className="text-md-b text-text-primary">{name}</p>
 
             {isEditing ? (
               <textarea
@@ -120,7 +119,7 @@ export default function CommentItem({
                   variant="outlinedPrimary"
                   size="small"
                   isFullWidth={false}
-                  onClick={() => handleEditClick(id, editContent)}
+                  onClick={() => handleEditSubmit()}
                 />
               </div>
             ) : (

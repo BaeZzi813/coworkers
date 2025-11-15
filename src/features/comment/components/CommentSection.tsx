@@ -1,13 +1,13 @@
 import clsx from "clsx";
-import { CommentItemProps } from "./CommentItem";
+import { Comment } from "./CommentItem";
 import CommentList from "./CommentList";
 import CommentPost from "./CommentPost";
 
 interface CommentSectionProps {
-  comments: CommentItemProps[];
+  comments: Comment[];
   onSubmit?: (content: string) => void;
-  onEdit?: (id: number, content: string) => void;
-  onDelete?: (id: number) => void;
+  onEdit?: (commentId: number, newContent: string) => void;
+  onDelete?: (commentId: number) => void;
   className?: string;
   horizontalPadding?: number;
 }
