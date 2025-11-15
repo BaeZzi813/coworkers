@@ -85,7 +85,7 @@ export default function Dropdown({
 
   return (
     <div className="relative w-fit" ref={targetRef}>
-      <div onClick={(event) => handleAnchorClick(event)}>{anchor}</div>
+      <div onClick={handleAnchorClick}>{anchor}</div>
       {isOpen && (
         <ul
           className={clsx(
