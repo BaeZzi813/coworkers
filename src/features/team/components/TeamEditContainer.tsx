@@ -16,7 +16,7 @@ export default function TeamEditContainer({
   return (
     <div
       className={clsx(
-        "w-[550px] rounded-[20px] bg-background-primary px-[45px] pt-14 pb-16",
+        "w-full max-w-[550px] min-w-[343px] rounded-[20px] bg-background-primary px-6 pt-14 pb-16 tablet:px-[45px]",
         className
       )}
     >
