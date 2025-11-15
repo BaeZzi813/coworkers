@@ -40,7 +40,7 @@ export default function DateSelector({
       />
 
       {isCalendarOpen && (
-        <div className="absolute top-8 right-0 z-999 rounded-xl border border-border-primary bg-background-primary p-2 shadow-lg">
+        <div className="absolute top-8 right-0 z-(--z-popover) rounded-xl border border-border-primary bg-background-primary p-2 shadow-lg">
           <DatePicker
             selected={selectedDate}
             onSelect={(date) => {
