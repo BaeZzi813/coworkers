@@ -4,6 +4,7 @@ import PostCard from "@/features/boards/PostCard";
 import SearchBar from "@/features/boards/SearchBar";
 import { Article } from "@/types/article";
 import { useQuery } from "@tanstack/react-query";
+import { useDebounce } from "@uidotdev/usehooks";
 import { useState } from "react";
 
 const options: SelectOption[] = [
@@ -13,17 +14,18 @@ const options: SelectOption[] = [
 
 export default function BoardsPage() {
   const [query, setQuery] = useState("");
+  const debounceQuery = useDebounce(query, 300);
   const [selectedOption, setSelectedOption] = useState<SelectOption>(
     options[0]
   );
 
   const { data: filterPost = [] } = useQuery<Article[]>({
-    queryKey: ["article", query, selectedOption.value],
+    queryKey: ["article", debounceQuery, selectedOption.value],
     queryFn: async () => {
       const article = await getArticle();
 
       let result = article.filter((post) =>
-        post.title.toLowerCase().includes(query.toLowerCase())
+        post.title.toLowerCase().includes(debounceQuery.toLowerCase())
       );
       if (selectedOption.value === "like") {
         result = result.sort((a, b) => b.likeCount - a.likeCount);
@@ -70,7 +72,7 @@ export default function BoardsPage() {
             />
           </div>
           <div className="flex flex-col gap-4 desktop:grid desktop:grid-cols-2 desktop:gap-5">
-            {(filterPost as Article[]).map((post) => (
+            {filterPost.map((post) => (
               <PostCard
                 key={post.id}
                 article={post}
