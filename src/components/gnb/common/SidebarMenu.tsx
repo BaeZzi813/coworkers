@@ -19,7 +19,7 @@ export default function SidebarMenu({
     <div
       className={clsx(
         "flex items-center gap-3 rounded-xl hover:bg-state-50",
-        compact ? "justify-center p-3.5" : "p-4",
+        compact ? "justify-center p-3.5" : "px-2 py-3 tablet:p-4",
         active && "bg-blue-50"
       )}
     >
@@ -33,8 +33,8 @@ export default function SidebarMenu({
           className={clsx(
             "whitespace-nowrap",
             active
-              ? "text-lg-s text-brand-primary"
-              : "text-lg-r text-text-primary"
+              ? "text-md-s text-brand-primary tablet:text-lg-s"
+              : "text-md-r text-text-primary tablet:text-lg-r"
           )}
         >
           {title}

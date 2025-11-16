@@ -2,9 +2,9 @@ import { useBackdropClick } from "@/hooks/use-backdrop-click";
 import clsx from "clsx";
 import { CSSProperties, ReactNode, useState } from "react";
 
-type Alignment = "top" | "bottom" | "left" | "right" | "fill";
+export type Alignment = "top" | "bottom" | "left" | "right" | "fill";
 
-type Direction = "top" | "bottom" | "left" | "right";
+export type Direction = "top" | "bottom" | "left" | "right";
 
 export interface DropdownOption {
   label: string;
@@ -98,7 +98,7 @@ export default function Dropdown({
             return (
               <li
                 key={key}
-                className="text-lg-r cursor-pointer px-6 py-3.5 whitespace-nowrap hover:bg-background-tertiary"
+                className="cursor-pointer px-6 py-3.5 text-lg-r whitespace-nowrap hover:bg-background-tertiary"
                 onClick={() => handleOptionClick(option)}
               >
                 {label}

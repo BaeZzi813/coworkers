@@ -1,17 +1,19 @@
 import LogoFull from "@/assets/images/logo-full.svg";
 import Logo from "@/assets/images/logo.svg";
+import { Button } from "@/components/button";
 import Icon from "@/components/icon";
 import { getUserGroups } from "@/features/group/apis";
+import { useSidebarStore } from "@/stores/sidebar-store";
 import { useQuery } from "@tanstack/react-query";
 import clsx from "clsx";
 import { motion } from "motion/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState } from "react";
-import Avatar from "../avatar";
-import { Button } from "../button";
-import SidebarMenu from "./SidebarMenu";
-import UserGroupList from "./UserGroupList";
+import { useShallow } from "zustand/shallow";
+import Separator from "../common/Separator";
+import SidebarMenu from "../common/SidebarMenu";
+import UserGroupList from "../common/UserGroupList";
+import SidebarProfile from "./SidebarProfile";
 
 function sidebarWidth(isFolded: boolean) {
   return isFolded ? 72 : 270;
@@ -21,18 +23,25 @@ function sidebarWidthClassName(isFolded: boolean) {
   return isFolded ? `w-[72px]` : `w-[270px]`;
 }
 
-export default function Sidebar() {
-  const [isFolded, setIsFolded] = useState(false);
+interface Props {
+  className?: string;
+}
+
+export default function Sidebar({ className }: Props) {
+  const [isFolded, setIsFolded] = useSidebarStore(
+    useShallow((state) => [state.isFold, state.toggle])
+  );
 
   const handleFoldClick = () => {
-    setIsFolded(!isFolded);
+    setIsFolded();
   };
 
   return (
     <motion.nav
       className={clsx(
-        "flex h-dvh shrink-0 flex-col border-r border-border-primary bg-background-primary text-text-primary",
-        sidebarWidthClassName(isFolded)
+        "flex shrink-0 flex-col border-r border-border-primary bg-background-primary text-text-primary",
+        sidebarWidthClassName(isFolded),
+        className
       )}
       animate={{ width: sidebarWidth(isFolded) }}
       transition={{ ease: "easeInOut", duration: 0.1 }}
@@ -45,9 +54,9 @@ export default function Sidebar() {
       <footer className={clsx("pb-6", isFolded || "px-4")}>
         <div className="border-t border-border-primary pt-5">
           {/* TODO: 로그아웃 상태에서는 info에 undefined/null이 전달되어 '로그인'으로 표시 */}
-          <Profile
+          <SidebarProfile
             isFolded={isFolded}
-            info={{ name: "안해나", team: "경영관리팀" }}
+            userInfo={{ name: "안해나", team: "경영관리팀" }}
           />
         </div>
       </footer>
@@ -106,7 +115,7 @@ function Content({ isFolded }: { isFolded: boolean }) {
             activeGroupId={Number(router.query.teamId)}
           />
           {isFolded || (
-            <div className="">
+            <div>
               <Button
                 variant="outlinedPrimary"
                 title="팀 추가하기"
@@ -127,57 +136,5 @@ function Content({ isFolded }: { isFolded: boolean }) {
         />
       </Link>
     </div>
-  );
-}
-
-function Separator() {
-  return <div className="mt-6 mb-3 h-px w-full bg-border-primary" />;
-}
-
-function Profile({
-  isFolded,
-  info,
-}: {
-  isFolded: boolean;
-  info?: {
-    imageUrl?: string;
-    name: string;
-    team: string;
-  };
-}) {
-  const avatar = (
-    <Avatar source={info?.imageUrl} size={isFolded ? "medium" : "large"} />
-  );
-  const title = (
-    <span
-      className={clsx(
-        "text-lg-m whitespace-nowrap",
-        isFolded ? "text-text-default" : "text-text-primary"
-      )}
-    >
-      {info?.name ?? "로그인"}
-    </span>
-  );
-
-  if (isFolded) {
-    return (
-      <button className="flex w-full cursor-pointer justify-center">
-        {info ? avatar : title}
-      </button>
-    );
-  }
-
-  return (
-    <button className="flex cursor-pointer items-center gap-3">
-      {avatar}
-      <div className="flex flex-col items-start gap-0.5">
-        {title}
-        {info?.team && (
-          <span className="text-md-m whitespace-nowrap text-state-400">
-            {info.team}
-          </span>
-        )}
-      </div>
-    </button>
   );
 }

@@ -4,17 +4,17 @@ import SidebarMenu from "./SidebarMenu";
 
 interface Props {
   groups: UserGroup[];
-  compact: boolean;
+  compact?: boolean;
   activeGroupId: number;
 }
 
 export default function UserGroupList({
   groups,
-  compact,
+  compact = false,
   activeGroupId,
 }: Props) {
   return (
-    <ul className="flex flex-col gap-2">
+    <ul className="flex flex-col tablet:gap-2">
       {groups.map((group) => (
         <li key={group.id}>
           <Link href={`/${group.id}`}>

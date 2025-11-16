@@ -1,13 +1,11 @@
 import Icon from "@/components/icon";
+import { type OverlayProps } from "@/components/overlay";
 import { useResponsive } from "@/hooks/use-responsive";
 import { motion } from "motion/react";
 import { ReactNode } from "react";
 import Modal from "./Modal";
 
-interface Props {
-  isOpen: boolean;
-  onClose?: () => void;
-  onExit?: () => void;
+interface Props extends OverlayProps {
   header?: ReactNode;
   title: string;
   message?: string;
@@ -39,18 +37,16 @@ export default function Alert({
         transition={{ damping: 0, duration: 0.25 }}
       >
         <div className="flex h-6 justify-end">
-          {onClose && (
-            <button className="cursor-pointer" onClick={onClose}>
-              <Icon name="xmark" />
-            </button>
-          )}
+          <button className="cursor-pointer" onClick={onClose}>
+            <Icon name="xmark" />
+          </button>
         </div>
         <div className="mx-8 flex flex-col">
           {header && <div className="mb-4 self-center">{header}</div>}
           <div className="flex flex-col items-center gap-2">
             <div className="text-lg-m">{title}</div>
             {message && (
-              <div className="text-md-m text-center whitespace-pre-wrap">
+              <div className="text-center text-md-m whitespace-pre-wrap">
                 {message}
               </div>
             )}
