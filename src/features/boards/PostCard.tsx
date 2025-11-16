@@ -41,7 +41,7 @@ export default function PostCard({ isPopular, article }: PostCardProps) {
       <div className="flex h-4 w-[308px] items-center justify-between tablet:w-[572px] desktop:w-[504px]">
         <div>
           <span className="text-sm-m">{writer.nickname}</span>
-          <span className="mx-2 inline-block h-3 -translate-y-[0.05rem] border-l border-slate-700 align-middle"></span>
+          <span className="mx-2 inline-block h-3 -translate-y-[0.05rem] border-l border-slate-700 align-middle" />
           <span className="text-sm-m text-slate-400">{formattedDate}</span>
         </div>
         <span className="flex items-center text-sm-m text-slate-400">
