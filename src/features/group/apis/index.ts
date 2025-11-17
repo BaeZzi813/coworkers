@@ -1,6 +1,7 @@
+import { apiClient } from "@/services/client";
 import { UserGroup } from "@/types/user-group";
-import userGroupsMock from "./user-groups-mock.json";
 
-export async function getUserGroups(): Promise<UserGroup[]> {
-  return userGroupsMock;
+export async function getUserGroups() {
+  const response = await apiClient.get<UserGroup[]>("/user/groups");
+  return response.data;
 }
