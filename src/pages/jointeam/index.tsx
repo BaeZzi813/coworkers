@@ -1,12 +1,13 @@
 import { Button } from "@/components/button";
-import { Input } from "@/components/input";
+import { TextField } from "@/components/input";
 import TeamEditContainer from "@/features/team/components/TeamEditContainer";
 import { useResponsive } from "@/hooks/use-responsive";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useId, useState } from "react";
 
 export default function JoinTeamPage() {
   const { isMobile } = useResponsive();
   const [teamName, setTeamName] = useState("");
+  const textFieldId = useId();
 
   const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
     setTeamName(event.target.value);
@@ -21,11 +22,11 @@ export default function JoinTeamPage() {
       >
         <div className="flex flex-col items-center">
           <div className="mt-6 flex w-full flex-col gap-3">
-            <label htmlFor="team-name" className="text-md-m tablet:text-lg-m">
+            <label htmlFor={textFieldId} className="text-md-m tablet:text-lg-m">
               팀 링크
             </label>
-            <Input
-              id="team-name"
+            <TextField
+              id={textFieldId}
               value={teamName}
               placeholder="팀 링크를 입력해주세요."
               size={isMobile ? "small" : "large"}
