@@ -13,4 +13,11 @@ const proxyClient = axios.create({
   baseURL: "/api",
 });
 
+apiClient.interceptors.request.use(apiRequestInterceptor);
+
+apiClient.interceptors.response.use(
+  apiResponseInterceptor,
+  apiResponseErrorInterceptor
+);
+
 export { apiClient, proxyClient };
