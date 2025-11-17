@@ -61,7 +61,7 @@ export default function BoardsPage() {
       </section>
       {bestPosts.length > 0 && <BestPost article={bestPosts} />}
       <section className="min-h-screen">
-        <div className="mx-auto mt-7 flex w-[340px] flex-col gap-5 tablet:w-[620px] desktop:w-[1120px]">
+        <div className="mx-auto mt-7 flex w-[340px] flex-col gap-5 tablet:w-[620px] desktop:w-[1074px]">
           <div className="flex items-center justify-between">
             <h1 className="text-2lg-b tablet:text-xl-b">전체</h1>
             <Select
