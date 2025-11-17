@@ -1,13 +1,11 @@
-import { IconName } from "@/components/icon/icons";
 import clsx from "clsx";
-import { MouseEventHandler } from "react";
-import Icon from "../icon";
+import { MouseEventHandler, ReactNode } from "react";
 
 type Variant = "primary" | "inverse";
 
 interface Props {
   variant?: Variant;
-  iconName: IconName;
+  icon: ReactNode;
   onClick?: MouseEventHandler<HTMLButtonElement>;
 }
 
@@ -24,7 +22,7 @@ const border: Record<Variant, string> = {
 
 export default function FloatingButton({
   variant = "primary",
-  iconName,
+  icon,
   onClick,
 }: Props) {
   return (
@@ -36,9 +34,7 @@ export default function FloatingButton({
       )}
       onClick={onClick}
     >
-      <div className="size-6 -translate-x-[0.5px]">
-        <Icon name={iconName} />
-      </div>
+      <div className="size-6 -translate-x-[0.5px]">{icon}</div>
     </button>
   );
 }

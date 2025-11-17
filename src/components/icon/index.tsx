@@ -9,5 +9,5 @@ export interface IconProps {
 
 export default function Icon({ name, size = "large", color }: IconProps) {
   const Component = Icons[name][size];
-  return Component ? <Component color={color} fill={color} /> : null;
+  return Component && <Component color={color} fill={color} stroke={color} />;
 }

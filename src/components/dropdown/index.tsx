@@ -1,14 +1,15 @@
 import { useBackdropClick } from "@/hooks/use-backdrop-click";
 import clsx from "clsx";
-import { CSSProperties, ReactNode, useState } from "react";
+import { CSSProperties, MouseEvent, ReactNode, useState } from "react";
 
 export type Alignment = "top" | "bottom" | "left" | "right" | "fill";
 
 export type Direction = "top" | "bottom" | "left" | "right";
 
 export interface DropdownOption {
-  label: string;
+  label: ReactNode;
   value: string;
+  action?: () => void;
 }
 
 interface Props {
@@ -18,7 +19,7 @@ interface Props {
   direction?: Direction;
   alignment?: Alignment;
   alignmentOffset?: number;
-  onSelect: (option: DropdownOption | string) => void;
+  onSelect?: (option: DropdownOption | string) => void;
 }
 
 type Edge = Pick<CSSProperties, "top" | "left" | "right" | "bottom">;
@@ -69,13 +70,30 @@ export default function Dropdown({
     callback: () => setIsOpen(false),
   });
 
-  const handleAnchorClick = () => {
+  const handleAnchorClick = (event: MouseEvent) => {
+    event.stopPropagation();
     setIsOpen(!isOpen);
   };
 
-  const handleOptionClick = (option: DropdownOption | string) => {
-    onSelect(option);
+  const handleOptionClick = (
+    event: MouseEvent,
+    option: DropdownOption | string
+  ) => {
+    event.stopPropagation();
+
+    if (isStringOption(option)) {
+      onSelect?.(option);
+    } else if (option.action) {
+      option.action();
+    } else {
+      onSelect?.(option);
+    }
+
     setIsOpen(false);
+  };
+
+  const isStringOption = (option: DropdownOption | string) => {
+    return typeof option === "string";
   };
 
   return (
@@ -93,13 +111,13 @@ export default function Dropdown({
           style={layoutStyles({ gap, direction, alignment, alignmentOffset })}
         >
           {options.map((option) => {
-            const key = typeof option === "string" ? option : option.value;
-            const label = typeof option === "string" ? option : option.label;
+            const key = isStringOption(option) ? option : option.value;
+            const label = isStringOption(option) ? option : option.label;
             return (
               <li
                 key={key}
                 className="cursor-pointer px-6 py-3.5 text-lg-r whitespace-nowrap hover:bg-background-tertiary"
-                onClick={() => handleOptionClick(option)}
+                onClick={(event) => handleOptionClick(event, option)}
               >
                 {label}
               </li>

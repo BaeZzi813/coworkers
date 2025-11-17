@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "name": "업무 A",
+    "description": "",
+    "commentCount": 0,
+    "writer": { "id": 1, "nickname": "홍길동", "image": "" },
+    "doneBy": { "user": { "id": 1, "nickname": "홍길동", "image": "" } },
+    "displayIndex": 0,
+    "frequency": "DAILY",
+    "date": "2025-11-14T21:58:08.308Z",
+    "doneAt": "2025-11-14T21:58:08.308Z",
+    "deletedAt": null,
+    "recurringId": 0,
+    "updatedAt": "2025-11-14T21:58:08.308Z"
+  },
+  {
+    "id": 2,
+    "name": "업무 A",
+    "description": "",
+    "commentCount": 0,
+    "writer": { "id": 1, "nickname": "홍길동", "image": "" },
+    "doneBy": null,
+    "displayIndex": 1,
+    "frequency": "DAILY",
+    "date": "2025-11-14T21:58:08.308Z",
+    "doneAt": null,
+    "deletedAt": null,
+    "recurringId": 0,
+    "updatedAt": "2025-11-14T21:58:08.308Z"
+  }
+]
