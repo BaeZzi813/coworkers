@@ -60,29 +60,17 @@ export default function SidebarProfile({ isFolded, user }: Props) {
 function EmptyProfile({ isFolded }: { isFolded: boolean }) {
   const title = <Title isFolded={isFolded}>로그인</Title>;
 
-  const handleClick = () => {
-    // TODO: Go to login page
-  };
-
   if (isFolded) {
     return (
-      <button
-        className="flex w-full cursor-pointer justify-center"
-        onClick={handleClick}
-      >
-        {title}
-      </button>
+      <div className="flex w-full cursor-pointer justify-center">{title}</div>
     );
   }
 
   return (
-    <button
-      className="flex cursor-pointer items-center gap-3"
-      onClick={handleClick}
-    >
+    <div className="flex cursor-pointer items-center gap-3">
       <Avatar size={isFolded ? "medium" : "large"} />
       <div className="flex flex-col items-start gap-0.5">{title}</div>
-    </button>
+    </div>
   );
 }
 
