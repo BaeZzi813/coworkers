@@ -1,6 +1,7 @@
 import BgTeamPattern from "@/assets/images/bg-team-pattern.png";
 import Dropdown, { DropdownOption } from "@/components/dropdown";
 import Icon from "@/components/icon";
+import { useResponsive } from "@/hooks/use-responsive";
 import Image from "next/image";
 
 interface TeamHeaderProps {
@@ -16,6 +17,8 @@ export default function TeamHeader({
   onEdit,
   onDelete,
 }: TeamHeaderProps) {
+  const { isMobile } = useResponsive();
+
   const options: DropdownOption[] = [
     { label: "수정하기", value: "edit" },
     { label: "삭제하기", value: "delete" },
@@ -54,7 +57,7 @@ export default function TeamHeader({
               aria-label="팀 설정 열기"
               className="ml-2 cursor-pointer py-1"
             >
-              <Icon name="gear" size="large" />
+              <Icon name="gear" size={isMobile ? "small" : "large"} />
             </button>
           }
           options={options}
