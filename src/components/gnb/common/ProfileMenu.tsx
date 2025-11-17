@@ -3,6 +3,8 @@ import Dropdown, {
   Direction,
   DropdownOption,
 } from "@/components/dropdown";
+import { postSignOut } from "@/features/auth/apis";
+import { useAuthStore } from "@/stores/auth-store";
 import { useRouter } from "next/router";
 import { ReactNode } from "react";
 
@@ -22,6 +24,7 @@ export default function ProfileMenu({
   alignmentOffset,
 }: Props) {
   const router = useRouter();
+  const logout = useAuthStore((state) => state.logOut);
 
   const options: DropdownOption[] = [
     {
@@ -42,7 +45,11 @@ export default function ProfileMenu({
     {
       label: "로그아웃",
       value: "logout",
-      action: () => console.log("Go to logout"),
+      action: async () => {
+        await postSignOut();
+        logout();
+        router.replace("/");
+      },
     },
   ];
 
