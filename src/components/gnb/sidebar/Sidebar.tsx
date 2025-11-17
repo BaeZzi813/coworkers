@@ -4,6 +4,7 @@ import { Button } from "@/components/button";
 import Icon from "@/components/icon";
 import { getUserGroups } from "@/features/group/apis";
 import { useResponsive } from "@/hooks/use-responsive";
+import { useAuthStore } from "@/stores/auth-store";
 import { useSidebarStore } from "@/stores/sidebar-store";
 import { useQuery } from "@tanstack/react-query";
 import clsx from "clsx";
@@ -32,6 +33,9 @@ export default function Sidebar({ className }: Props) {
   const [isFolded, toggle, setFold] = useSidebarStore(
     useShallow((state) => [state.isFold, state.toggle, state.setFold])
   );
+  const [isLoggedIn, user] = useAuthStore(
+    useShallow((state) => [state.loggedIn, state.user])
+  );
   useResponsive({ onTablet: setFold });
 
   const handleFoldClick = () => {
@@ -52,14 +56,10 @@ export default function Sidebar({ className }: Props) {
         <LogoImage isFolded={isFolded} />
         <FoldButton isFolded={isFolded} onClick={handleFoldClick} />
       </header>
-      <Content isFolded={isFolded} />
+      {isLoggedIn ? <Content isFolded={isFolded} /> : <div className="grow" />}
       <footer className={clsx("pb-6", isFolded || "px-4")}>
         <div className="border-t border-border-primary pt-5">
-          {/* TODO: 로그아웃 상태에서는 info에 undefined/null이 전달되어 '로그인'으로 표시 */}
-          <SidebarProfile
-            isFolded={isFolded}
-            userInfo={{ name: "안해나", team: "경영관리팀" }}
-          />
+          <SidebarProfile isFolded={isFolded} user={user} />
         </div>
       </footer>
     </motion.nav>

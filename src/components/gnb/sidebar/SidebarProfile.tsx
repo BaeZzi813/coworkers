@@ -1,16 +1,12 @@
 import Avatar from "@/components/avatar";
+import { User } from "@/types/user";
 import clsx from "clsx";
+import Link from "next/link";
 import ProfileMenu from "../common/ProfileMenu";
-
-interface UserInfo {
-  imageUrl?: string;
-  name: string;
-  team: string;
-}
 
 interface Props {
   isFolded: boolean;
-  userInfo?: UserInfo;
+  user?: User | null;
 }
 
 export default function SidebarProfile({ isFolded, userInfo }: Props) {
@@ -22,7 +18,7 @@ export default function SidebarProfile({ isFolded, userInfo }: Props) {
     return (
       <div className="flex w-full cursor-pointer justify-center">
         <ProfileMenu
-          anchor={<Avatar source={userInfo.imageUrl} size="medium" />}
+          anchor={<Avatar source={user.image} size="medium" />}
           gap={16}
           direction="right"
           alignment="bottom"
@@ -33,14 +29,14 @@ export default function SidebarProfile({ isFolded, userInfo }: Props) {
   }
 
   const profile = isFolded ? (
-    <Avatar source={userInfo.imageUrl} size="medium" />
+    <Avatar source={user.image} size="medium" />
   ) : (
     <div className="flex cursor-pointer items-center gap-3">
-      <Avatar source={userInfo.imageUrl} size="large" />
+      <Avatar source={user.image} size="large" />
       <div className="flex flex-col items-start gap-0.5">
-        <Title>{userInfo.name}</Title>
+        <Title>{user.nickname}</Title>
         <span className="text-md-m whitespace-nowrap text-state-400">
-          {userInfo.team}
+          {user.teamId}
         </span>
       </div>
     </div>
