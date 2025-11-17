@@ -12,8 +12,10 @@ import CheckboxCheckIcon16 from "@/assets/icons/ic-checkbox-check-16.svg";
 import CheckboxCheckIcon18 from "@/assets/icons/ic-checkbox-check-18.svg";
 import ChessIcon20 from "@/assets/icons/ic-chess-20.svg";
 import ChessIcon24 from "@/assets/icons/ic-chess-24.svg";
+import ChevronLeftIcon12 from "@/assets/icons/ic-chevron-left-12.svg";
 import ChevronLeftIcon16 from "@/assets/icons/ic-chevron-left-16.svg";
 import ChevronLeftIcon24 from "@/assets/icons/ic-chevron-left-24.svg";
+import ChevronRightIcon12 from "@/assets/icons/ic-chevron-right-12.svg";
 import ChevronRightIcon16 from "@/assets/icons/ic-chevron-right-16.svg";
 import ChevronRightIcon24 from "@/assets/icons/ic-chevron-right-24.svg";
 import ClockIcon12 from "@/assets/icons/ic-clock-12.svg";
@@ -141,11 +143,13 @@ const Icons: Record<
   },
   chevronLeft: {
     large: ChevronLeftIcon24,
-    small: ChevronLeftIcon16,
+    medium: ChevronLeftIcon16,
+    small: ChevronLeftIcon12,
   },
   chevronRight: {
     large: ChevronRightIcon24,
-    small: ChevronRightIcon16,
+    medium: ChevronRightIcon16,
+    small: ChevronRightIcon12,
   },
   clock: {
     large: ClockIcon16,
