@@ -24,28 +24,27 @@ export default function ProfileMenu({
   const router = useRouter();
 
   const options: DropdownOption[] = [
-    { label: "마이 히스토리", value: "myhistory" },
-    { label: "계정 설정", value: "mypage" },
-    { label: "팀 참여", value: "joinTeam" },
-    { label: "로그아웃", value: "logout" },
+    {
+      label: "마이 히스토리",
+      value: "myhistory",
+      action: () => console.log("Go to my history"),
+    },
+    {
+      label: "계정 설정",
+      value: "mypage",
+      action: () => console.log("Go to my page"),
+    },
+    {
+      label: "팀 참여",
+      value: "joinTeam",
+      action: () => router.push("/jointeam"),
+    },
+    {
+      label: "로그아웃",
+      value: "logout",
+      action: () => console.log("Go to logout"),
+    },
   ];
-
-  const handleSelect = (option: DropdownOption) => {
-    switch (option.value) {
-      case "myhistory":
-        console.log("Go to my history");
-        break;
-      case "mypage":
-        console.log("Go to my page");
-        break;
-      case "joinTeam":
-        router.push("/jointeam");
-        break;
-      case "logout":
-        console.log("Go to logout");
-        break;
-    }
-  };
 
   return (
     <Dropdown
@@ -55,7 +54,6 @@ export default function ProfileMenu({
       direction={direction}
       alignment={alignment}
       alignmentOffset={alignmentOffset}
-      onSelect={(option) => handleSelect(option as DropdownOption)}
     />
   );
 }
