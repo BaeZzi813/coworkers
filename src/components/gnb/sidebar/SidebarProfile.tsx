@@ -9,9 +9,13 @@ interface Props {
   user?: User | null;
 }
 
-export default function SidebarProfile({ isFolded, userInfo }: Props) {
-  if (!userInfo) {
-    return <EmptyProfile isFolded={isFolded} />;
+export default function SidebarProfile({ isFolded, user }: Props) {
+  if (!user) {
+    return (
+      <Link href="/login">
+        <EmptyProfile isFolded={isFolded} />
+      </Link>
+    );
   }
 
   if (isFolded) {
