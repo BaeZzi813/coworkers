@@ -1,4 +1,5 @@
 import { FloatingButton } from "@/components/button";
+import Icon from "@/components/icon";
 import Select, { SelectOption } from "@/components/select";
 import { getArticle, GetArticleResponse } from "@/features/boards/api";
 import BestPost from "@/features/boards/BestPost";
@@ -93,7 +94,7 @@ export default function BoardsPage() {
           )}
         >
           <FloatingButton
-            iconName="pencil"
+            icon={<Icon name="pencil" />}
             onClick={() => router.push("/boards/new")}
           />
         </div>
