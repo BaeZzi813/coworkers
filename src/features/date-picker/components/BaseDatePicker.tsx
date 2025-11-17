@@ -29,6 +29,7 @@ export default function BaseDatePicker({
         mode="single"
         locale={ko}
         selected={selected}
+        defaultMonth={selected}
         onSelect={onSelect}
         onDayClick={onDayClick}
         showOutsideDays

@@ -1,5 +1,6 @@
 import AlertIcon20 from "@/assets/icons/ic-alert-20.svg";
 import AlertIcon24 from "@/assets/icons/ic-alert-24.svg";
+import ArrowUpIcon from "@/assets/icons/ic-arrow-up-16.svg";
 import BestIcon from "@/assets/icons/ic-best.svg";
 import BoardIcon20 from "@/assets/icons/ic-board-20.svg";
 import BoardIcon24 from "@/assets/icons/ic-board-24.svg";
@@ -13,8 +14,10 @@ import CheckboxCheckIcon16 from "@/assets/icons/ic-checkbox-check-16.svg";
 import CheckboxCheckIcon18 from "@/assets/icons/ic-checkbox-check-18.svg";
 import ChessIcon20 from "@/assets/icons/ic-chess-20.svg";
 import ChessIcon24 from "@/assets/icons/ic-chess-24.svg";
+import ChevronLeftIcon12 from "@/assets/icons/ic-chevron-left-12.svg";
 import ChevronLeftIcon16 from "@/assets/icons/ic-chevron-left-16.svg";
 import ChevronLeftIcon24 from "@/assets/icons/ic-chevron-left-24.svg";
+import ChevronRightIcon12 from "@/assets/icons/ic-chevron-right-12.svg";
 import ChevronRightIcon16 from "@/assets/icons/ic-chevron-right-16.svg";
 import ChevronRightIcon24 from "@/assets/icons/ic-chevron-right-24.svg";
 import ClockIcon12 from "@/assets/icons/ic-clock-12.svg";
@@ -70,6 +73,7 @@ import { IconSize } from "./types";
 
 export type IconName =
   | "alert"
+  | "arrowUp"
   | "board"
   | "calendar"
   | "checkCompact"
@@ -115,6 +119,9 @@ const Icons: Record<
     large: AlertIcon24,
     small: AlertIcon20,
   },
+  arrowUp: {
+    large: ArrowUpIcon,
+  },
   board: {
     large: BoardIcon24,
     small: BoardIcon20,
@@ -143,11 +150,13 @@ const Icons: Record<
   },
   chevronLeft: {
     large: ChevronLeftIcon24,
-    small: ChevronLeftIcon16,
+    medium: ChevronLeftIcon16,
+    small: ChevronLeftIcon12,
   },
   chevronRight: {
     large: ChevronRightIcon24,
-    small: ChevronRightIcon16,
+    medium: ChevronRightIcon16,
+    small: ChevronRightIcon12,
   },
   clock: {
     large: ClockIcon16,

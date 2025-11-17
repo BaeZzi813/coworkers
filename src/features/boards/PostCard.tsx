@@ -1,38 +1,24 @@
 import Icon from "@/components/icon";
-import Formatter from "@/utils/formatter";
+import { Article } from "@/types/article";
+import { formatDate } from "@/utils/formatDate";
 import clsx from "clsx";
 import Image from "next/image";
 
-interface Writer {
-  id: number;
-  nickname: string;
-}
-
 interface PostCardProps {
   isPopular?: boolean;
-  image?: string;
-  title: string;
-  content?: string;
-  likeCount: number;
-  createdAt: string;
-  writer: Writer;
+  article: Article;
 }
 
-export default function PostCard({
-  isPopular,
-  image,
-  title,
-  writer,
-  createdAt,
-  content,
-  likeCount,
-}: PostCardProps) {
-  const formattedDate = Formatter(createdAt);
+export default function PostCard({ isPopular, article }: PostCardProps) {
+  const { title, content, writer, createdAt, likeCount, image } = article;
+  const formattedDate = formatDate(createdAt);
   return (
     <div
       className={clsx(
-        "flex h-40 w-[340px] flex-col gap-1.5 rounded-[20px] border border-border-primary bg-background-primary p-3 tablet:h-44 tablet:w-[620px] tablet:p-4 desktop:w-[552px]",
-        isPopular ? "justify-between" : "justify-around"
+        "flex w-[340px] flex-col gap-1.5 rounded-[20px] border border-border-primary bg-background-primary p-3 tablet:h-44 tablet:p-4",
+        isPopular
+          ? "h-[177px] justify-between tablet:w-[304px] desktop:h-[206px] desktop:w-[350px]"
+          : "h-[140px] justify-around tablet:h-[156px] tablet:w-[620px] desktop:w-[529px]"
       )}
     >
       {isPopular && (
@@ -42,10 +28,17 @@ export default function PostCard({
         </div>
       )}
       <div className="flex flex-col gap-2">
-        <div className="flex h-20 w-[308px] justify-between tablet:h-[88px] tablet:w-[572px] desktop:w-[504px]">
+        <div
+          className={clsx(
+            "flex h-20 w-[308px] justify-between tablet:h-[88px]",
+            isPopular
+              ? "tablet:w-[264px] desktop:w-[310px]"
+              : "tablet:w-[572px] desktop:w-[504px]"
+          )}
+        >
           <div className="flex flex-col gap-2">
             <h3 className="text-lg-b tablet:text-2lg-b">{title}</h3>
-            <p className="text-sm-m tablet:text-md-r">{content}</p>
+            <p className="line-clamp-2 text-sm-m tablet:text-md-r">{content}</p>
           </div>
           {image && (
             <div className="relative h-20 w-20 tablet:w-[88px] desktop:h-[88px]">
@@ -54,10 +47,17 @@ export default function PostCard({
           )}
         </div>
       </div>
-      <div className="flex h-4 w-[308px] items-center justify-between tablet:w-[572px] desktop:w-[504px]">
+      <div
+        className={clsx(
+          "flex h-4 w-[308px] items-center justify-between",
+          isPopular
+            ? "tablet:w-[264px] desktop:w-[310px]"
+            : "tablet:w-[572px] desktop:w-[504px]"
+        )}
+      >
         <div>
           <span className="text-sm-m">{writer.nickname}</span>
-          <span className="mx-2 inline-block h-3 -translate-y-[0.05rem] border-l border-slate-700 align-middle"></span>
+          <div className="mx-2 inline-block h-3 -translate-y-[0.05rem] border-l border-slate-700 align-middle" />
           <span className="text-sm-m text-slate-400">{formattedDate}</span>
         </div>
         <span className="flex items-center text-sm-m text-slate-400">

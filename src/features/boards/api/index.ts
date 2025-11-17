@@ -1,22 +1,11 @@
+import { Article } from "@/types/article";
 import ArticleMock from "./article-mock.json";
 
-interface Article {
-  id: number;
-  title: string;
-  image?: string;
-  likeCount: number;
-  content?: string;
-  writer: {
-    id: number;
-    nickname: string;
-  };
-  createdAt: string;
-  updatedAt: string;
-}
-
-export async function getArticle(): Promise<{
+export interface GetArticleResponse {
   totalCount: number;
   list: Article[];
-}> {
+}
+
+export async function getArticle(): Promise<GetArticleResponse> {
   return ArticleMock;
 }
