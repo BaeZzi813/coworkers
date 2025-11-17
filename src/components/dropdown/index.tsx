@@ -9,6 +9,7 @@ export type Direction = "top" | "bottom" | "left" | "right";
 export interface DropdownOption {
   label: ReactNode;
   value: string;
+  action?: () => void;
 }
 
 interface Props {
@@ -80,6 +81,9 @@ export default function Dropdown({
   ) => {
     event.stopPropagation();
     onSelect(option);
+    if (typeof option !== "string") {
+      option.action?.();
+    }
     setIsOpen(false);
   };
 
