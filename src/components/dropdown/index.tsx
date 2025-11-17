@@ -7,7 +7,7 @@ export type Alignment = "top" | "bottom" | "left" | "right" | "fill";
 export type Direction = "top" | "bottom" | "left" | "right";
 
 export interface DropdownOption {
-  label: string;
+  label: ReactNode;
   value: string;
 }
 
