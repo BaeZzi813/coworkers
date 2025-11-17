@@ -74,7 +74,7 @@ function ImageContainer({
   return (
     <div
       className={clsx(
-        "size-16 overflow-hidden rounded-[20px] tablet:size-[100px] tablet:rounded-4xl",
+        "size-16 overflow-hidden rounded-[20px] border-2 border-border-primary tablet:size-[100px] tablet:rounded-4xl",
         className
       )}
     >
