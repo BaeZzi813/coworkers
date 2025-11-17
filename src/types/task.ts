@@ -30,3 +30,5 @@ export interface TaskGroup {
   name: string;
   id: number;
 }
+
+export type TaskFrequency = "ONCE" | "DAILY" | "WEEKLY" | "MONTHLY";

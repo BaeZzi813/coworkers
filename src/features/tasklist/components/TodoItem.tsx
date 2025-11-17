@@ -1,7 +1,9 @@
 import Dropdown, { DropdownOption } from "@/components/dropdown";
 import Icon from "@/components/icon";
+import { TaskFrequency } from "@/types/task";
 import clsx from "clsx";
 import { MouseEvent } from "react";
+import { FREQUENCY_LABEL } from "../constants/task-frequency";
 
 const spanStyle = "text-xs leading-4 text-text-default no-underline";
 const itemStyle = {
@@ -19,19 +21,11 @@ const itemStyle = {
   },
 };
 
-const frequencyDescription = {
-  ONCE: "반복 없음",
-  DAILY: "매일 반복",
-  WEEKLY: "주 반복",
-  MONTHLY: "월 반복",
-};
-
-type taskFrequency = "ONCE" | "DAILY" | "WEEKLY" | "MONTHLY";
 interface TodoItemProps {
   title: string;
   commentCount: number;
   createdAt: string;
-  frequency: taskFrequency;
+  frequency: TaskFrequency;
   isSelected?: boolean;
   isDone?: boolean;
   onToggleDone?: () => void;
@@ -134,7 +128,7 @@ export default function TodoItem({
 
         <div className="flex items-center gap-1.5">
           <Icon name="repeat" size="large" color="transparent" />
-          <span className={spanStyle}>{frequencyDescription[frequency]}</span>
+          <span className={spanStyle}>{FREQUENCY_LABEL[frequency]}</span>
         </div>
       </div>
     </div>
