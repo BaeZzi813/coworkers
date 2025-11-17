@@ -2,7 +2,7 @@ import KakaotalkIcon from "@/assets/icons/ic-kakaotalk.svg";
 import { Button } from "@/components/button";
 import InputLabel from "@/features/login/components/FormField";
 import PasswordVisible from "@/features/login/components/PasswordVisible";
-import { validateEmail, validatePassword } from "@/utils/LoginValidator";
+import { validateEmail, validatePassword } from "@/utils/login-validator";
 import { useState } from "react";
 
 export default function LoginPage() {
