@@ -1,0 +1,152 @@
+import Avatar from "@/components/avatar";
+import { Button } from "@/components/button";
+import Dropdown, { DropdownOption } from "@/components/dropdown";
+import Icon from "@/components/icon";
+import clsx from "clsx";
+import { useState } from "react";
+
+export interface Comment {
+  commentId: number;
+  userId: number;
+  name: string;
+  profileImageUrl?: string;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CommentItemProps extends Comment {
+  onEdit?: (commentId: number, newContent: string) => void;
+  onDelete?: (commentId: number) => void;
+  className?: string;
+  horizontalPadding?: number;
+}
+
+export default function CommentItem({
+  commentId,
+  userId,
+  profileImageUrl,
+  name,
+  content,
+  createdAt,
+  updatedAt,
+  onEdit,
+  onDelete,
+  className,
+  horizontalPadding,
+}: CommentItemProps) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [editContent, setEditContent] = useState(content);
+  const isEdited = createdAt !== updatedAt;
+
+  const currentUserId = 5; // 테스트용 임시 id
+  const isMine = currentUserId === userId;
+
+  const options: DropdownOption[] = [
+    { label: "수정하기", value: "edit" },
+    { label: "삭제하기", value: "delete" },
+  ];
+
+  const handleSelect = (option: DropdownOption) => {
+    switch (option.value) {
+      case "edit":
+        setIsEditing(true);
+        break;
+      case "delete":
+        handleDelete();
+        break;
+    }
+  };
+
+  const handleEditSubmit = () => {
+    onEdit?.(commentId, editContent);
+    setIsEditing(false);
+  };
+  const handleEditCancel = () => {
+    setEditContent(content);
+    setIsEditing(false);
+  };
+
+  const handleDelete = () => {
+    onDelete?.(commentId);
+  };
+
+  return (
+    <div
+      className={clsx(
+        isEditing ? "my-4 border-none bg-state-50" : "bg-background-primary",
+        className
+      )}
+      style={{
+        paddingLeft: horizontalPadding,
+        paddingRight: horizontalPadding,
+      }}
+    >
+      <div
+        className={clsx(
+          "flex w-full items-start gap-4 border-t border-gray-100 py-3",
+          isEditing && "border-none"
+        )}
+      >
+        <Avatar source={profileImageUrl ?? ""} size="medium" />
+
+        <div className="flex flex-1 items-start justify-between">
+          <div className="flex flex-1 flex-col gap-1">
+            <p className="text-md-b text-text-primary">{name}</p>
+
+            {isEditing ? (
+              <textarea
+                value={editContent}
+                onChange={(e) => setEditContent(e.target.value)}
+                className="my-1 w-full resize-none border-y border-border-primary bg-transparent px-1 py-3 text-md-r text-text-primary outline-none"
+                rows={3}
+              />
+            ) : (
+              <p className="text-md-r whitespace-pre-line text-text-primary">
+                {content}
+              </p>
+            )}
+
+            {isEditing ? (
+              <div className="flex justify-end gap-2 pt-1">
+                <button
+                  onClick={handleEditCancel}
+                  className="cursor-pointer px-3 text-md-s text-text-default"
+                >
+                  취소
+                </button>
+                <Button
+                  title="수정하기"
+                  variant="outlinedPrimary"
+                  size="small"
+                  isFullWidth={false}
+                  onClick={() => handleEditSubmit()}
+                />
+              </div>
+            ) : (
+              <p className="text-md-m text-state-400">
+                {new Date(createdAt).toLocaleDateString("ko-KR")}
+                {isEdited && (
+                  <span className="ml-0.5 text-xs-r opacity-70">(수정됨)</span>
+                )}
+              </p>
+            )}
+          </div>
+
+          {isMine && !isEditing && (
+            <Dropdown
+              anchor={
+                <button aria-label="댓글 설정 열기" className="cursor-pointer">
+                  <Icon name="dots" size="small" />
+                </button>
+              }
+              options={options}
+              alignment="right"
+              onSelect={(option) => handleSelect(option as DropdownOption)}
+            />
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}

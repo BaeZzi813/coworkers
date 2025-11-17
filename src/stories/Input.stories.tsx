@@ -2,6 +2,7 @@ import InvisibleIcon from "@/assets/icons/ic-invisible.svg";
 import VisibleIcon from "@/assets/icons/ic-visible.svg";
 import { Button } from "@/components/button";
 import { Input as InputComponent } from "@/components/input";
+import TextField from "@/components/input/TextField";
 import type { Meta, StoryObj } from "@storybook/nextjs";
 import type { ComponentPropsWithoutRef } from "react";
 
@@ -28,6 +29,7 @@ const trailingPaddingMap = {
 
 type InputArgs = ComponentPropsWithoutRef<typeof InputComponent> & {
   trailingVariant?: keyof typeof trailingVariants;
+  errorMessage?: string;
 };
 
 const meta = {
@@ -52,12 +54,16 @@ const meta = {
       control: { type: "radio" },
       options: ["none", "button", "visible", "invisible"],
     },
+    errorMessage: {
+      control: { type: "text" },
+    },
   },
   args: {
     placeholder: "이메일을 입력하세요.",
     size: "large",
     type: "text",
     trailingVariant: "none",
+    errorMessage: undefined,
   },
 } satisfies Meta<InputArgs>;
 
@@ -82,10 +88,12 @@ export const Default: Story = {
   render: (args) => {
     const size = args.size ?? "large";
     const widthClass = size === "small" ? "w-[300px]" : "w-[460px]";
+    const { errorMessage } = args;
+    const inputArgs = mapVariants(args);
 
     return (
       <div className={`flex flex-col items-center gap-4 ${widthClass}`}>
-        <InputComponent {...mapVariants(args)} />
+        <TextField {...inputArgs} errorMessage={errorMessage} />
       </div>
     );
   },
