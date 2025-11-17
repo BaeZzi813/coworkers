@@ -52,7 +52,7 @@ export default function TeamEditImageInput({ source, onChange }: Props) {
             <Icon name="image" />
           </ImageContainer>
         )}
-        <div className="absolute right-0 bottom-1.5 rounded-full border-2 border-white">
+        <div className="absolute right-0 bottom-1.5 rounded-full tablet:border-2 tablet:border-white">
           {isMobile ? <TeamImageEdit18 /> : <TeamImageEdit32 />}
         </div>
       </label>
