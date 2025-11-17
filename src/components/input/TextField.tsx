@@ -1,8 +1,10 @@
 import { Input } from "@/components/input";
 import clsx from "clsx";
-import { useId, type ComponentPropsWithRef } from "react";
+import { useId } from "react";
 
-interface TextFieldProps extends ComponentPropsWithRef<typeof Input> {
+type InputProps = Parameters<typeof Input>[0];
+
+interface TextFieldProps extends Omit<InputProps, "isError"> {
   errorMessage?: string;
   containerClassName?: string;
   messageClassName?: string;
