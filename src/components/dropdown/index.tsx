@@ -19,7 +19,7 @@ interface Props {
   direction?: Direction;
   alignment?: Alignment;
   alignmentOffset?: number;
-  onSelect: (option: DropdownOption | string) => void;
+  onSelect?: (option: DropdownOption | string) => void;
 }
 
 type Edge = Pick<CSSProperties, "top" | "left" | "right" | "bottom">;
@@ -80,7 +80,7 @@ export default function Dropdown({
     option: DropdownOption | string
   ) => {
     event.stopPropagation();
-    onSelect(option);
+    onSelect?.(option);
     if (typeof option !== "string") {
       option.action?.();
     }
