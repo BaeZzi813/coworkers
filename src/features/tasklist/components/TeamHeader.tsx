@@ -20,20 +20,9 @@ export default function TeamHeader({
   const { isMobile } = useResponsive();
 
   const options: DropdownOption[] = [
-    { label: "수정하기", value: "edit" },
-    { label: "삭제하기", value: "delete" },
+    { label: "수정하기", value: "edit", action: onEdit },
+    { label: "삭제하기", value: "delete", action: onDelete },
   ];
-
-  const handleSelect = (option: DropdownOption) => {
-    switch (option.value) {
-      case "edit":
-        onEdit?.();
-        break;
-      case "delete":
-        onDelete?.();
-        break;
-    }
-  };
 
   return (
     <header className="flex h-7 w-full max-w-[1120px] items-center justify-start rounded-xl bg-none shadow-card outline-border-primary desktop:h-16 desktop:justify-between desktop:bg-background-primary desktop:px-7 desktop:py-4 desktop:outline">
@@ -62,7 +51,6 @@ export default function TeamHeader({
           }
           options={options}
           alignment="left"
-          onSelect={(option) => handleSelect(option as DropdownOption)}
         />
       )}
     </header>
