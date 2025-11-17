@@ -80,11 +80,20 @@ export default function Dropdown({
     option: DropdownOption | string
   ) => {
     event.stopPropagation();
-    onSelect?.(option);
-    if (typeof option !== "string") {
-      option.action?.();
+
+    if (isStringOption(option)) {
+      onSelect?.(option);
+    } else if (option.action) {
+      option.action();
+    } else {
+      onSelect?.(option);
     }
+
     setIsOpen(false);
+  };
+
+  const isStringOption = (option: DropdownOption | string) => {
+    return typeof option === "string";
   };
 
   return (
@@ -102,8 +111,8 @@ export default function Dropdown({
           style={layoutStyles({ gap, direction, alignment, alignmentOffset })}
         >
           {options.map((option) => {
-            const key = typeof option === "string" ? option : option.value;
-            const label = typeof option === "string" ? option : option.label;
+            const key = isStringOption(option) ? option : option.value;
+            const label = isStringOption(option) ? option : option.label;
             return (
               <li
                 key={key}
