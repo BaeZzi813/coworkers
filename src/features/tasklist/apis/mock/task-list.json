@@ -1,32 +1,107 @@
 [
   {
     "id": 1,
-    "name": "업무 A",
-    "description": "",
-    "commentCount": 0,
-    "writer": { "id": 1, "nickname": "홍길동", "image": "" },
-    "doneBy": { "user": { "id": 1, "nickname": "홍길동", "image": "" } },
+    "groupId": 1,
+    "name": "법인 설립",
     "displayIndex": 0,
-    "frequency": "DAILY",
-    "date": "2025-11-14T21:58:08.308Z",
-    "doneAt": "2025-11-14T21:58:08.308Z",
-    "deletedAt": null,
-    "recurringId": 0,
-    "updatedAt": "2025-11-14T21:58:08.308Z"
+    "createdAt": "2025-11-17T19:11:54.983Z",
+    "updatedAt": "2025-11-17T19:11:54.983Z",
+    "tasks": [
+      {
+        "id": 1,
+        "name": "정관 작성",
+        "description": "",
+        "commentCount": 0,
+        "writer": { "id": 1, "nickname": "홍길동", "image": "" },
+        "doneBy": { "user": { "id": 1, "nickname": "홍길동", "image": "" } },
+        "displayIndex": 0,
+        "frequency": "DAILY",
+        "date": "2025-11-14T21:58:08.308Z",
+        "doneAt": "2025-11-14T21:58:08.308Z",
+        "deletedAt": null,
+        "recurringId": 0,
+        "updatedAt": "2025-11-14T21:58:08.308Z"
+      },
+      {
+        "id": 2,
+        "name": "법인명 확인",
+        "description": "",
+        "commentCount": 0,
+        "writer": { "id": 1, "nickname": "홍길동", "image": "" },
+        "doneBy": null,
+        "displayIndex": 1,
+        "frequency": "DAILY",
+        "date": "2025-11-14T21:58:08.308Z",
+        "doneAt": null,
+        "deletedAt": null,
+        "recurringId": 0,
+        "updatedAt": "2025-11-14T21:58:08.308Z"
+      }
+    ]
   },
   {
     "id": 2,
-    "name": "업무 A",
-    "description": "",
-    "commentCount": 0,
-    "writer": { "id": 1, "nickname": "홍길동", "image": "" },
-    "doneBy": null,
+    "groupId": 2,
+    "name": "법인 등기",
     "displayIndex": 1,
-    "frequency": "DAILY",
-    "date": "2025-11-14T21:58:08.308Z",
-    "doneAt": null,
-    "deletedAt": null,
-    "recurringId": 0,
-    "updatedAt": "2025-11-14T21:58:08.308Z"
+    "createdAt": "2025-11-17T19:11:54.983Z",
+    "updatedAt": "2025-11-17T19:11:54.983Z",
+    "tasks": [
+      {
+        "id": 3,
+        "name": "등기 서류 준비",
+        "description": "",
+        "commentCount": 0,
+        "writer": { "id": 1, "nickname": "홍길동", "image": "" },
+        "doneBy": null,
+        "displayIndex": 0,
+        "frequency": "WEEKLY",
+        "date": "2025-11-14T21:58:08.308Z",
+        "doneAt": null,
+        "deletedAt": null,
+        "recurringId": 0,
+        "updatedAt": "2025-11-14T21:58:08.308Z"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "groupId": 3,
+    "name": "정기 주총",
+    "displayIndex": 2,
+    "createdAt": "2025-11-17T19:11:54.983Z",
+    "updatedAt": "2025-11-17T19:11:54.983Z",
+    "tasks": [
+      {
+        "id": 4,
+        "name": "재무제표 검토",
+        "description": "",
+        "commentCount": 0,
+        "writer": { "id": 1, "nickname": "홍길동", "image": "" },
+        "doneBy": null,
+        "displayIndex": 0,
+        "frequency": "MONTHLY",
+        "date": "2025-11-14T21:58:08.308Z",
+        "doneAt": null,
+        "deletedAt": null,
+        "recurringId": 0,
+        "updatedAt": "2025-11-14T21:58:08.308Z"
+      },
+      {
+        "id": 5,
+        "name": "의결안 초안 작성",
+        "description": "",
+        "commentCount": 0,
+        "writer": { "id": 2, "nickname": "이순신", "image": "" },
+        "doneBy": { "user": { "id": 2, "nickname": "이순신", "image": "" } },
+        "displayIndex": 1,
+        "frequency": "ONCE",
+        "date": "2025-11-14T21:58:08.308Z",
+        "doneAt": "2025-11-14T21:58:08.308Z",
+        "deletedAt": null,
+        "recurringId": 0,
+        "updatedAt": "2025-11-14T21:58:08.308Z"
+      }
+    ]
   }
 ]
