@@ -1,6 +1,6 @@
 import { useBackdropClick } from "@/hooks/use-backdrop-click";
 import clsx from "clsx";
-import { CSSProperties, ReactNode, useState } from "react";
+import { CSSProperties, MouseEvent, ReactNode, useState } from "react";
 
 export type Alignment = "top" | "bottom" | "left" | "right" | "fill";
 
@@ -69,11 +69,16 @@ export default function Dropdown({
     callback: () => setIsOpen(false),
   });
 
-  const handleAnchorClick = () => {
+  const handleAnchorClick = (event: MouseEvent) => {
+    event.stopPropagation();
     setIsOpen(!isOpen);
   };
 
-  const handleOptionClick = (option: DropdownOption | string) => {
+  const handleOptionClick = (
+    event: MouseEvent,
+    option: DropdownOption | string
+  ) => {
+    event.stopPropagation();
     onSelect(option);
     setIsOpen(false);
   };
@@ -99,7 +104,7 @@ export default function Dropdown({
               <li
                 key={key}
                 className="cursor-pointer px-6 py-3.5 text-lg-r whitespace-nowrap hover:bg-background-tertiary"
-                onClick={() => handleOptionClick(option)}
+                onClick={(event) => handleOptionClick(event, option)}
               >
                 {label}
               </li>
