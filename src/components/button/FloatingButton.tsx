@@ -37,7 +37,7 @@ export default function FloatingButton({
       onClick={onClick}
     >
       <div className="size-6 -translate-x-[0.5px]">
-        <Icon name={iconName} />
+        <Icon name={iconName} color="white" />
       </div>
     </button>
   );
