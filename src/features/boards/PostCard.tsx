@@ -1,6 +1,6 @@
 import Icon from "@/components/icon";
 import { Article } from "@/types/article";
-import { formatDate } from "@/utils/formatDate";
+import { formatDate } from "@/utils/format-date";
 import clsx from "clsx";
 import Image from "next/image";
 
