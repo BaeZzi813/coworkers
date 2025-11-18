@@ -7,11 +7,17 @@ import TaskItem from "@/features/tasklist/components/TaskItem";
 import TeamHeader from "@/features/tasklist/components/TeamHeader";
 import TodoItem from "@/features/tasklist/components/TodoItem";
 import { useResponsive } from "@/hooks/use-responsive";
+import { useSidebarStore } from "@/stores/sidebar-store";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function TaskListPage() {
   const { isDesktop } = useResponsive();
+  const { setFold } = useSidebarStore();
+
+  useEffect(() => {
+    setFold(!isDesktop);
+  }, [isDesktop, setFold]);
 
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
@@ -49,7 +55,7 @@ export default function TaskListPage() {
 
   return (
     <div className="flex h-dvh flex-col overflow-x-hidden bg-background-secondary p-4 tablet:px-[26px] tablet:py-[70px] desktop:px-[84px] desktop:py-[120px]">
-      <div className="flex max-w-[1120px] flex-1 flex-col gap-5 tablet:gap-10 desktop:gap-7">
+      <div className="flex max-w-[1120px] flex-1 flex-col gap-5 tablet:gap-10 desktop:min-w-[780px] desktop:gap-7">
         {/* section 1 */}
         <TeamHeader teamName="경영관리팀" isAdmin />
 
