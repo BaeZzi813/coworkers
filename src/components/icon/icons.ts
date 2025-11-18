@@ -1,6 +1,7 @@
 import AlertIcon20 from "@/assets/icons/ic-alert-20.svg";
 import AlertIcon24 from "@/assets/icons/ic-alert-24.svg";
 import ArrowUpIcon from "@/assets/icons/ic-arrow-up-16.svg";
+import BestIcon from "@/assets/icons/ic-best.svg";
 import BoardIcon20 from "@/assets/icons/ic-board-20.svg";
 import BoardIcon24 from "@/assets/icons/ic-board-24.svg";
 import CalendarIcon12 from "@/assets/icons/ic-calendar-12.svg";
@@ -107,7 +108,8 @@ export type IconName =
   | "union"
   | "folder"
   | "doneShadow"
-  | "commentShadow";
+  | "commentShadow"
+  | "best";
 
 const Icons: Record<
   IconName,
@@ -255,6 +257,9 @@ const Icons: Record<
     large: CommentShadowIcon48,
     medium: CommentShadowIcon40,
     small: CommentShadowIcon28,
+  },
+  best: {
+    large: BestIcon,
   },
 } as const;
 
