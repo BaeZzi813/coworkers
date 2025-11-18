@@ -23,6 +23,10 @@ export default function Drawer({
     queryFn: getUserGroups,
   });
 
+  const handleAddTeamClick = () => {
+    router.push("/addteam");
+  };
+
   const handleContentClick = (event: MouseEvent) => {
     event.stopPropagation();
   };
@@ -60,9 +64,10 @@ export default function Drawer({
               <div className="mt-2 px-2">
                 <Button
                   variant="outlinedPrimary"
-                  title="팀 추가하기"
+                  title="팀 생성하기"
                   iconName="plus"
                   size="small"
+                  onClick={handleAddTeamClick}
                 />
                 <Separator />
               </div>

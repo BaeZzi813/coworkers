@@ -9,7 +9,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
     return (
       <div>
         <NavigationBar />
-        <main>{children}</main>
+        <main className="h-[calc(100dvh-52px)]">{children}</main>
       </div>
     );
   }

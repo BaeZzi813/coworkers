@@ -7,8 +7,9 @@ export type Alignment = "top" | "bottom" | "left" | "right" | "fill";
 export type Direction = "top" | "bottom" | "left" | "right";
 
 export interface DropdownOption {
-  label: string;
+  label: ReactNode;
   value: string;
+  action?: () => void;
 }
 
 interface Props {
@@ -18,7 +19,7 @@ interface Props {
   direction?: Direction;
   alignment?: Alignment;
   alignmentOffset?: number;
-  onSelect: (option: DropdownOption | string) => void;
+  onSelect?: (option: DropdownOption | string) => void;
 }
 
 type Edge = Pick<CSSProperties, "top" | "left" | "right" | "bottom">;
@@ -79,8 +80,20 @@ export default function Dropdown({
     option: DropdownOption | string
   ) => {
     event.stopPropagation();
-    onSelect(option);
+
+    if (isStringOption(option)) {
+      onSelect?.(option);
+    } else if (option.action) {
+      option.action();
+    } else {
+      onSelect?.(option);
+    }
+
     setIsOpen(false);
+  };
+
+  const isStringOption = (option: DropdownOption | string) => {
+    return typeof option === "string";
   };
 
   return (
@@ -98,8 +111,8 @@ export default function Dropdown({
           style={layoutStyles({ gap, direction, alignment, alignmentOffset })}
         >
           {options.map((option) => {
-            const key = typeof option === "string" ? option : option.value;
-            const label = typeof option === "string" ? option : option.label;
+            const key = isStringOption(option) ? option : option.value;
+            const label = isStringOption(option) ? option : option.label;
             return (
               <li
                 key={key}

@@ -8,6 +8,7 @@ type Variant = "primary" | "outlinedPrimary" | "outlinedSecondary" | "danger";
 type ButtonSize = "large" | "medium" | "small";
 
 interface Props {
+  className?: string;
   title: string;
   iconName?: IconName;
   variant?: Variant;
@@ -102,6 +103,7 @@ const iconColor: Record<Variant, string> = {
 };
 
 export default function Button({
+  className,
   title,
   iconName,
   variant = "primary",
@@ -120,7 +122,8 @@ export default function Button({
         borders(variant, size, rounded),
         sizes({ size, isFullWidth }),
         fonts(variant, size),
-        iconColor[variant]
+        iconColor[variant],
+        className
       )}
       disabled={disabled}
       onClick={onClick}
