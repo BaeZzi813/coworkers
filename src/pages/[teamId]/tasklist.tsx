@@ -15,20 +15,18 @@ export default function TaskListPage() {
     setFold(!isDesktop);
   }, [isDesktop, setFold]);
 
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
-
-  const { data: taskList } = useQuery<TaskGroup[]>({
+  const { data: taskList } = useQuery<TaskGroup[] | undefined>({
     queryKey: ["task-list"],
     queryFn: getTaskList,
   });
 
-  const defaultTaskId =
-    selectedTaskId ?? (taskList?.length ? taskList[0].id : null);
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
 
-  const defaultTaskName = selectedTaskId
-    ? (taskList?.find((t) => t.id === selectedTaskId)?.name ?? "")
-    : (taskList?.[0]?.name ?? "");
+  const hasTaskList = taskList && taskList.length > 0;
+  const selectedTask = hasTaskList
+    ? (taskList.find((task) => task.id === selectedTaskId) ?? taskList[0])
+    : null;
 
   return (
     <div className="flex h-dvh flex-col overflow-x-hidden bg-background-secondary p-4 tablet:px-[26px] tablet:py-[70px] desktop:px-[84px] desktop:py-[120px]">
@@ -37,17 +35,15 @@ export default function TaskListPage() {
 
         <div className="flex flex-1 flex-col gap-[22px] tablet:gap-7 desktop:flex-row desktop:gap-6">
           <TaskGroupList
-            isDesktop={isDesktop}
-            taskList={taskList}
-            selectedTaskId={defaultTaskId}
+            taskList={taskList ?? []}
+            selectedTaskId={selectedTask?.id ?? null}
             onSelectTask={setSelectedTaskId}
           />
 
           <TaskListContent
             selectedDate={selectedDate}
             onSelectDate={setSelectedDate}
-            defaultTaskId={defaultTaskId}
-            defaultTaskName={defaultTaskName}
+            selectedTask={selectedTask}
           />
         </div>
       </div>

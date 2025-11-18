@@ -14,6 +14,7 @@ interface TaskItemProps {
 export default function TaskItem({ title, tasks, onClick }: TaskItemProps) {
   const { isDesktop } = useResponsive();
 
+  const hasTask = tasks.length > 0;
   const totalCount = tasks.length;
   const doneCount = tasks.filter((task) => task.doneAt).length;
 
@@ -44,7 +45,7 @@ export default function TaskItem({ title, tasks, onClick }: TaskItemProps) {
       <div className="desktop:ml-auto">
         <DoneBadge current={doneCount} total={totalCount} size="small" />
       </div>
-      {isDesktop && (
+      {isDesktop && hasTask && (
         <Dropdown
           anchor={
             <div

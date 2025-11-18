@@ -28,6 +28,7 @@ interface TodoItemProps {
   frequency: TaskFrequency;
   isSelected?: boolean;
   isDone?: boolean;
+  isEmpty?: boolean;
   onToggleDone?: () => void;
   onItemClick?: () => void;
 }
@@ -39,6 +40,7 @@ export default function TodoItem({
   frequency = "ONCE",
   isSelected = false,
   isDone = false,
+  isEmpty,
   onToggleDone,
   onItemClick,
 }: TodoItemProps) {
@@ -91,37 +93,44 @@ export default function TodoItem({
               !isSelected && !isDone && itemStyle.text.base,
               isSelected && !isDone && itemStyle.text.selected,
               !isSelected && isDone && itemStyle.text.done,
-              isSelected && isDone && itemStyle.text.selectedDone
+              isSelected && isDone && itemStyle.text.selectedDone,
+              isEmpty && "text-text-default!"
             )}
           >
             {title}
           </p>
         </div>
-        <div className="flex items-center gap-0.5">
-          <Icon name="comment" size="large" />
-          <span className={spanStyle}>{commentCount}</span>
-        </div>
+        {commentCount > 0 && (
+          <div className="flex items-center gap-0.5">
+            <Icon name="comment" size="large" />
+            <span className={spanStyle}>{commentCount}</span>
+          </div>
+        )}
         <div className="ml-auto">
-          <Dropdown
-            anchor={
-              <div
-                role="button"
-                aria-label="할일 설정 열기"
-                className="cursor-pointer"
-              >
-                <Icon name="dots" size="small" />
-              </div>
-            }
-            options={options}
-            alignment="right"
-            onSelect={(option) => handleSelect(option as DropdownOption)}
-          />
+          {!isEmpty && (
+            <Dropdown
+              anchor={
+                <div
+                  role="button"
+                  aria-label="할일 설정 열기"
+                  className="cursor-pointer"
+                >
+                  <Icon name="dots" size="small" />
+                </div>
+              }
+              options={options}
+              alignment="right"
+              onSelect={(option) => handleSelect(option as DropdownOption)}
+            />
+          )}
         </div>
       </div>
       <div className="flex items-center justify-start gap-2.5">
         <div className="flex items-center gap-1.5">
           <Icon name="calendar" size="large" />
-          <span className={spanStyle}>{createdAt}</span>
+          <span className={spanStyle}>
+            {new Date(createdAt).toLocaleDateString("ko-KR")}
+          </span>
         </div>
 
         <div className="h-2 w-px bg-slate-700"></div>

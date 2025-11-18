@@ -1,32 +1,71 @@
 import { Button } from "@/components/button";
 import Select, { SelectOption } from "@/components/select";
+import { useResponsive } from "@/hooks/use-responsive";
 import { TaskGroup } from "@/types/task";
 import TaskItem from "./TaskItem";
 
 interface Props {
-  isDesktop: boolean;
-  taskList?: TaskGroup[];
+  taskList: TaskGroup[];
   selectedTaskId: number | null;
   onSelectTask: (id: number) => void;
 }
 
 export default function TaskGroupList({
-  isDesktop,
   taskList,
   selectedTaskId,
   onSelectTask,
 }: Props) {
-  const taskOptions: SelectOption[] =
-    taskList?.map((task) => ({
-      label: (
-        <TaskItem title={task.name} tasks={task.tasks} onClick={() => {}} />
-      ),
-      value: String(task.id),
-    })) ?? [];
+  const { isDesktop } = useResponsive();
+  const hasTask = taskList.length > 0;
 
-  const selectedTaskOption =
-    taskOptions.find((opt) => opt.value === String(selectedTaskId)) ??
-    undefined;
+  const handleTaskAdd = () => {
+    console.log("Add TaskItem");
+  };
+
+  const mobileTaskOptions: SelectOption[] = taskList.map((task) => ({
+    label: (
+      <TaskItem
+        key={task.id}
+        title={task.name}
+        tasks={task.tasks}
+        onClick={() => {}}
+      />
+    ),
+    value: String(task.id),
+  }));
+  const selectedOption = mobileTaskOptions.find(
+    (opt) => opt.value === String(selectedTaskId)
+  );
+
+  const mobileTaskSelect = hasTask ? (
+    <Select
+      options={mobileTaskOptions}
+      value={selectedOption}
+      onChange={(opt) => onSelectTask(Number(opt.value))}
+      className="h-11 w-[180px] tablet:w-60"
+    />
+  ) : (
+    <div className="tablet:[240p]x flex h-11 w-[180px] cursor-pointer items-center rounded-lg border border-border-primary bg-background-primary p-2 tablet:w-60 tablet:rounded-xl tablet:px-3.5 tablet:py-2.5">
+      <TaskItem title="제목 없음" tasks={[]} onClick={handleTaskAdd} />
+    </div>
+  );
+
+  const desktopTaskList = (
+    <div className="flex w-full min-w-60 flex-col gap-1">
+      {hasTask ? (
+        taskList.map((task) => (
+          <TaskItem
+            key={task.id}
+            title={task.name}
+            tasks={task.tasks}
+            onClick={() => onSelectTask(task.id)}
+          />
+        ))
+      ) : (
+        <TaskItem title="제목 없음" tasks={[]} onClick={handleTaskAdd} />
+      )}
+    </div>
+  );
 
   return (
     <section className="flex w-full flex-col gap-2 tablet:gap-3 desktop:max-w-[270px] desktop:gap-6 desktop:py-3">
@@ -35,25 +74,7 @@ export default function TaskGroupList({
       </h2>
 
       <div className="flex items-center justify-between gap-[38px] desktop:flex-col">
-        {isDesktop ? (
-          <div className="flex w-full min-w-60 flex-col gap-1">
-            {taskList?.map((task) => (
-              <TaskItem
-                key={task.id}
-                title={task.name}
-                tasks={task.tasks}
-                onClick={() => onSelectTask(task.id)}
-              />
-            ))}
-          </div>
-        ) : (
-          <Select
-            options={taskOptions}
-            value={selectedTaskOption}
-            onChange={(opt) => onSelectTask(Number(opt.value))}
-            className="h-11 w-[180px] tablet:w-60"
-          />
-        )}
+        {isDesktop ? desktopTaskList : mobileTaskSelect}
 
         <div className="rounded-full bg-background-primary">
           <Button
@@ -62,6 +83,7 @@ export default function TaskGroupList({
             variant="outlinedPrimary"
             isFullWidth={false}
             rounded
+            onClick={handleTaskAdd}
           />
         </div>
       </div>
