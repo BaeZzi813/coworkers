@@ -1,4 +1,4 @@
-import { expireRefreshToken } from "@/features/auth/utils/refresh-token-cookie";
+import { createExpiredCookie } from "@/features/auth/utils/cookie";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -10,7 +10,7 @@ export default async function handler(
     return;
   }
 
-  const cookie = expireRefreshToken();
+  const cookie = createExpiredCookie({ name: "refreshToken" });
   res.setHeader("Set-Cookie", cookie);
   res.status(200).json({ message: "Logged out successfully" });
 

@@ -1,4 +1,7 @@
-import { serializeRefreshToken } from "@/features/auth/utils/refresh-token-cookie";
+import {
+  createJWTCookie,
+  REFRESH_TOKEN_COOKIE_NAME,
+} from "@/features/auth/utils/cookie";
 import { apiClient } from "@/services/client";
 import { withAxiosErrorResponse } from "@/services/with-axios-error-response";
 import { User } from "@/types/user";
@@ -22,7 +25,10 @@ export default async function handler(
   withAxiosErrorResponse(res, async () => {
     const response = await apiClient.post<Response>("/auth/signIn", req.body);
     const data = response.data;
-    const cookie = serializeRefreshToken(data.refreshToken);
+    const cookie = createJWTCookie({
+      name: REFRESH_TOKEN_COOKIE_NAME,
+      jwtToken: data.refreshToken,
+    });
     res.setHeader("Set-Cookie", cookie);
     res.status(200).json(data);
   });
