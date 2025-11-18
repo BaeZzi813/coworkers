@@ -34,7 +34,7 @@ export default function TaskItem({ title, tasks, onClick }: TaskItemProps) {
   return (
     <div
       className={clsx(
-        "flex items-center justify-start",
+        "flex items-center justify-start bg-background-primary",
         isDesktop &&
           "h-[54px] cursor-pointer rounded-xl border border-border-primary pr-3 pl-5"
       )}
