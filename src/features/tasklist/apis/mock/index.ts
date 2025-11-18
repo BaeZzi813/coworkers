@@ -12,9 +12,17 @@ export async function getTaskList(): Promise<TaskGroup[]> {
   }));
 }
 
-export async function getTodoList(): Promise<Task[]> {
-  return todoListMock.map((task) => ({
-    ...task,
-    frequency: task.frequency as TaskFrequency,
-  }));
+export async function getTodoList(
+  taskId: number,
+  date?: Date
+): Promise<Task[]> {
+  return todoListMock
+    .filter((task) => task.groupId === taskId)
+    .filter((task) =>
+      date ? task.date.slice(0, 10) === date.toISOString().slice(0, 10) : true
+    )
+    .map((task) => ({
+      ...task,
+      frequency: task.frequency as TaskFrequency,
+    }));
 }
