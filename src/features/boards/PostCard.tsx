@@ -3,6 +3,7 @@ import { Article } from "@/types/article";
 import { formatDate } from "@/utils/format-date";
 import clsx from "clsx";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 interface PostCardProps {
   isPopular?: boolean;
@@ -10,10 +11,16 @@ interface PostCardProps {
 }
 
 export default function PostCard({ isPopular, article }: PostCardProps) {
-  const { title, content, writer, createdAt, likeCount, image } = article;
+  const { title, id, content, writer, createdAt, likeCount, image } = article;
   const formattedDate = formatDate(createdAt);
+  const router = useRouter();
+
+  const handleClick = () => {
+    router.push(`/boards/${id}`);
+  };
   return (
     <div
+      onClick={handleClick}
       className={clsx(
         "flex w-[340px] flex-col gap-1.5 rounded-[20px] border border-border-primary bg-background-primary p-3 tablet:h-44 tablet:p-4",
         isPopular

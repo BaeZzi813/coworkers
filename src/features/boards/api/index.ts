@@ -9,3 +9,8 @@ export interface GetArticleResponse {
 export async function getArticle(): Promise<GetArticleResponse> {
   return ArticleMock;
 }
+
+export async function getArticleById(id: number): Promise<Article | undefined> {
+  const article = ArticleMock.list.find((item) => item.id === id);
+  return article;
+}
