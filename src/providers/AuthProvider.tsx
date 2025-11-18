@@ -5,7 +5,6 @@ import { useRouter } from "next/router";
 import { PropsWithChildren, useEffect } from "react";
 import { useShallow } from "zustand/shallow";
 import { postRefreshToken } from "../features/auth/apis";
-import { redirectWhitelist } from "../features/auth/constants/redirect-whitelist";
 
 export default function AuthProvider({ children }: PropsWithChildren) {
   const router = useRouter();
@@ -16,18 +15,18 @@ export default function AuthProvider({ children }: PropsWithChildren) {
 
   const initializeAuth = async () => {
     try {
+      if (["/", "/login", "/signup"].includes(router.pathname)) {
+        return;
+      }
+
       const { accessToken } = await postRefreshToken();
       refreshToken({ accessToken });
 
       const user = await getUser();
       login({ user, accessToken });
     } catch (error) {
-      if (
-        isAxiosError(error) &&
-        error.response?.status === 400 &&
-        !redirectWhitelist.includes(router.pathname)
-      ) {
-        router.replace("/");
+      if (isAxiosError(error) && error.response?.status === 400) {
+        router.replace("/login");
         logout();
       }
     }

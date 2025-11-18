@@ -1,5 +1,5 @@
+import { postSignOut } from "@/features/auth/apis";
 import { postRefreshToken } from "@/features/auth/apis/post-refresh-token";
-import { redirectWhitelist } from "@/features/auth/constants/redirect-whitelist";
 import { useAuthStore } from "@/stores/auth-store";
 import {
   AxiosError,
@@ -18,7 +18,7 @@ export function apiRequestInterceptor(config: InternalAxiosRequestConfig) {
   return config;
 }
 
-const MAX_RETRY_COUNT = 3;
+const MAX_RETRY_COUNT = 1;
 let retryCount = 0;
 
 export async function apiResponseInterceptor(response: AxiosResponse) {
@@ -32,8 +32,9 @@ export async function apiResponseErrorInterceptor(error: AxiosError) {
   }
 
   if (retryCount >= MAX_RETRY_COUNT) {
-    retryCount = 0;
+    await postSignOut();
     useAuthStore.getState().logOut();
+    retryCount = 0;
     window.location.href = "/login";
     return Promise.reject(error);
   }
@@ -48,15 +49,11 @@ export async function apiResponseErrorInterceptor(error: AxiosError) {
     useAuthStore.getState().refreshToken({ accessToken });
     config.headers.Authorization = `Bearer ${accessToken}`;
     retryCount++;
-  } catch (error) {
-    if (
-      isAxiosError(error) &&
-      error.response?.status === 400 &&
-      !redirectWhitelist.includes(window.location.pathname)
-    ) {
-      window.location.href = "/";
+    return apiClient.request(config as AxiosRequestConfig);
+  } catch (refreshError) {
+    if (isAxiosError(refreshError) && refreshError.response?.status === 400) {
+      window.location.href = "/login";
     }
+    return Promise.reject(error);
   }
-
-  return apiClient.request(config as AxiosRequestConfig);
 }
