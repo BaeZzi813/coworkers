@@ -2,7 +2,8 @@ import KakaotalkIcon from "@/assets/icons/ic-kakaotalk.svg";
 import { Button } from "@/components/button";
 import InputLabel from "@/features/login/components/FormField";
 import PasswordVisible from "@/features/login/components/PasswordVisible";
-import { validateEmail, validatePassword } from "@/utils/LoginValidator";
+import { validateEmail, validatePassword } from "@/utils/login-validator";
+import clsx from "clsx";
 import { useState } from "react";
 
 export default function LoginPage() {
@@ -12,21 +13,43 @@ export default function LoginPage() {
   const [emailError, setEmailError] = useState<string | undefined>();
   const [passwordError, setPasswordError] = useState<string | undefined>();
 
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleEmailChangeValidate = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setEmail(e.target.value);
   };
 
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePasswordChangeValidate = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setPassword(e.target.value);
   };
 
+  const handleEmailBlurValidate = () => {
+    const emailResult = validateEmail(email);
+    setEmailError(emailResult.valid ? undefined : emailResult.reason);
+  };
+
+  const handlePasswordBlurValidate = () => {
+    const passwordResult = validatePassword(password);
+    setPasswordError(passwordResult.valid ? undefined : passwordResult.reason);
+  };
+
+  //인지부하에 대하여, 중첩된 if문,복잡한 조건문 정리
+  const marginTop = (() => {
+    if (emailError && passwordError) return "mt-12";
+    if (emailError) return "mt-9";
+    if (passwordError) return "mt-6";
+    return "mt-3";
+  })();
+
+  // 포커스 해제하지않은 상태에서 에러상태 해제 후 로그인 눌렀을 때 시나리오를 생각해서 로그인 버튼 클릭 유효성검사는 유지
   const handleLoginButtonClick = () => {
     const emailResult = validateEmail(email);
     const passwordResult = validatePassword(password);
 
     setEmailError(emailResult.valid ? undefined : emailResult.reason);
     setPasswordError(passwordResult.valid ? undefined : passwordResult.reason);
-
     if (emailResult.valid && passwordResult.valid) {
       // 로그인 로직 추가하기
     }
@@ -50,7 +73,8 @@ export default function LoginPage() {
               placeholder="이메일을 입력해주세요."
               size="large"
               value={email}
-              onChange={handleEmailChange}
+              onChange={handleEmailChangeValidate}
+              onBlur={handleEmailBlurValidate}
               errorMessage={emailError}
             />
           </div>
@@ -64,7 +88,8 @@ export default function LoginPage() {
                 placeholder="비밀번호를 입력해주세요."
                 size="large"
                 value={password}
-                onChange={handlePasswordChange}
+                onChange={handlePasswordChangeValidate}
+                onBlur={handlePasswordBlurValidate}
                 errorMessage={passwordError}
                 trailing={
                   <PasswordVisible
@@ -77,17 +102,7 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <div
-          className={`mx-auto ${
-            emailError && passwordError
-              ? "mt-12"
-              : emailError
-                ? "mt-9"
-                : passwordError
-                  ? "mt-6"
-                  : "mt-3"
-          } flex w-[460px] justify-end`}
-        >
+        <div className={clsx("mx-auto flex w-[460px] justify-end", marginTop)}>
           <button
             type="button"
             className="h-6 w-[176px] cursor-pointer text-right text-lg-m text-brand-primary underline hover:text-lg-s"

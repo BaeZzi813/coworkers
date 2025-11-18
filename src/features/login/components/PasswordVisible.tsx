@@ -18,9 +18,9 @@ export default function PasswordVisible({
       aria-label={isVisible ? "비밀번호 숨기기" : "비밀번호 보기"}
     >
       {isVisible ? (
-        <VisibleIcon width={28} height={24} />
+        <VisibleIcon width={24} height={24} />
       ) : (
-        <InvisibleIcon width={28} height={24} />
+        <InvisibleIcon width={24} height={24} />
       )}
     </button>
   );

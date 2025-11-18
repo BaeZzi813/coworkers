@@ -1,4 +1,5 @@
 import { TextField } from "@/components/input";
+import clsx from "clsx";
 import type { ComponentPropsWithoutRef } from "react";
 
 type TextFieldProps = ComponentPropsWithoutRef<typeof TextField>;
@@ -17,10 +18,10 @@ export default function InputLabel({
   ...textFieldProps
 }: InputLabelProps) {
   return (
-    <div className={`flex flex-col gap-3 ${containerClassName ?? ""}`}>
+    <div className={clsx("flex flex-col gap-3", containerClassName)}>
       <label
         htmlFor={id}
-        className={`text-lg-m text-text-primary ${labelClassName ?? ""}`}
+        className={clsx("text-lg-m text-text-primary", labelClassName)}
       >
         {label}
       </label>
