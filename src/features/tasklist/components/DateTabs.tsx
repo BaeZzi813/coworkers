@@ -41,7 +41,7 @@ export default function DateTabs({ selectedDate, onSelect }: DateTabsProps) {
   };
 
   return (
-    <div className="flex items-center gap-1 py-2 tablet:gap-2">
+    <div className="flex items-center gap-1 overflow-auto py-2 tablet:gap-2">
       <motion.div
         key={selectedDate.getTime()}
         initial={{ x: direction === "next" ? 80 : -80, opacity: 0 }}
