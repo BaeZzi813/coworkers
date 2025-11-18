@@ -19,9 +19,9 @@ export default function ArticlePage() {
 
   return (
     <>
-      <section className="min-h-screen w-full bg-background-secondary pt-5">
-        <div className="mx-auto h-[731px] w-[343px] bg-background-primary tablet:h-[989px] tablet:w-[620px]">
-          <div className="mx-auto h-[652px] w-[300px] pt-[39px] tablet:w-[540px]">
+      <section className="min-h-screen w-full bg-background-secondary py-5 tablet:py-[68px]">
+        <div className="mx-auto w-[343px] rounded-[20px] bg-background-primary tablet:w-[620px] desktop:w-[900px]">
+          <div className="mx-auto w-[300px] pt-10 pb-10 tablet:w-[540px] tablet:pt-[54px] tablet:pb-[54px] desktop:w-[780px]">
             <div className="flex h-[68px] flex-col gap-2 border-b border-b-border-primary tablet:h-[76px]">
               <div className="flex justify-between">
                 <div className="text-2lg-b tablet:text-xl-b">{data?.title}</div>
@@ -37,7 +37,7 @@ export default function ArticlePage() {
                 </span>
               </div>
             </div>
-            <div className="mt-4 flex h-[270px] flex-col gap-6">
+            <div className="mt-4 flex flex-col gap-6">
               <div className="text-md-r text-text-primary tablet:text-lg-r">
                 {data?.content}
               </div>
@@ -52,17 +52,17 @@ export default function ArticlePage() {
                 </div>
               )}
             </div>
-            <span className="flex h-[49px] items-center justify-end text-md-r text-slate-400 tablet:h-[80px] tablet:text-lg-r">
+            <span className="flex h-[49px] items-center justify-end text-md-r text-slate-400 tablet:h-20 tablet:text-lg-r">
               <span className="mr-1 inline-block">
-                <Icon name="heart" size="small" color="white" />
+                <Icon name="heart" size="large" color="white" />
               </span>
               {data?.likeCount}
             </span>
-            <div className="flex flex-col gap-3">
+            <div className="mb-5 flex flex-col gap-3">
               <div className="flex items-center gap-1">
                 <div className="text-md-b tablet:text-2lg-b">댓글</div>
                 <span className="text-md-b text-brand-primary tablet:text-2lg-b">
-                  2
+                  {data?.commentCount}
                 </span>
               </div>
               <div className="flex items-center">
@@ -71,7 +71,7 @@ export default function ArticlePage() {
                   <input
                     type="text"
                     placeholder="댓글을 달아주세요"
-                    className="w-52 focus:outline-none tablet:w-[420px]"
+                    className="w-52 text-text-default placeholder:text-xs-r focus:outline-none tablet:w-[420px]"
                   />
                   <button className="flex h-6 w-6 items-center justify-center rounded-full bg-icon-primary">
                     <Icon name="arrowUp" />
@@ -79,6 +79,38 @@ export default function ArticlePage() {
                 </div>
               </div>
             </div>
+            {data?.comment &&
+              data.comment.map((article) => (
+                <div
+                  key={article.id}
+                  className="border-t border-t-border-primary py-3 tablet:py-5"
+                >
+                  <div className="flex h-[54px] gap-2">
+                    <div className="relative h-6 w-6 tablet:h-8 tablet:w-8">
+                      <Image
+                        src={article.writer.image}
+                        alt="댓글작성자 이미지"
+                        fill
+                        className="rounded-md"
+                      />
+                    </div>
+                    <div className="flex w-full flex-col gap-1">
+                      <div className="flex justify-between">
+                        <div className="text-xs-s text-text-primary tablet:text-md-b">
+                          {article.writer.nickname}
+                        </div>
+                        <Icon name="dots" size="small" />
+                      </div>
+                      <div className="text-sm-m text-text-primary tablet:text-md-r">
+                        {article.content}
+                      </div>
+                      <span className="text-xs-r text-slate-400 tablet:text-md-m">
+                        {formatDate(article.createdAt)}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
           </div>
         </div>
       </section>

@@ -9,7 +9,32 @@
       "content": "커피 마시고 싶어요..",
       "writer": { "id": 1, "nickname": "우지원" },
       "createdAt": "2025-11-10T08:20:15.000Z",
-      "updatedAt": "2025-11-10T08:20:15.000Z"
+      "updatedAt": "2025-11-10T08:20:15.000Z",
+      "commentCount": 2,
+      "comment": [
+        {
+          "id": 1,
+          "content": "저도요ㅠㅠ",
+          "writer": {
+            "image": "https://fastly.picsum.photos/id/243/200/300.jpg?hmac=yLdg7AjJQVsW8Nb4Ja2x90yuJhJq_3E-znErM3eg2js",
+            "nickname": "김철수",
+            "id": 1
+          },
+          "createdAt": "2025-11-10T09:00:00.000Z",
+          "updatedAt": "2025-11-10T09:00:00.000Z"
+        },
+        {
+          "id": 2,
+          "content": "저번주부터 그랬어요!",
+          "writer": {
+            "image": "https://fastly.picsum.photos/id/315/200/300.jpg?hmac=C67WPcnxkaV_SPowHi-8nl3yoODZSBZqnoOdBObP5Ys",
+            "nickname": "박영희",
+            "id": 2
+          },
+          "createdAt": "2025-11-10T09:10:00.000Z",
+          "updatedAt": "2025-11-10T09:10:00.000Z"
+        }
+      ]
     },
     {
       "id": 2,
@@ -19,7 +44,21 @@
       "content": "자판기 고쳐주세요~~~",
       "writer": { "id": 2, "nickname": "이수빈" },
       "createdAt": "2025-11-09T12:45:50.000Z",
-      "updatedAt": "2025-11-09T12:45:50.000Z"
+      "updatedAt": "2025-11-09T12:45:50.000Z",
+      "commentCount": 1,
+      "comment": [
+        {
+          "id": 1,
+          "content": "저도 방금 당했어요 ㅠㅠ",
+          "writer": {
+            "image": "https://fastly.picsum.photos/id/846/200/300.jpg?hmac=56qbTJ7KrbbWoe5OYb__qtZZt0ydzvJU0sFHaEsDUS0",
+            "nickname": "서지우",
+            "id": 3
+          },
+          "createdAt": "2025-11-09T13:00:00.000Z",
+          "updatedAt": "2025-11-09T13:00:00.000Z"
+        }
+      ]
     },
     {
       "id": 3,
@@ -29,7 +68,9 @@
       "content": "계단으로 올라오느라 힘들어요",
       "writer": { "id": 3, "nickname": "정민재" },
       "createdAt": "2025-11-08T10:13:40.000Z",
-      "updatedAt": "2025-11-08T10:13:40.000Z"
+      "updatedAt": "2025-11-08T10:13:40.000Z",
+      "commentCount": 0,
+      "comment": []
     },
     {
       "id": 4,
@@ -39,7 +80,43 @@
       "content": "당분간 예약은 수기로 작성부탁드려요",
       "writer": { "id": 4, "nickname": "박서연" },
       "createdAt": "2025-11-07T14:30:00.000Z",
-      "updatedAt": "2025-11-07T14:30:00.000Z"
+      "updatedAt": "2025-11-07T14:30:00.000Z",
+      "commentCount": 3,
+      "comment": [
+        {
+          "id": 1,
+          "content": "헉 불편하겠다 ㅠㅠ",
+          "writer": {
+            "image": "https://fastly.picsum.photos/id/279/200/300.jpg?hmac=fYDbVmnm7vDGt7SA51v-qMUKHIn7HKCp5v9d8Wx_SVM",
+            "nickname": "이은정",
+            "id": 4
+          },
+          "createdAt": "2025-11-07T15:00:00.000Z",
+          "updatedAt": "2025-11-07T15:00:00.000Z"
+        },
+        {
+          "id": 2,
+          "content": "진짜 고쳐져야할듯...",
+          "writer": {
+            "image": "https://fastly.picsum.photos/id/562/200/300.jpg?hmac=hpXw5M2jimIlA8mbmOszsyQ8e8ZBdyiCeb9T-8STe44",
+            "nickname": "최현우",
+            "id": 5
+          },
+          "createdAt": "2025-11-07T15:15:00.000Z",
+          "updatedAt": "2025-11-07T15:15:00.000Z"
+        },
+        {
+          "id": 3,
+          "content": "알려줘서 고마워요!",
+          "writer": {
+            "image": "https://fastly.picsum.photos/id/289/200/300.jpg?hmac=TVh4H_Hra3e1VSDPJz-mhCgep32qIa7T6DGQvbrjMb4",
+            "nickname": "이성민",
+            "id": 6
+          },
+          "createdAt": "2025-11-07T15:20:00.000Z",
+          "updatedAt": "2025-11-07T15:20:00.000Z"
+        }
+      ]
     },
     {
       "id": 5,
@@ -49,7 +126,21 @@
       "content": "업체 번호 알고 계신 분 있으신가요~?",
       "writer": { "id": 5, "nickname": "김태훈" },
       "createdAt": "2025-11-06T09:05:25.000Z",
-      "updatedAt": "2025-11-06T09:05:25.000Z"
+      "updatedAt": "2025-11-06T09:05:25.000Z",
+      "commentCount": 1,
+      "comment": [
+        {
+          "id": 1,
+          "content": "앞에 붙어있던 번호가 사라졌어요 ㅠㅠ",
+          "writer": {
+            "image": "https://fastly.picsum.photos/id/397/200/300.jpg?hmac=9VBInLrifj_yyc2JuJSAVIfj9yQdt5Ovm2sHmvva-48",
+            "nickname": "박진영",
+            "id": 7
+          },
+          "createdAt": "2025-11-06T09:15:00.000Z",
+          "updatedAt": "2025-11-06T09:15:00.000Z"
+        }
+      ]
     },
     {
       "id": 6,
@@ -59,7 +150,9 @@
       "content": "사무실 공기가 너무 탁해요",
       "writer": { "id": 6, "nickname": "최예린" },
       "createdAt": "2025-11-05T11:22:31.000Z",
-      "updatedAt": "2025-11-05T11:22:31.000Z"
+      "updatedAt": "2025-11-05T11:22:31.000Z",
+      "commentCount": 0,
+      "comment": []
     },
     {
       "id": 7,
@@ -69,7 +162,32 @@
       "content": "안에 있던 음식들 폐기 예정입니다!",
       "writer": { "id": 7, "nickname": "홍지훈" },
       "createdAt": "2025-11-04T15:10:45.000Z",
-      "updatedAt": "2025-11-04T15:10:45.000Z"
+      "updatedAt": "2025-11-04T15:10:45.000Z",
+      "commentCount": 2,
+      "comment": [
+        {
+          "id": 1,
+          "content": "헐 다 버려졌나요?",
+          "writer": {
+            "image": "https://fastly.picsum.photos/id/456/200/300.jpg?hmac=p9jAgKWZ8BmAcmdpyO2siEEUZaIzEUHYN64WS2rJNtM",
+            "nickname": "이도현",
+            "id": 8
+          },
+          "createdAt": "2025-11-04T15:30:00.000Z",
+          "updatedAt": "2025-11-04T15:30:00.000Z"
+        },
+        {
+          "id": 2,
+          "content": "다음엔 문 꼭 닫아주세요 ㅠㅠ",
+          "writer": {
+            "image": "https://fastly.picsum.photos/id/538/200/300.jpg?hmac=QyW9exvhaGnW9uknxjXGZYm6JAtg9ctqbnYTTwBk61o",
+            "nickname": "최민지",
+            "id": 9
+          },
+          "createdAt": "2025-11-04T15:35:00.000Z",
+          "updatedAt": "2025-11-04T15:35:00.000Z"
+        }
+      ]
     },
     {
       "id": 8,
@@ -79,7 +197,21 @@
       "content": "미팅하는데 불편함을 겪고 있어요 참고하세요!",
       "writer": { "id": 8, "nickname": "이하늘" },
       "createdAt": "2025-11-03T08:00:10.000Z",
-      "updatedAt": "2025-11-03T08:00:10.000Z"
+      "updatedAt": "2025-11-03T08:00:10.000Z",
+      "commentCount": 1,
+      "comment": [
+        {
+          "id": 1,
+          "content": "HDMI 케이블 바꾸면 될 때도 있어요!",
+          "writer": {
+            "image": "https://fastly.picsum.photos/id/423/200/300.jpg?hmac=Yb4FKqDYd2C1Lvx5F0BDwATeS4vxsllU9vPl228-BXQ",
+            "nickname": "정세연",
+            "id": 10
+          },
+          "createdAt": "2025-11-03T08:30:00.000Z",
+          "updatedAt": "2025-11-03T08:30:00.000Z"
+        }
+      ]
     },
     {
       "id": 9,
@@ -89,7 +221,9 @@
       "content": "눈이 나갈 거 같아요",
       "writer": { "id": 9, "nickname": "정유나" },
       "createdAt": "2025-11-02T19:40:55.000Z",
-      "updatedAt": "2025-11-02T19:40:55.000Z"
+      "updatedAt": "2025-11-02T19:40:55.000Z",
+      "commentCount": 0,
+      "comment": []
     },
     {
       "id": 10,
@@ -99,7 +233,32 @@
       "content": "재등록 하는 법 아시는 분 계신가요~?",
       "writer": { "id": 10, "nickname": "윤도현" },
       "createdAt": "2025-11-01T17:25:00.000Z",
-      "updatedAt": "2025-11-01T17:25:00.000Z"
+      "updatedAt": "2025-11-01T17:25:00.000Z",
+      "commentCount": 2,
+      "comment": [
+        {
+          "id": 1,
+          "content": "저도 어제 재등록했어요! 도움 드릴게요!",
+          "writer": {
+            "image": "https://fastly.picsum.photos/id/924/200/300.jpg?hmac=9Zu3ewQYhI2ltbuwGQk-Ed6PjR87O-zdiPty45pJS6g",
+            "nickname": "장하늘",
+            "id": 11
+          },
+          "createdAt": "2025-11-01T17:50:00.000Z",
+          "updatedAt": "2025-11-01T17:50:00.000Z"
+        },
+        {
+          "id": 2,
+          "content": "관리실에 전화하면 바로 해줘요!",
+          "writer": {
+            "image": "https://fastly.picsum.photos/id/856/200/300.jpg?hmac=aENqXLQRhaJimtL7dToYysOgNeVwtibR-Gj5IUAS4I4",
+            "nickname": "서진우",
+            "id": 12
+          },
+          "createdAt": "2025-11-01T18:00:00.000Z",
+          "updatedAt": "2025-11-01T18:00:00.000Z"
+        }
+      ]
     }
   ]
 }
