@@ -49,3 +49,17 @@ export function validateName(name: string): ValidationResult {
   }
   return { valid: true };
 }
+
+export function validatePasswordConfirm(
+  password: string,
+  confirmPassword: string
+): ValidationResult {
+  const value = String(confirmPassword ?? "");
+  if (value.length === 0) {
+    return { valid: false, reason: "비밀번호를 다시 한 번 입력해주세요." };
+  }
+  if (value !== password) {
+    return { valid: false, reason: "비밀번호가 일치하지 않습니다." };
+  }
+  return { valid: true };
+}

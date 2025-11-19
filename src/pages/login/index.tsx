@@ -4,6 +4,7 @@ import InputLabel from "@/features/login/components/FormField";
 import PasswordVisible from "@/features/login/components/PasswordVisible";
 import { validateEmail, validatePassword } from "@/utils/login-validator";
 import clsx from "clsx";
+import Link from "next/link";
 import { useState } from "react";
 
 export default function LoginPage() {
@@ -108,6 +109,7 @@ export default function LoginPage() {
             className="h-6 w-[176px] cursor-pointer text-right text-lg-m text-brand-primary underline hover:text-lg-s"
           >
             비밀번호를 잊으셨나요?
+            {/* 비밀번호 재설정 모달이 나오게 */}
           </button>
         </div>
 
@@ -119,18 +121,19 @@ export default function LoginPage() {
             isFullWidth={true}
             onClick={handleLoginButtonClick}
           />
+          {/* 로그인시 엑세스토큰 받고 팀페이지로 이동 */}
         </div>
 
         <div className="mx-auto mt-6 flex h-[20px] w-[268px] items-center justify-center gap-3">
           <span className="text-lg-m text-text-secondary">
             아직 계정이 없으신가요?
           </span>
-          <button
-            type="button"
+          <Link
+            href="/signup"
             className="cursor-pointer text-lg-m text-brand-primary underline hover:text-lg-s"
           >
             가입하기
-          </button>
+          </Link>
         </div>
 
         <div className="mx-auto mt-[60px] flex h-[20px] w-[460px] items-center">
