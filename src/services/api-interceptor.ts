@@ -1,5 +1,5 @@
 import { postSignOut } from "@/features/auth/apis";
-import { postRefreshToken } from "@/features/auth/apis/post-refresh-token";
+import { postProxyRefreshToken } from "@/features/auth/apis/";
 import { bearer } from "@/features/auth/utils/token";
 import { useAuthStore } from "@/stores/auth-store";
 import {
@@ -46,7 +46,7 @@ export async function apiResponseErrorInterceptor(error: AxiosError) {
   }
 
   try {
-    const { accessToken } = await postRefreshToken();
+    const { accessToken } = await postProxyRefreshToken();
     useAuthStore.getState().refreshToken({ accessToken });
     config.headers.Authorization = bearer(accessToken);
     retryCount++;
