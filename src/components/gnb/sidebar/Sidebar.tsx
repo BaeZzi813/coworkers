@@ -99,7 +99,7 @@ function Content({ isFolded }: { isFolded: boolean }) {
 
   const { data: groups } = useQuery({
     queryKey: ["user", "groups"],
-    queryFn: getUserGroups,
+    queryFn: () => getUserGroups(),
   });
 
   const handleAddTeamClick = () => {

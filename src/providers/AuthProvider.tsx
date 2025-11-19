@@ -4,7 +4,7 @@ import { isAxiosError } from "axios";
 import { useRouter } from "next/router";
 import { PropsWithChildren, useEffect } from "react";
 import { useShallow } from "zustand/shallow";
-import { postRefreshToken } from "../features/auth/apis";
+import { postProxyRefreshToken } from "../features/auth/apis";
 
 export default function AuthProvider({ children }: PropsWithChildren) {
   const router = useRouter();
@@ -19,7 +19,7 @@ export default function AuthProvider({ children }: PropsWithChildren) {
         return;
       }
 
-      const { accessToken } = await postRefreshToken();
+      const { accessToken } = await postProxyRefreshToken();
       refreshToken({ accessToken });
 
       const user = await getUser();
