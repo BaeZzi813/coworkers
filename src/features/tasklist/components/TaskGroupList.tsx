@@ -18,7 +18,7 @@ export default function TaskGroupList({
   const { isDesktop } = useResponsive();
   const hasTask = taskList.length > 0;
 
-  const handleTaskAdd = () => {
+  const handleAddTaskClick = () => {
     console.log("Add TaskItem");
   };
 
@@ -46,7 +46,7 @@ export default function TaskGroupList({
     />
   ) : (
     <div className="tablet:[240p]x flex h-11 w-[180px] cursor-pointer items-center rounded-lg border border-border-primary bg-background-primary p-2 tablet:w-60 tablet:rounded-xl tablet:px-3.5 tablet:py-2.5">
-      <TaskItem title="제목 없음" tasks={[]} onClick={handleTaskAdd} />
+      <TaskItem title="제목 없음" tasks={[]} onClick={handleAddTaskClick} />
     </div>
   );
 
@@ -62,7 +62,7 @@ export default function TaskGroupList({
           />
         ))
       ) : (
-        <TaskItem title="제목 없음" tasks={[]} onClick={handleTaskAdd} />
+        <TaskItem title="제목 없음" tasks={[]} onClick={handleAddTaskClick} />
       )}
     </div>
   );
@@ -83,7 +83,7 @@ export default function TaskGroupList({
             variant="outlinedPrimary"
             isFullWidth={false}
             rounded
-            onClick={handleTaskAdd}
+            onClick={handleAddTaskClick}
           />
         </div>
       </div>

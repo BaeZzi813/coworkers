@@ -27,9 +27,10 @@ export default function TaskListContent({
 
   const hasTodo = todoList && todoList.length > 0;
 
-  const handleTodoAdd = () => {
+  const handleAddTodoClick = () => {
     console.log("Add TodoItem");
   };
+
   return (
     <section className="relative -mx-4 -mb-4 min-h-[768px] flex-1 bg-background-primary px-[18px] py-[38px] tablet:m-0 tablet:w-full tablet:rounded-3xl tablet:px-[30px] tablet:py-[46px] desktop:px-[42px] desktop:py-[46px]">
       <div className="relative">
@@ -40,7 +41,7 @@ export default function TaskListContent({
         ) : (
           <button
             aria-label="할 일 추가"
-            onClick={handleTodoAdd}
+            onClick={handleAddTodoClick}
             className="absolute z-10 cursor-pointer text-xl-s text-state-400"
           >
             할 일을 입력해주세요
@@ -68,7 +69,7 @@ export default function TaskListContent({
             createdAt={new Date().toISOString()}
             frequency="DAILY"
             isEmpty
-            onItemClick={handleTodoAdd}
+            onItemClick={handleAddTodoClick}
           />
         )}
       </div>
@@ -76,7 +77,7 @@ export default function TaskListContent({
       <div className="fixed right-3.5 bottom-[30px] tablet:bottom-32 desktop:absolute desktop:top-[260px] desktop:-right-7">
         <FloatingButton
           icon={<Icon name="plus" color="white" />}
-          onClick={handleTodoAdd}
+          onClick={handleAddTodoClick}
         />
       </div>
     </section>
