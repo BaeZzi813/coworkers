@@ -1,5 +1,6 @@
 import Icon from "@/components/icon";
 import { getArticleById } from "@/features/boards/api";
+import { useResponsive } from "@/hooks/use-responsive";
 import { formatDate } from "@/utils/format-date";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
@@ -8,6 +9,7 @@ import { useRouter } from "next/router";
 export default function ArticlePage() {
   const router = useRouter();
   const { id } = router.query;
+  const { isDesktop, isTablet, isMobile } = useResponsive();
 
   const { data } = useQuery({
     queryKey: ["article", id],
@@ -20,7 +22,7 @@ export default function ArticlePage() {
   return (
     <>
       <section className="min-h-screen w-full bg-background-secondary py-5 tablet:py-[68px]">
-        <div className="mx-auto w-[343px] rounded-[20px] bg-background-primary tablet:w-[620px] desktop:w-[900px]">
+        <div className="relative mx-auto w-[343px] rounded-[20px] bg-background-primary tablet:w-[620px] desktop:w-[900px]">
           <div className="mx-auto w-[300px] pt-10 pb-10 tablet:w-[540px] tablet:pt-[54px] tablet:pb-[54px] desktop:w-[780px]">
             <div className="flex h-[68px] flex-col gap-2 border-b border-b-border-primary tablet:h-[76px]">
               <div className="flex justify-between">
@@ -52,12 +54,29 @@ export default function ArticlePage() {
                 </div>
               )}
             </div>
-            <span className="flex h-[49px] items-center justify-end text-md-r text-slate-400 tablet:h-20 tablet:text-lg-r">
-              <span className="mr-1 inline-block">
-                <Icon name="heart" size="large" color="white" />
+            {isDesktop ? (
+              <div className="h-10">
+                <div className="absolute top-44 -right-20 flex flex-col items-center gap-2">
+                  <button className="flex h-16 w-16 cursor-pointer items-center justify-center rounded-full bg-background-inverse">
+                    <Icon name="heart" color="white" />
+                  </button>
+                  <span className="text-lg-r text-state-400">
+                    {data?.likeCount}
+                  </span>
+                </div>
+              </div>
+            ) : (
+              <span className="flex h-[49px] items-center justify-end text-md-r text-slate-400 tablet:h-20 tablet:text-lg-r">
+                <button className="mr-1 inline-block cursor-pointer">
+                  {isMobile ? (
+                    <Icon name="heart" size="small" color="white" />
+                  ) : (
+                    <Icon name="heart" size="large" color="white" />
+                  )}
+                </button>
+                {data?.likeCount}
               </span>
-              {data?.likeCount}
-            </span>
+            )}
             <div className="mb-5 flex flex-col gap-3">
               <div className="flex items-center gap-1">
                 <div className="text-md-b tablet:text-2lg-b">댓글</div>

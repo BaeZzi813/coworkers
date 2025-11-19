@@ -22,7 +22,7 @@ export default function PostCard({ isPopular, article }: PostCardProps) {
     <div
       onClick={handleClick}
       className={clsx(
-        "flex w-[340px] flex-col gap-1.5 rounded-[20px] border border-border-primary bg-background-primary p-3 tablet:h-44 tablet:p-4",
+        "flex w-[340px] cursor-pointer flex-col gap-1.5 rounded-[20px] border border-border-primary bg-background-primary p-3 tablet:h-44 tablet:p-4",
         isPopular
           ? "h-[177px] justify-between tablet:w-[304px] desktop:h-[206px] desktop:w-[350px]"
           : "h-[140px] justify-around tablet:h-[156px] tablet:w-[620px] desktop:w-[529px]"
