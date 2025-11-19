@@ -45,18 +45,9 @@ export default function TodoItem({
   onItemClick,
 }: TodoItemProps) {
   const options: DropdownOption[] = [
-    { label: "수정하기", value: "edit" },
-    { label: "삭제하기", value: "delete" },
+    { label: "수정하기", value: "edit", action: () => {} },
+    { label: "삭제하기", value: "delete", action: () => {} },
   ];
-
-  const handleSelect = (option: DropdownOption) => {
-    switch (option.value) {
-      case "edit":
-        break;
-      case "delete":
-        break;
-    }
-  };
 
   const handleCheckboxClick = (e: MouseEvent) => {
     e.stopPropagation();
@@ -120,7 +111,6 @@ export default function TodoItem({
               }
               options={options}
               alignment="right"
-              onSelect={(option) => handleSelect(option as DropdownOption)}
             />
           )}
         </div>
