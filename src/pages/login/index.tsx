@@ -59,13 +59,11 @@ export default function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-background-secondary">
       <div className="relative h-[720px] w-[550px] rounded-2xl bg-background-primary">
         <div className="flex flex-col items-center pt-[72px]">
-          <h1 className="h-[28px] w-[72px] text-2xl-b text-text-primary">
-            로그인
-          </h1>
+          <h1 className="h-7 w-[72px] text-2xl-b text-text-primary">로그인</h1>
         </div>
 
-        <div className="mx-auto mt-[64px] h-[184px] w-[460px]">
-          <div className="h-[80px] w-[460px]">
+        <div className="mx-auto mt-16 h-[184px] w-[460px]">
+          <div className="h-20 w-[460px]">
             <InputLabel
               label="이메일"
               id="email"
@@ -80,7 +78,7 @@ export default function LoginPage() {
           </div>
 
           <div className={emailError ? "mt-12" : "mt-6"}>
-            <div className="h-[80px] w-[460px]">
+            <div className="h-20 w-[460px]">
               <InputLabel
                 label="비밀번호"
                 id="password"
@@ -105,7 +103,7 @@ export default function LoginPage() {
         <div className={clsx("mx-auto flex w-[460px] justify-end", marginTop)}>
           <button
             type="button"
-            className="h-6 w-[176px] cursor-pointer text-right text-lg-m text-brand-primary underline hover:text-lg-s"
+            className="h-6 w-44 cursor-pointer text-right text-lg-m text-brand-primary underline hover:text-lg-s"
           >
             비밀번호를 잊으셨나요?
           </button>
@@ -121,7 +119,7 @@ export default function LoginPage() {
           />
         </div>
 
-        <div className="mx-auto mt-6 flex h-[20px] w-[268px] items-center justify-center gap-3">
+        <div className="mx-auto mt-6 flex h-5 w-[268px] items-center justify-center gap-3">
           <span className="text-lg-m text-text-secondary">
             아직 계정이 없으신가요?
           </span>
@@ -133,13 +131,13 @@ export default function LoginPage() {
           </button>
         </div>
 
-        <div className="mx-auto mt-[60px] flex h-[20px] w-[460px] items-center">
+        <div className="mx-auto mt-[60px] flex h-5 w-[460px] items-center">
           <div className="h-px flex-1 bg-border-primary"></div>
           <span className="px-10 text-xl-r text-text-default">OR</span>
           <div className="h-px flex-1 bg-border-primary"></div>
         </div>
 
-        <div className="mx-auto mt-6 flex h-[44px] w-[460px] items-center justify-between pb-[72px]">
+        <div className="mx-auto mt-6 flex h-11 w-[460px] items-center justify-between pb-[72px]">
           <span className="text-lg-m text-text-default">간편 로그인하기</span>
           <button
             type="button"
