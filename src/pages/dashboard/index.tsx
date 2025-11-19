@@ -1,4 +1,4 @@
-import { GET_SERVER_SIDE_PROPS_REDIRECT_RESULT } from "@/constants/ssr";
+import { GET_SERVER_SIDE_PROPS_REDIRECT_RETURN } from "@/constants/ssr";
 import { postAPIRefreshToken } from "@/features/auth/apis/post-refresh-token";
 import { getUserGroups } from "@/features/group/apis";
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
@@ -10,7 +10,7 @@ import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 export async function getServerSideProps({ req }: GetServerSidePropsContext) {
   const refreshToken = req.cookies.refreshToken;
   if (!refreshToken) {
-    return GET_SERVER_SIDE_PROPS_REDIRECT_RESULT;
+    return GET_SERVER_SIDE_PROPS_REDIRECT_RETURN;
   }
 
   const { accessToken } = await postAPIRefreshToken({ refreshToken });
