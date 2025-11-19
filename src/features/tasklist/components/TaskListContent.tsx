@@ -8,7 +8,7 @@ import TodoItem from "./TodoItem";
 
 interface Props {
   selectedDate: Date;
-  onSelectDate: (d: Date) => void;
+  onSelectDate: (date: Date) => void;
   selectedTask: TaskGroup | null;
 }
 
