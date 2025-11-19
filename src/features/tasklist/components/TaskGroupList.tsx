@@ -1,11 +1,11 @@
 import { Button } from "@/components/button";
 import Select, { SelectOption } from "@/components/select";
 import { useResponsive } from "@/hooks/use-responsive";
-import { TaskGroup } from "@/types/task";
+import { TaskList } from "@/types/task";
 import TaskItem from "./TaskItem";
 
 interface Props {
-  taskList: TaskGroup[];
+  taskList: TaskList[];
   selectedTaskId: number | null;
   onSelectTask: (id: number) => void;
 }

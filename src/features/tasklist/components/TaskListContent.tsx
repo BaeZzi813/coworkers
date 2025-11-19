@@ -1,6 +1,6 @@
 import { FloatingButton } from "@/components/button";
 import Icon from "@/components/icon";
-import { TaskGroup } from "@/types/task";
+import { TaskList } from "@/types/task";
 import { useQuery } from "@tanstack/react-query";
 import { getTodoList } from "../apis/mock";
 import DateSelector from "./DateSelector";
@@ -9,7 +9,7 @@ import TodoItem from "./TodoItem";
 interface Props {
   selectedDate: Date;
   onSelectDate: (date: Date) => void;
-  selectedTask: TaskGroup | null;
+  selectedTask: TaskList | null;
 }
 
 export default function TaskListContent({

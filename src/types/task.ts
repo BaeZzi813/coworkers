@@ -22,7 +22,7 @@ export interface Task {
   id: number;
 }
 
-export interface TaskGroup {
+export interface TaskList {
   displayIndex: number;
   groupId: number;
   updatedAt: string;

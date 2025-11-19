@@ -4,7 +4,7 @@ import TaskListContent from "@/features/tasklist/components/TaskListContent";
 import TeamHeader from "@/features/tasklist/components/TeamHeader";
 import { useResponsive } from "@/hooks/use-responsive";
 import { useSidebarStore } from "@/stores/sidebar-store";
-import { TaskGroup } from "@/types/task";
+import { TaskList } from "@/types/task";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 
@@ -15,7 +15,7 @@ export default function TaskListPage() {
     setFold(!isDesktop);
   }, [isDesktop, setFold]);
 
-  const { data: taskList } = useQuery<TaskGroup[] | undefined>({
+  const { data: taskList } = useQuery<TaskList[] | undefined>({
     queryKey: ["task-list"],
     queryFn: getTaskList,
   });

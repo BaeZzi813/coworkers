@@ -1,9 +1,9 @@
-import { Task, TaskFrequency, TaskGroup } from "@/types/task";
+import { Task, TaskFrequency, TaskList } from "@/types/task";
 import taskListMock from "./task-list.json";
 import todoListMock from "./todo-list.json";
 
-export async function getTaskList(): Promise<TaskGroup[]> {
-  return (taskListMock as TaskGroup[]).map((group) => ({
+export async function getTaskList(): Promise<TaskList[]> {
+  return (taskListMock as TaskList[]).map((group) => ({
     ...group,
     tasks: (group.tasks ?? []).map((task) => ({
       ...task,
