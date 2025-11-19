@@ -1,9 +1,12 @@
 import KakaotalkIcon from "@/assets/icons/ic-kakaotalk.svg";
 import { Button } from "@/components/button";
+import { postSignIn } from "@/features/auth/apis";
 import InputLabel from "@/features/login/components/FormField";
 import PasswordVisible from "@/features/login/components/PasswordVisible";
+import { useAuthStore } from "@/stores/auth-store";
 import { validateEmail, validatePassword } from "@/utils/login-validator";
 import clsx from "clsx";
+import { useRouter } from "next/router";
 import { useState } from "react";
 
 export default function LoginPage() {
@@ -12,6 +15,8 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState<string | undefined>();
   const [passwordError, setPasswordError] = useState<string | undefined>();
+  const login = useAuthStore((state) => state.logIn);
+  const router = useRouter();
 
   const handleEmailChangeValidate = (
     e: React.ChangeEvent<HTMLInputElement>
@@ -44,14 +49,16 @@ export default function LoginPage() {
   })();
 
   // 포커스 해제하지않은 상태에서 에러상태 해제 후 로그인 눌렀을 때 시나리오를 생각해서 로그인 버튼 클릭 유효성검사는 유지
-  const handleLoginButtonClick = () => {
+  const handleLoginButtonClick = async () => {
     const emailResult = validateEmail(email);
     const passwordResult = validatePassword(password);
 
     setEmailError(emailResult.valid ? undefined : emailResult.reason);
     setPasswordError(passwordResult.valid ? undefined : passwordResult.reason);
     if (emailResult.valid && passwordResult.valid) {
-      // 로그인 로직 추가하기
+      const response = await postSignIn({ email, password });
+      login({ accessToken: response.accessToken, user: response.user });
+      router.push("/dashboard");
     }
   };
 
