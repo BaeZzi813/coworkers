@@ -1,10 +1,10 @@
+import { postProxyRefreshToken } from "@/features/auth/apis";
 import { getUser } from "@/features/user/apis/get-user";
 import { useAuthStore } from "@/stores/auth-store";
 import { isAxiosError } from "axios";
 import { useRouter } from "next/router";
 import { PropsWithChildren, useEffect } from "react";
 import { useShallow } from "zustand/shallow";
-import { postProxyRefreshToken } from "../features/auth/apis";
 
 export default function AuthProvider({ children }: PropsWithChildren) {
   const router = useRouter();
