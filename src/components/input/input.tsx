@@ -26,10 +26,7 @@ interface Props
 }
 
 const baseClasses =
-  "w-full rounded-xl border border-state-300 bg-background-primary text-text-primary placeholder:text-text-default focus:border-brand-primary focus:outline-none focus:ring-0 focus:ring-brand-primary transition disabled:border-state-200 disabled:bg-state-50 disabled:text-text-disabled";
-
-const errorClasses =
-  "border-status-danger text-status-danger placeholder:text-status-danger focus:border-status-danger focus:ring-status-danger";
+  "w-full rounded-xl border bg-background-primary text-text-primary placeholder:text-text-default focus:outline-none focus:ring-0 focus:ring-brand-primary transition disabled:border-state-200 disabled:bg-state-50 disabled:text-text-disabled";
 
 const wrapperClasses = "relative flex items-center w-full";
 
@@ -69,7 +66,9 @@ function inputSize({
     textSizeClasses[size],
     contentPadding ?? contentPaddingClasses[size],
     hasTrailing ? (trailingPadding ?? "pr-12") : null,
-    isError ? errorClasses : null,
+    isError
+      ? "border-[var(--color-status-danger)] focus:border-[var(--color-status-danger)]"
+      : "border-state-300 focus:border-brand-primary",
     className
   );
 }
@@ -105,7 +104,6 @@ function Input({
         type={type}
         placeholder={placeholder}
         className={inputClassName}
-        aria-invalid={isError ?? undefined}
         {...rest}
       />
       {trailing && (
