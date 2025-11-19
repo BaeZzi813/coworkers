@@ -1,5 +1,6 @@
 import { postSignOut } from "@/features/auth/apis";
 import { postRefreshToken } from "@/features/auth/apis/post-refresh-token";
+import { bearer } from "@/features/auth/utils/token";
 import { useAuthStore } from "@/stores/auth-store";
 import {
   AxiosError,
@@ -13,7 +14,7 @@ import { apiClient } from "./client";
 export function apiRequestInterceptor(config: InternalAxiosRequestConfig) {
   const accessToken = useAuthStore.getState().accessToken;
   if (accessToken) {
-    config.headers.Authorization = `Bearer ${accessToken}`;
+    config.headers.Authorization = bearer(accessToken);
   }
   return config;
 }
@@ -47,7 +48,7 @@ export async function apiResponseErrorInterceptor(error: AxiosError) {
   try {
     const { accessToken } = await postRefreshToken();
     useAuthStore.getState().refreshToken({ accessToken });
-    config.headers.Authorization = `Bearer ${accessToken}`;
+    config.headers.Authorization = bearer(accessToken);
     retryCount++;
     return apiClient.request(config as AxiosRequestConfig);
   } catch (refreshError) {

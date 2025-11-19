@@ -13,3 +13,7 @@ export function validate(token?: string) {
   const expiryDate = parseExpiryDateTime(token);
   return Date.now() < expiryDate;
 }
+
+export function bearer(token: string) {
+  return `Bearer ${token}`;
+}
