@@ -1,4 +1,5 @@
 import RootLayout from "@/layouts/RootLayout";
+import AuthProvider from "@/providers/AuthProvider";
 import ReactQueryProvider from "@/providers/ReactQueryProvider";
 import "@/styles/globals.css";
 import "@/styles/tailwind.css";
@@ -12,9 +13,11 @@ function Providers({
   children,
 }: PropsWithChildren<{ reactQueryState: DehydratedState }>) {
   return (
-    <ReactQueryProvider dehydratedState={reactQueryState}>
-      <OverlayProvider>{children}</OverlayProvider>
-    </ReactQueryProvider>
+    <AuthProvider>
+      <ReactQueryProvider dehydratedState={reactQueryState}>
+        <OverlayProvider>{children}</OverlayProvider>
+      </ReactQueryProvider>
+    </AuthProvider>
   );
 }
 
