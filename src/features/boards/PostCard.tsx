@@ -11,7 +11,7 @@ interface PostCardProps {
 }
 
 export default function PostCard({ isPopular, article }: PostCardProps) {
-  const { title, id, content, writer, createdAt, likeCount, image } = article;
+  const { title, id, writer, createdAt, likeCount, image } = article;
   const formattedDate = formatDate(createdAt);
   const router = useRouter();
 
@@ -45,7 +45,6 @@ export default function PostCard({ isPopular, article }: PostCardProps) {
         >
           <div className="flex flex-col gap-2">
             <h3 className="text-lg-b tablet:text-2lg-b">{title}</h3>
-            <p className="line-clamp-2 text-sm-m tablet:text-md-r">{content}</p>
           </div>
           {image && (
             <div className="relative h-20 w-20 tablet:w-[88px] desktop:h-[88px]">

@@ -1,64 +1,75 @@
 import { FloatingButton } from "@/components/button";
 import Icon from "@/components/icon";
+import Pagination from "@/components/pagination/Pagination";
 import Select, { SelectOption } from "@/components/select";
-import { getArticle, GetArticleResponse } from "@/features/boards/api";
+import { getArticle } from "@/features/boards/api";
 import BestPost from "@/features/boards/BestPost";
 import PostCard from "@/features/boards/PostCard";
 import SearchBar from "@/features/boards/SearchBar";
 import { useSidebarStore } from "@/stores/sidebar-store";
-import { Article } from "@/types/article";
-import { useQuery } from "@tanstack/react-query";
+import { Article, GetArticleResponse } from "@/types/article";
+import {
+  keepPreviousData,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { useDebounce } from "@uidotdev/usehooks";
 import clsx from "clsx";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const options: SelectOption[] = [
   { label: "최신순", value: "recent" },
   { label: "좋아요순", value: "like" },
 ];
 
+const PAGE_SIZE = 6;
+
 export default function BoardsPage() {
+  const router = useRouter();
+  const isSidebarFolded = useSidebarStore((state) => state.isFold);
   const [query, setQuery] = useState("");
   const debounceQuery = useDebounce(query, 300);
   const [selectedOption, setSelectedOption] = useState<SelectOption>(
     options[0]
   );
-  const router = useRouter();
-  const isSidebarFolded = useSidebarStore((state) => state.isFold);
+  const [page, setPage] = useState(1);
+  const queryClient = useQueryClient();
 
   const { data } = useQuery<GetArticleResponse>({
-    queryKey: ["article"],
-    queryFn: getArticle,
-    placeholderData: { totalCount: 0, list: [] },
+    queryKey: ["articles", page, debounceQuery, selectedOption.value],
+    queryFn: () =>
+      getArticle({
+        page,
+        pageSize: PAGE_SIZE,
+        orderBy: selectedOption.value as "recent" | "like",
+        keyword: debounceQuery,
+      }),
+    placeholderData: keepPreviousData,
   });
 
-  const { data: filterPost = [] } = useQuery<Article[]>({
-    queryKey: ["filterPost", data?.list, debounceQuery, selectedOption.value],
-    queryFn: () => {
-      if (!data?.list) return [];
-      let result = data.list.filter((post) =>
-        post.title.toLowerCase().includes(debounceQuery.toLowerCase())
-      );
-      if (selectedOption.value === "like") {
-        result = result.sort((a, b) => b.likeCount - a.likeCount);
-      } else {
-        result = result.sort(
-          (a, b) =>
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-        );
-      }
-      return result;
-    },
-  });
+  useEffect(() => {
+    const nextPage = page + 1;
+    queryClient.prefetchQuery({
+      queryKey: ["articles", nextPage, debounceQuery, selectedOption.value],
+      queryFn: () =>
+        getArticle({
+          page: nextPage,
+          pageSize: PAGE_SIZE,
+          orderBy: selectedOption.value as "recent" | "like",
+          keyword: debounceQuery,
+        }),
+    });
+  }, [page, debounceQuery, selectedOption.value, queryClient]);
 
-  const bestPosts = [...(data?.list ?? [])].sort(
-    (a, b) => b.likeCount - a.likeCount
-  );
+  console.log(data);
 
   const handleChange = (value: SelectOption) => {
     setSelectedOption(value);
   };
+
+  const totalPages = Math.ceil((data?.totalCount ?? 0) / PAGE_SIZE);
+
   return (
     <>
       <section className="border-t border-border-primary tablet:border-t-0">
@@ -66,7 +77,7 @@ export default function BoardsPage() {
           <SearchBar value={query} onChange={setQuery} />
         </div>
       </section>
-      {bestPosts.length > 0 && <BestPost article={bestPosts} />}
+      <BestPost />
       <section className="min-h-screen">
         <div className="relative mx-auto mt-7 flex w-[340px] flex-col gap-5 tablet:w-[620px] desktop:w-[1074px]">
           <div className="flex items-center justify-between">
@@ -80,10 +91,16 @@ export default function BoardsPage() {
             />
           </div>
           <div className="flex flex-col gap-4 desktop:grid desktop:grid-cols-2 desktop:gap-5">
-            {filterPost.map((post) => (
+            {data?.list.map((post: Article) => (
               <PostCard key={post.id} article={post} />
             ))}
           </div>
+          <Pagination
+            page={page}
+            totalPages={totalPages}
+            onPageChange={setPage}
+            className="mt-6"
+          />
         </div>
         <div
           className={clsx(

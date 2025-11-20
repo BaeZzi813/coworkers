@@ -1,13 +1,12 @@
-import { Article } from "@/types/article";
+import { apiClient } from "@/services/client";
+import { Article, GetArticleParams, GetArticleResponse } from "@/types/article";
 import ArticleMock from "./article-mock.json";
 
-export interface GetArticleResponse {
-  totalCount: number;
-  list: Article[];
-}
-
-export async function getArticle(): Promise<GetArticleResponse> {
-  return ArticleMock;
+export async function getArticle(params: GetArticleParams) {
+  const res = await apiClient.get<GetArticleResponse>("/articles", {
+    params: params,
+  });
+  return res.data;
 }
 
 export async function getArticleById(id: number): Promise<Article | undefined> {
