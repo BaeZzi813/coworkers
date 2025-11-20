@@ -2,7 +2,8 @@ import {
   createJWTCookie,
   REFRESH_TOKEN_COOKIE_NAME,
 } from "@/features/auth/utils/cookie";
-import { apiClient } from "@/services/client";
+import { serverApiInstance } from "@/services/instance/server";
+
 import { withAxiosErrorResponse } from "@/services/with-axios-error-response";
 import { User } from "@/types/user";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -23,7 +24,10 @@ export default async function handler(
   }
 
   withAxiosErrorResponse(res, async () => {
-    const response = await apiClient.post<Response>("/auth/signIn", req.body);
+    const response = await serverApiInstance.post<Response>(
+      "/auth/signIn",
+      req.body
+    );
     const data = response.data;
     const cookie = createJWTCookie({
       name: REFRESH_TOKEN_COOKIE_NAME,

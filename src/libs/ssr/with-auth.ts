@@ -1,4 +1,4 @@
-import { postAPIRefreshToken } from "@/features/auth/apis";
+import { postRefreshToken } from "@/features/auth/apis";
 import { GSSP_LOGIN_REDIRECT_RETURN } from "@/libs/ssr/gssp-return";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
 import { JSX } from "react";
@@ -20,8 +20,7 @@ export function getServerSidePropsWithAuth<Data>(
       return GSSP_LOGIN_REDIRECT_RETURN;
     }
 
-    const { accessToken } = await postAPIRefreshToken({ refreshToken });
-
+    const accessToken = await postRefreshToken(refreshToken, { ssr: true });
     return getServerSidePropsFunc(context, accessToken);
   };
 }

@@ -1,9 +1,9 @@
-import { apiClient } from "@/services/client";
+import { clientApiInstance } from "@/services/instance/client";
 import { User } from "@/types/user";
 
 type GetUserResponse = User;
 
 export async function getUser() {
-  const response = await apiClient.get<GetUserResponse>("/user");
+  const response = await clientApiInstance.get<GetUserResponse>("/user");
   return response.data;
 }
