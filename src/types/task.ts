@@ -13,7 +13,7 @@ export interface Task {
   commentCount: number;
   deletedAt: string | null;
   recurringId: number;
-  frequency: "ONCE" | "DAILY" | "MONTHLY" | "WEEKLY";
+  frequency: TaskFrequency;
   updatedAt: string;
   doneAt: string | null;
   date: string;
@@ -22,13 +22,28 @@ export interface Task {
   id: number;
 }
 
-export interface TaskGroup {
+export interface TaskList {
   displayIndex: number;
   groupId: number;
   updatedAt: string;
   createdAt: string;
   name: string;
   id: number;
+  tasks: Task[];
 }
 
 export type TaskFrequency = "ONCE" | "DAILY" | "WEEKLY" | "MONTHLY";
+
+export interface TaskComment {
+  user: {
+    image: string;
+    nickname: string;
+    id: number;
+  };
+  userId: number;
+  taskId: number;
+  updatedAt: string;
+  createdAt: string;
+  content: string;
+  id: number;
+}

@@ -18,7 +18,7 @@ export default function DateNav({
 
   return (
     <div className="flex items-center justify-end gap-2">
-      <span className="text-lg-m text-text-primary">
+      <span className="text-sm-m text-text-primary tablet:text-lg-m">
         {year}년 {month}월
       </span>
 
