@@ -1,26 +1,27 @@
-import { GET_SERVER_SIDE_PROPS_REDIRECT_RETURN } from "@/constants/ssr";
-import { postAPIRefreshToken } from "@/features/auth/apis/post-refresh-token";
 import { getUserGroups } from "@/features/group/apis";
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
+import { gsspPropsWithTokenReturn } from "@/libs/ssr/gssp-return";
+import {
+  getServerSidePropsWithAuth,
+  serverSideComponentWithAuth,
+} from "@/libs/ssr/with-auth";
+import { UserGroup } from "@/types/user-group";
 
 /**
  * SSR 환경에서 API 호출을 위해 access token을 사용하는 예시 코드
  */
 
-export async function getServerSideProps({ req }: GetServerSidePropsContext) {
-  const refreshToken = req.cookies.refreshToken;
-  if (!refreshToken) {
-    return GET_SERVER_SIDE_PROPS_REDIRECT_RETURN;
-  }
-
-  const { accessToken } = await postAPIRefreshToken({ refreshToken });
-  const groups = await getUserGroups({ accessToken });
-  return { props: { groups } };
+interface DashboardPageData {
+  groups: UserGroup[];
 }
 
-export default function DashboardPage({
-  groups,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export const getServerSideProps = getServerSidePropsWithAuth(
+  async (context, accessToken) => {
+    const groups = await getUserGroups({ accessToken });
+    return gsspPropsWithTokenReturn({ groups }, accessToken);
+  }
+);
+
+export default serverSideComponentWithAuth<DashboardPageData>(({ groups }) => {
   return (
     <div>
       {groups.map((group) => (
@@ -28,4 +29,4 @@ export default function DashboardPage({
       ))}
     </div>
   );
-}
+});
