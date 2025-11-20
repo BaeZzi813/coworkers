@@ -5,7 +5,7 @@ import Icon from "@/components/icon";
 import clsx from "clsx";
 import { useState } from "react";
 
-export interface Comment {
+export interface CommentModel {
   commentId: number;
   userId: number;
   name: string;
@@ -15,7 +15,7 @@ export interface Comment {
   updatedAt: string;
 }
 
-export interface CommentItemProps extends Comment {
+export interface CommentItemProps extends CommentModel {
   onEdit?: (commentId: number, newContent: string) => void;
   onDelete?: (commentId: number) => void;
   className?: string;
