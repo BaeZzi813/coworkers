@@ -1,5 +1,5 @@
+import Icon from "@/components/icon";
 import { useCanvas } from "@/hooks/use-canvas";
-import Icon from "../icon";
 
 type BadgeSize = "large" | "small";
 
