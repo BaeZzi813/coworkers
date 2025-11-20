@@ -23,7 +23,7 @@ export default function CommentSection({
   return (
     <section className={clsx("flex flex-col gap-4", className)}>
       <h2
-        className="text-2xl-b"
+        className="tabelt:text-2xl-b text-lg-b"
         style={{
           paddingLeft: horizontalPadding,
           paddingRight: horizontalPadding,
