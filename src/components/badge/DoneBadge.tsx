@@ -1,5 +1,5 @@
+import Icon from "@/components/icon";
 import { useCanvas } from "@/hooks/use-canvas";
-import Icon from "../icon";
 
 type BadgeSize = "large" | "small";
 
@@ -18,13 +18,14 @@ export default function DoneBadge({ current, total, size }: Props) {
   const fontColor = current > 0 ? "text-brand-primary" : "text-state-400";
   const safeCurrent = Math.max(0, current);
   const safeTotal = Math.max(0, total);
+  const isDone = safeTotal > 0 && safeCurrent === safeTotal;
 
   return (
     <div
       className={`${typography[size]} rounded-full bg-background-primary px-2 py-1`}
     >
       <div className="flex items-center gap-1">
-        {safeCurrent === safeTotal ? (
+        {isDone ? (
           <Icon name="progressDone" size={size} />
         ) : (
           <CircularProgress

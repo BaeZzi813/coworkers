@@ -1,6 +1,6 @@
+import Dropdown, { type DropdownOption } from "@/components/dropdown";
+import Icon from "@/components/icon";
 import clsx from "clsx";
-import Dropdown, { type DropdownOption } from "../dropdown";
-import Icon from "../icon";
 
 type SelectSize = "large" | "small";
 

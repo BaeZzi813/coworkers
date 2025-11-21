@@ -20,7 +20,7 @@ export default function Drawer({
 
   const { data: groups } = useQuery({
     queryKey: ["user", "groups"],
-    queryFn: getUserGroups,
+    queryFn: () => getUserGroups(),
   });
 
   const handleAddTeamClick = () => {
