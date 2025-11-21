@@ -5,6 +5,7 @@ import {
   GetArticleResponse,
 } from "@/types/boards-article";
 import {
+  Comment,
   GetCommentResponse,
   PostComment,
   PostCommentBody,
@@ -40,5 +41,15 @@ export async function postCommentById(id: number, body: PostCommentBody) {
     `/articles/${id}/comments`,
     body
   );
+  return res.data;
+}
+
+export async function patchCommentById(id: number, body: PostCommentBody) {
+  const res = await apiClient.patch<Comment>(`comments/${id}`, body);
+  return res.data;
+}
+
+export async function deleteCommentById(id: number) {
+  const res = await apiClient.delete<Comment>(`comments/${id}`);
   return res.data;
 }

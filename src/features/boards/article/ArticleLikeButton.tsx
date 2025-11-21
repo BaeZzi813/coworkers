@@ -1,7 +1,11 @@
 import Icon from "@/components/icon";
 import { useResponsive } from "@/hooks/use-responsive";
 
-export default function ArticleLikeButton({ likeCount }) {
+export default function ArticleLikeButton({
+  likeCount,
+}: {
+  likeCount?: number;
+}) {
   const { isDesktop, isMobile } = useResponsive();
   return (
     <>

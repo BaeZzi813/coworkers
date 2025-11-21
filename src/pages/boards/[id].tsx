@@ -1,19 +1,18 @@
-import { Button } from "@/components/button";
-import { Alert } from "@/components/modal";
 import {
   deleteArticleById,
+  deleteCommentById,
   getArticleById,
   getCommentById,
+  patchCommentById,
+  postCommentById,
 } from "@/features/boards/api";
 import ArticleComment from "@/features/boards/article/ArticleComment";
 import ArticleContent from "@/features/boards/article/ArticleContent";
 import ArticleHeader from "@/features/boards/article/ArticleHeader";
 import ArticleLikeButton from "@/features/boards/article/ArticleLikeButton";
 import { useAuthStore } from "@/stores/auth-store";
-import { formatDate } from "@/utils/format-date";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/router";
-import { overlay } from "overlay-kit";
 
 export default function ArticlePage() {
   const router = useRouter();
@@ -34,7 +33,7 @@ export default function ArticlePage() {
 
   console.log(comments);
 
-  const deleteMutation = useMutation({
+  const deleteArticleMutation = useMutation({
     mutationFn: (id: number) => deleteArticleById(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["articles"] });
@@ -45,58 +44,43 @@ export default function ArticlePage() {
     },
   });
 
-  const formattedDate = formatDate(article?.createdAt ?? "");
+  const postCommentMutation = useMutation({
+    mutationFn: (data: { id: number; content: string }) =>
+      postCommentById(data.id, { content: data.content }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["comment", id] });
+    },
+    onError: (error) => {
+      console.error("댓글 작성 실패:", error);
+    },
+  });
 
-  const articleDropdownOptions = [
-    {
-      label: "수정하기",
-      value: "edit",
-      action: () => router.push(`/boards/edit/${id}`),
+  const patchCommentMutation = useMutation({
+    mutationFn: ({
+      commentId,
+      content,
+    }: {
+      commentId: number;
+      content: string;
+    }) => patchCommentById(commentId, { content }),
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ["comment", id] }),
+  });
+
+  const deleteCommentMutation = useMutation({
+    mutationFn: (id: number) => deleteCommentById(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["comment"] });
     },
-    {
-      label: "삭제하기",
-      value: "delete",
-      action: () => {
-        overlay.open(
-          ({ isOpen, close, unmount }) => (
-            <Alert
-              isOpen={isOpen}
-              onClose={close}
-              onExit={unmount}
-              title="게시글을 삭제하시겠어요?"
-              message={`삭제된 게시글은 다시 복구할 수 없습니다.`}
-              actions={[
-                <Button
-                  key="alert-close"
-                  variant="outlinedSecondary"
-                  title="닫기"
-                  onClick={close}
-                />,
-                <Button
-                  key="alert-action"
-                  variant="danger"
-                  title="삭제"
-                  onClick={() => {
-                    deleteMutation.mutate(Number(id), {
-                      onSuccess: () => close(),
-                    });
-                  }}
-                />,
-              ]}
-            />
-          ),
-          { overlayId: "delete-article-alert" }
-        );
-      },
+    onError: (error) => {
+      console.log("삭제 실패:", error);
     },
-  ];
+  });
 
   const user = useAuthStore((state) => state.user);
   const userImage = user?.image;
   const userId = user?.id;
 
-  console.log("글쓴이 아이디", article?.writer.id);
-  console.log("접속자 아이디", userId);
   return (
     <>
       <section className="min-h-screen w-full bg-background-secondary py-5 tablet:py-[68px]">
@@ -104,22 +88,21 @@ export default function ArticlePage() {
           <div className="mx-auto w-[300px] pt-10 pb-10 tablet:w-[540px] tablet:pt-[54px] tablet:pb-[54px] desktop:w-[780px]">
             <ArticleHeader
               currentUserId={userId}
-              writerId={article?.writer.id}
-              title={article?.title}
-              articleDropdownOptions={articleDropdownOptions}
-              nickname={article?.writer.nickname}
-              formattedDate={formattedDate}
+              article={article}
               userImage={userImage}
+              deleteArticleMutation={deleteArticleMutation}
             />
-            <ArticleContent content={article?.content} image={article?.image} />
+            <ArticleContent article={article} />
             <ArticleLikeButton likeCount={article?.likeCount} />
             <ArticleComment
-              id={id}
+              id={Number(id)}
               commentCount={article?.commentCount}
               currentUserId={userId}
               comment={comments?.list ?? []}
-              articleDropdownOptions={articleDropdownOptions}
               userImage={userImage}
+              postCommentMutation={postCommentMutation}
+              patchCommentMutation={patchCommentMutation}
+              deleteCommentMutation={deleteCommentMutation}
             />
           </div>
         </div>

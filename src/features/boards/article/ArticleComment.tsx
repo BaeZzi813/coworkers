@@ -1,43 +1,128 @@
 import AvatarMD from "@/assets/images/avatar-placeholder-md.svg";
 import AvatarSM from "@/assets/images/avatar-placeholder-sm.svg";
+import { Button } from "@/components/button";
 import Dropdown from "@/components/dropdown";
 import Icon from "@/components/icon";
+import { Alert } from "@/components/modal";
 import { useResponsive } from "@/hooks/use-responsive";
-import { Comment } from "@/types/boards-comment";
+import { Comment, PostComment } from "@/types/boards-comment";
 import { formatDate } from "@/utils/format-date";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { UseMutationResult } from "@tanstack/react-query";
 import Image from "next/image";
-import { useState } from "react";
-import { postCommentById } from "../api";
+import { overlay } from "overlay-kit";
+import { useEffect, useRef, useState } from "react";
+
+interface ArticleCommentProps {
+  commentCount?: number;
+  comment?: Comment[];
+  userImage?: string;
+  id: number;
+  currentUserId?: number;
+  postCommentMutation: UseMutationResult<
+    PostComment,
+    Error,
+    { id: number; content: string }
+  >;
+  patchCommentMutation: UseMutationResult<
+    Comment,
+    Error,
+    { commentId: number; content: string }
+  >;
+  deleteCommentMutation: UseMutationResult<Comment, Error, number>;
+}
 
 export default function ArticleComment({
   commentCount,
   comment,
-  articleDropdownOptions,
   userImage,
   id,
   currentUserId,
-}) {
+  postCommentMutation,
+  patchCommentMutation,
+  deleteCommentMutation,
+}: ArticleCommentProps) {
   const { isMobile } = useResponsive();
-  const queryClient = useQueryClient();
   const [commentContent, setCommentContent] = useState("");
-
-  const commnetMutation = useMutation({
-    mutationFn: (data: { id: number; content: string }) =>
-      postCommentById(data.id, { content: data.content }),
-    onSuccess: (newComment) => {
-      queryClient.invalidateQueries({ queryKey: ["comment", id] });
-      setCommentContent("");
-    },
-    onError: (error) => {
-      console.error("댓글 작성 실패:", error);
-    },
-  });
+  const [editCommentId, setEditCommentId] = useState<number | null>(null);
+  const [editContent, setEditContent] = useState("");
+  const editInputRef = useRef<HTMLInputElement>(null);
 
   const handleSubmitComment = () => {
     if (commentContent.trim() === "") return;
-    commnetMutation.mutate({ id, content: commentContent });
+    postCommentMutation.mutate({ id, content: commentContent });
+    setCommentContent("");
   };
+
+  const commentDropdownOptions = (item: Comment) => [
+    {
+      label: "수정하기",
+      value: "edit",
+      action: () => {
+        setEditCommentId(item.id);
+        setEditContent(item.content);
+      },
+    },
+    {
+      label: "삭제하기",
+      value: "delete",
+      action: () => {
+        alertDeleteComment(item.id);
+      },
+    },
+  ];
+
+  const alertDeleteComment = (commentId: number) => {
+    overlay.open(
+      ({ isOpen, close, unmount }) => (
+        <Alert
+          isOpen={isOpen}
+          onClose={close}
+          onExit={unmount}
+          title="댓글을 삭제하시겠어요?"
+          message={`삭제된 댓글은 다시 복구할 수 없습니다.`}
+          actions={[
+            <Button
+              key="alert-close"
+              variant="outlinedSecondary"
+              title="닫기"
+              onClick={close}
+            />,
+            <Button
+              key="alert-action"
+              variant="danger"
+              title="삭제"
+              onClick={() => {
+                handleDeleteComment(commentId);
+                close();
+              }}
+            />,
+          ]}
+        />
+      ),
+      { overlayId: "delete-article-alert" }
+    );
+  };
+
+  const handleEditComment = (commentId: number, content: string) => {
+    patchCommentMutation.mutate(
+      { commentId, content },
+      {
+        onSuccess: () => {
+          setEditCommentId(null);
+        },
+      }
+    );
+  };
+
+  const handleDeleteComment = (commentId: number) => {
+    deleteCommentMutation.mutate(commentId);
+  };
+
+  useEffect(() => {
+    if (editCommentId !== null && editInputRef.current) {
+      editInputRef.current.focus();
+    }
+  });
 
   return (
     <>
@@ -79,7 +164,7 @@ export default function ArticleComment({
             <button
               onClick={handleSubmitComment}
               disabled={
-                commnetMutation.isPending || commentContent.trim() === ""
+                postCommentMutation.isPending || commentContent.trim() === ""
               }
               className="flex h-6 w-6 cursor-pointer items-center justify-center rounded-full bg-icon-primary"
             >
@@ -89,52 +174,92 @@ export default function ArticleComment({
         </div>
       </div>
       {comment && comment.length > 0 ? (
-        comment.map((item: Comment) => (
-          <div
-            key={item.id}
-            className="border-t border-t-border-primary py-3 tablet:py-5"
-          >
-            <div className="flex h-[54px] gap-2">
-              <div className="relative h-6 w-6 tablet:h-8 tablet:w-8">
-                {item.writer.image ? (
-                  <Image
-                    src={item.writer.image}
-                    alt="댓글작성자 이미지"
-                    fill
-                    className="rounded-md"
-                  />
-                ) : isMobile ? (
-                  <AvatarSM className="h-6 w-6" />
-                ) : (
-                  <AvatarMD className="h-8 w-8" />
-                )}
-              </div>
-              <div className="flex w-full flex-col gap-1">
-                <div className="flex justify-between">
-                  <div className="text-xs-s text-text-primary tablet:text-md-b">
-                    {item.writer.nickname}
-                  </div>
-                  {item.writer.id === currentUserId && (
-                    <button className="cursor-pointer">
-                      <Dropdown
-                        anchor={<Icon name="dots" size="small" />}
-                        options={articleDropdownOptions}
-                        direction="bottom"
-                        alignment="right"
-                      />
-                    </button>
+        comment.map((item: Comment) => {
+          const getCommentDropdownOptions = commentDropdownOptions(item);
+          return (
+            <div
+              key={item.id}
+              className="border-t border-t-border-primary py-3 tablet:py-5"
+            >
+              <div className="flex h-[54px] gap-2">
+                <div className="relative h-6 w-6 tablet:h-8 tablet:w-8">
+                  {item.writer.image ? (
+                    <Image
+                      src={item.writer.image}
+                      alt="댓글작성자 이미지"
+                      fill
+                      className="rounded-md"
+                    />
+                  ) : isMobile ? (
+                    <AvatarSM className="h-6 w-6" />
+                  ) : (
+                    <AvatarMD className="h-8 w-8" />
                   )}
                 </div>
-                <div className="text-sm-m text-text-primary tablet:text-md-r">
-                  {item.content}
+                <div className="flex w-full flex-col gap-1">
+                  <div className="flex justify-between">
+                    <div className="text-xs-s text-text-primary tablet:text-md-b">
+                      {item.writer.nickname}
+                    </div>
+                    {item.writer.id === currentUserId && (
+                      <button className="cursor-pointer">
+                        <Dropdown
+                          anchor={<Icon name="dots" size="small" />}
+                          options={getCommentDropdownOptions}
+                          direction="bottom"
+                          alignment="right"
+                        />
+                      </button>
+                    )}
+                  </div>
+                  {editCommentId === item.id ? (
+                    <div className="flex h-4 justify-between gap-2 tablet:h-[17px]">
+                      <input
+                        ref={editInputRef}
+                        value={editContent}
+                        onChange={(e) => setEditContent(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" && editContent.trim() !== "") {
+                            handleEditComment(item.id, editContent);
+                          }
+                        }}
+                        className="w-full rounded-sm pl-1 text-xs-r text-text-primary focus:outline-1 tablet:text-md-r"
+                      />
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() =>
+                            handleEditComment(item.id, editContent)
+                          }
+                          className="w-10 cursor-pointer rounded bg-brand-primary text-xs-r text-white disabled:cursor-not-allowed disabled:bg-slate-500 tablet:w-14 tablet:text-md-r"
+                          disabled={
+                            editContent.trim() === "" ||
+                            patchCommentMutation.isPending
+                          }
+                        >
+                          수정
+                        </button>
+                        <button
+                          onClick={() => setEditCommentId(null)}
+                          className="w-10 cursor-pointer rounded bg-slate-500 text-xs-r text-white tablet:w-14 tablet:text-md-r"
+                        >
+                          취소
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="text-sm-m text-text-primary tablet:text-md-r">
+                      {item.content}
+                    </div>
+                  )}
+
+                  <span className="text-xs-r text-slate-400 tablet:text-md-m">
+                    {formatDate(item.createdAt)}
+                  </span>
                 </div>
-                <span className="text-xs-r text-slate-400 tablet:text-md-m">
-                  {formatDate(item.createdAt)}
-                </span>
               </div>
             </div>
-          </div>
-        ))
+          );
+        })
       ) : (
         <div className="flex h-[120px] items-center justify-center text-md-r text-text-default">
           아직 작성한 댓글이 없습니다.
