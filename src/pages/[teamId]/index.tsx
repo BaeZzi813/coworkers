@@ -8,11 +8,13 @@ import {
   gsspWithAuth,
   serverSideComponentWithAuth,
 } from "@/libs/ssr/with-auth";
+import { Group } from "@/types/group";
 import { Member } from "@/types/member";
 import { Task, TaskList } from "@/types/task";
 
 interface PageProps {
   isAdmin: boolean;
+  group: Group;
   members: Member[];
   taskLists: TaskList[];
   tasks: Task[];
@@ -33,6 +35,7 @@ export const getServerSideProps = gsspWithAuth(async (context, accessToken) => {
   return gsspPropsWithTokenReturn(
     {
       isAdmin,
+      group,
       members: group.members,
       taskLists: group.taskLists,
       tasks: group.taskLists.flatMap((taskList) => taskList.tasks),
@@ -42,10 +45,11 @@ export const getServerSideProps = gsspWithAuth(async (context, accessToken) => {
 });
 
 export default serverSideComponentWithAuth<PageProps>(
-  ({ isAdmin, members, taskLists, tasks }) => {
+  ({ isAdmin, group, members, taskLists, tasks }) => {
     return (
       <div>
         <div>{isAdmin ? "You are an admin" : "You are not an admin"}</div>
+        <div>Group Name : {group.name}</div>
         <div>
           <div>Members</div>
           {members.map((member) => member.userName)}
