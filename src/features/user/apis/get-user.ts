@@ -1,9 +1,9 @@
-import { clientApiInstance } from "@/services/instance/client";
+import { apiRequest, APIRequestOptions } from "@/services/api-request";
 import { User } from "@/types/user";
 
-type GetUserResponse = User;
-
-export async function getUser() {
-  const response = await clientApiInstance.get<GetUserResponse>("/user");
-  return response.data;
+export async function getUser(options?: APIRequestOptions) {
+  return apiRequest<User>(async (instance) => {
+    const response = await instance.get("/user");
+    return response.data;
+  }, options);
 }

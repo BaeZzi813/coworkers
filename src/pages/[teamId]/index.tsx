@@ -1,4 +1,5 @@
 import { getGroup } from "@/features/group/apis";
+import { getUser } from "@/features/user/apis/get-user";
 import {
   GSSP_NOT_FOUND_RETURN,
   gsspPropsWithTokenReturn,
@@ -11,6 +12,7 @@ import { Member } from "@/types/member";
 import { Task, TaskList } from "@/types/task";
 
 interface PageProps {
+  isAdmin: boolean;
   members: Member[];
   taskLists: TaskList[];
   tasks: Task[];
@@ -24,9 +26,13 @@ export const getServerSideProps = gsspWithAuth(async (context, accessToken) => {
   }
 
   const group = await getGroup({ groupId: teamId }, { accessToken });
+  const currentUser = await getUser({ accessToken });
+  const adminMember = group.members.find((member) => member.role === "ADMIN");
+  const isAdmin = adminMember?.userId === currentUser.id;
 
   return gsspPropsWithTokenReturn(
     {
+      isAdmin,
       members: group.members,
       taskLists: group.taskLists,
       tasks: group.taskLists.flatMap((taskList) => taskList.tasks),
@@ -36,9 +42,10 @@ export const getServerSideProps = gsspWithAuth(async (context, accessToken) => {
 });
 
 export default serverSideComponentWithAuth<PageProps>(
-  ({ members, taskLists, tasks }) => {
+  ({ isAdmin, members, taskLists, tasks }) => {
     return (
       <div>
+        <div>{isAdmin ? "You are an admin" : "You are not an admin"}</div>
         <div>
           <div>Members</div>
           {members.map((member) => member.userName)}
