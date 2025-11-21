@@ -5,7 +5,7 @@ import PasswordVisible from "@/features/login/components/PasswordVisible";
 import { validateEmail, validatePassword } from "@/utils/login-validator";
 import clsx from "clsx";
 import Link from "next/link";
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 
 export default function LoginPage() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -13,18 +13,6 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState<string | undefined>();
   const [passwordError, setPasswordError] = useState<string | undefined>();
-
-  const handleEmailChangeValidate = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setEmail(e.target.value);
-  };
-
-  const handlePasswordChangeValidate = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setPassword(e.target.value);
-  };
 
   const handleEmailBlurValidate = () => {
     const emailResult = validateEmail(email);
@@ -36,7 +24,7 @@ export default function LoginPage() {
     setPasswordError(passwordResult.valid ? undefined : passwordResult.reason);
   };
 
-  //인지부하에 대하여, 중첩된 if문,복잡한 조건문 정리
+  //인지부하 고려, 중첩된 if문,복잡한 조건문 정리
   const marginTop = (() => {
     if (emailError && passwordError) return "mt-12";
     if (emailError) return "mt-9";
@@ -44,16 +32,17 @@ export default function LoginPage() {
     return "mt-3";
   })();
 
-  // 포커스 해제하지않은 상태에서 에러상태 해제 후 로그인 눌렀을 때 시나리오를 생각해서 로그인 버튼 클릭 유효성검사는 유지
+  const isFormValid =
+    validateEmail(email).valid && validatePassword(password).valid;
+
   const handleLoginButtonClick = () => {
     const emailResult = validateEmail(email);
     const passwordResult = validatePassword(password);
 
     setEmailError(emailResult.valid ? undefined : emailResult.reason);
     setPasswordError(passwordResult.valid ? undefined : passwordResult.reason);
-    if (emailResult.valid && passwordResult.valid) {
-      // 로그인 로직 추가하기
-    }
+
+    // 로그인 로직 추가하기
   };
 
   return (
@@ -65,64 +54,74 @@ export default function LoginPage() {
           </h1>
         </div>
 
-        <div className="mx-auto mt-[64px] h-[184px] w-[460px]">
-          <div className="h-[80px] w-[460px]">
-            <InputLabel
-              label="이메일"
-              id="email"
-              type="email"
-              placeholder="이메일을 입력해주세요."
-              size="large"
-              value={email}
-              onChange={handleEmailChangeValidate}
-              onBlur={handleEmailBlurValidate}
-              errorMessage={emailError}
-            />
-          </div>
-
-          <div className={emailError ? "mt-12" : "mt-6"}>
+        <form
+          onSubmit={(e: FormEvent<HTMLFormElement>) => {
+            e.preventDefault();
+            handleLoginButtonClick();
+          }}
+        >
+          <div className="mx-auto mt-[64px] h-[184px] w-[460px]">
             <div className="h-[80px] w-[460px]">
               <InputLabel
-                label="비밀번호"
-                id="password"
-                type={isPasswordVisible ? "text" : "password"}
-                placeholder="비밀번호를 입력해주세요."
+                label="이메일"
+                id="email"
+                type="email"
+                placeholder="이메일을 입력해주세요."
                 size="large"
-                value={password}
-                onChange={handlePasswordChangeValidate}
-                onBlur={handlePasswordBlurValidate}
-                errorMessage={passwordError}
-                trailing={
-                  <PasswordVisible
-                    isVisible={isPasswordVisible}
-                    onToggle={() => setIsPasswordVisible(!isPasswordVisible)}
-                  />
-                }
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                onBlur={handleEmailBlurValidate}
+                errorMessage={emailError}
               />
             </div>
+
+            <div className={emailError ? "mt-12" : "mt-6"}>
+              <div className="h-[80px] w-[460px]">
+                <InputLabel
+                  label="비밀번호"
+                  id="password"
+                  type={isPasswordVisible ? "text" : "password"}
+                  placeholder="비밀번호를 입력해주세요."
+                  size="large"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  onBlur={handlePasswordBlurValidate}
+                  errorMessage={passwordError}
+                  trailing={
+                    <PasswordVisible
+                      isVisible={isPasswordVisible}
+                      onToggle={() => setIsPasswordVisible(!isPasswordVisible)}
+                    />
+                  }
+                />
+              </div>
+            </div>
           </div>
-        </div>
 
-        <div className={clsx("mx-auto flex w-[460px] justify-end", marginTop)}>
-          <button
-            type="button"
-            className="h-6 w-[176px] cursor-pointer text-right text-lg-m text-brand-primary underline hover:text-lg-s"
+          <div
+            className={clsx("mx-auto flex w-[460px] justify-end", marginTop)}
           >
-            비밀번호를 잊으셨나요?
-            {/* 비밀번호 재설정 모달이 나오게 */}
-          </button>
-        </div>
+            <button
+              type="button"
+              className="h-6 w-[176px] cursor-pointer text-right text-lg-m text-brand-primary underline hover:text-lg-s"
+            >
+              비밀번호를 잊으셨나요?
+              {/* 비밀번호 재설정 모달이 나오게 */}
+            </button>
+          </div>
 
-        <div className="mx-auto mt-10 w-[460px]">
-          <Button
-            title="로그인"
-            variant="primary"
-            size="large"
-            isFullWidth={true}
-            onClick={handleLoginButtonClick}
-          />
-          {/* 로그인시 엑세스토큰 받고 팀페이지로 이동 */}
-        </div>
+          <div className="mx-auto mt-10 w-[460px]">
+            <Button
+              title="로그인"
+              variant="primary"
+              size="large"
+              isFullWidth={true}
+              disabled={!isFormValid} //회원가입 ui 수정하면서 코드 일관성 유지
+              onClick={handleLoginButtonClick}
+            />
+            {/* 로그인시 엑세스토큰 받고 팀페이지로 이동 */}
+          </div>
+        </form>
 
         <div className="mx-auto mt-6 flex h-[20px] w-[268px] items-center justify-center gap-3">
           <span className="text-lg-m text-text-secondary">

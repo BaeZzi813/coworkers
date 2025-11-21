@@ -47,6 +47,9 @@ export function validateName(name: string): ValidationResult {
   if (trimmed.length === 0) {
     return { valid: false, reason: "이름을 입력해주세요." };
   }
+  if (trimmed.length > 20) {
+    return { valid: false, reason: "이름은 20자 이하로 입력해주세요." };
+  }
   return { valid: true };
 }
 

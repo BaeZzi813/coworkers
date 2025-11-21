@@ -8,99 +8,103 @@ import {
   validatePassword,
   validatePasswordConfirm,
 } from "@/utils/login-validator";
-import { useState } from "react";
+import { FormEvent, useState } from "react";
+
+interface InputFormData {
+  name: string;
+  email: string;
+  password: string;
+  confirmedPassword: string;
+}
+
+const INITIAL_INPUT_FORM_DATA: InputFormData = {
+  name: "",
+  email: "",
+  password: "",
+  confirmedPassword: "",
+};
+
+interface InputFormError {
+  nameError?: string;
+  emailError?: string;
+  passwordError?: string;
+  confirmedPasswordError?: string;
+}
 
 export default function SignUpPage() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
     useState(false);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [nameError, setNameError] = useState<string | undefined>();
-  const [emailError, setEmailError] = useState<string | undefined>();
-  const [passwordError, setPasswordError] = useState<string | undefined>();
-  const [confirmPasswordError, setConfirmPasswordError] = useState<
-    string | undefined
-  >();
-
-  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value);
-  };
-
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-  };
-
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-  };
-
-  const handleConfirmPasswordChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setConfirmPassword(e.target.value);
-  };
+  const [inputFormData, setInputFormData] = useState<InputFormData>(
+    INITIAL_INPUT_FORM_DATA
+  );
+  const [inputFormError, setInputFormError] = useState<InputFormError>({});
 
   const handleNameBlur = () => {
-    const nameResult = validateName(name);
-    setNameError(nameResult.valid ? undefined : nameResult.reason);
+    const nameResult = validateName(inputFormData.name);
+    setInputFormError((prev) => ({
+      ...prev,
+      nameError: nameResult.valid ? undefined : nameResult.reason,
+    }));
   };
 
   const handleEmailBlur = () => {
-    const emailResult = validateEmail(email);
-    setEmailError(emailResult.valid ? undefined : emailResult.reason);
+    const emailResult = validateEmail(inputFormData.email);
+    setInputFormError((prev) => ({
+      ...prev,
+      emailError: emailResult.valid ? undefined : emailResult.reason,
+    }));
   };
 
   const handlePasswordBlur = () => {
-    const passwordResult = validatePassword(password);
-    setPasswordError(passwordResult.valid ? undefined : passwordResult.reason);
+    const passwordResult = validatePassword(inputFormData.password);
+    setInputFormError((prev) => ({
+      ...prev,
+      passwordError: passwordResult.valid ? undefined : passwordResult.reason,
+    }));
   };
 
   const handleConfirmPasswordBlur = () => {
     const confirmPasswordResult = validatePasswordConfirm(
-      password,
-      confirmPassword
+      inputFormData.password,
+      inputFormData.confirmedPassword
     );
-    setConfirmPasswordError(
-      confirmPasswordResult.valid ? undefined : confirmPasswordResult.reason
-    );
+    setInputFormError((prev) => ({
+      ...prev,
+      confirmedPasswordError: confirmPasswordResult.valid
+        ? undefined
+        : confirmPasswordResult.reason,
+    }));
   };
 
-  const marginTop = (() => {
-    const errors = [nameError, emailError, passwordError, confirmPasswordError];
-    const errorCount = errors.filter(Boolean).length;
-    if (errorCount >= 3) return "mt-12";
-    if (errorCount === 2) return "mt-9";
-    if (errorCount === 1) return "mt-6";
-    return "mt-3";
-  })();
+  const isFormValid =
+    validateName(inputFormData.name).valid &&
+    validateEmail(inputFormData.email).valid &&
+    validatePassword(inputFormData.password).valid &&
+    validatePasswordConfirm(
+      inputFormData.password,
+      inputFormData.confirmedPassword
+    ).valid;
 
   const handleSignUpButtonClick = () => {
-    const nameResult = validateName(name);
-    const emailResult = validateEmail(email);
-    const passwordResult = validatePassword(password);
+    const nameResult = validateName(inputFormData.name);
+    const emailResult = validateEmail(inputFormData.email);
+    const passwordResult = validatePassword(inputFormData.password);
     const confirmPasswordResult = validatePasswordConfirm(
-      password,
-      confirmPassword
+      inputFormData.password,
+      inputFormData.confirmedPassword
     );
 
-    setNameError(nameResult.valid ? undefined : nameResult.reason);
-    setEmailError(emailResult.valid ? undefined : emailResult.reason);
-    setPasswordError(passwordResult.valid ? undefined : passwordResult.reason);
-    setConfirmPasswordError(
-      confirmPasswordResult.valid ? undefined : confirmPasswordResult.reason
-    );
+    setInputFormError({
+      nameError: nameResult.valid ? undefined : nameResult.reason,
+      emailError: emailResult.valid ? undefined : emailResult.reason,
+      passwordError: passwordResult.valid ? undefined : passwordResult.reason,
+      confirmedPasswordError: confirmPasswordResult.valid
+        ? undefined
+        : confirmPasswordResult.reason,
+    });
 
-    if (
-      nameResult.valid &&
-      emailResult.valid &&
-      passwordResult.valid &&
-      confirmPasswordResult.valid
-    ) {
-      // 회원가입 로직 추가하기
-    }
+    // 회원가입 로직 추가하기
   };
 
   return (
@@ -112,94 +116,122 @@ export default function SignUpPage() {
           </h1>
         </div>
 
-        <div className="mx-auto mt-[64px] w-[460px]">
-          <div className="h-[80px] w-[460px]">
-            <InputLabel
-              label="이름"
-              id="name"
-              type="text"
-              placeholder="이름을 입력해주세요."
+        <form
+          onSubmit={(e: FormEvent<HTMLFormElement>) => {
+            e.preventDefault();
+            handleSignUpButtonClick();
+          }}
+        >
+          <div className="mx-auto mt-[64px] w-[460px]">
+            <div className="h-[80px] w-[460px]">
+              <InputLabel
+                label="이름"
+                id="name"
+                type="text"
+                placeholder="이름을 입력해주세요."
+                size="large"
+                value={inputFormData.name}
+                onChange={(e) =>
+                  setInputFormData((prev) => ({
+                    ...prev,
+                    name: e.target.value,
+                  }))
+                }
+                onBlur={handleNameBlur}
+                errorMessage={inputFormError.nameError}
+              />
+            </div>
+
+            <div className={inputFormError.nameError ? "mt-12" : "mt-6"}>
+              <div className="h-[80px] w-[460px]">
+                <InputLabel
+                  label="이메일"
+                  id="email"
+                  type="email"
+                  placeholder="이메일을 입력해주세요."
+                  size="large"
+                  value={inputFormData.email}
+                  onChange={(e) =>
+                    setInputFormData((prev) => ({
+                      ...prev,
+                      email: e.target.value,
+                    }))
+                  }
+                  onBlur={handleEmailBlur}
+                  errorMessage={inputFormError.emailError}
+                />
+              </div>
+            </div>
+
+            <div className={inputFormError.emailError ? "mt-12" : "mt-6"}>
+              <div className="h-[80px] w-[460px]">
+                <InputLabel
+                  label="비밀번호"
+                  id="password"
+                  type={isPasswordVisible ? "text" : "password"}
+                  placeholder="비밀번호를 입력해주세요."
+                  size="large"
+                  value={inputFormData.password}
+                  onChange={(e) =>
+                    setInputFormData((prev) => ({
+                      ...prev,
+                      password: e.target.value,
+                    }))
+                  }
+                  onBlur={handlePasswordBlur}
+                  errorMessage={inputFormError.passwordError}
+                  trailing={
+                    <PasswordVisible
+                      isVisible={isPasswordVisible}
+                      onToggle={() => setIsPasswordVisible(!isPasswordVisible)}
+                    />
+                  }
+                />
+              </div>
+            </div>
+
+            <div className={inputFormError.passwordError ? "mt-12" : "mt-6"}>
+              <div className="h-[80px] w-[460px]">
+                <InputLabel
+                  label="비밀번호 확인"
+                  id="confirmPassword"
+                  type={isConfirmPasswordVisible ? "text" : "password"}
+                  placeholder="비밀번호를 다시 한 번 입력해주세요."
+                  size="large"
+                  value={inputFormData.confirmedPassword}
+                  onChange={(e) =>
+                    setInputFormData((prev) => ({
+                      ...prev,
+                      confirmedPassword: e.target.value,
+                    }))
+                  }
+                  onBlur={handleConfirmPasswordBlur}
+                  errorMessage={inputFormError.confirmedPasswordError}
+                  trailing={
+                    <PasswordVisible
+                      isVisible={isConfirmPasswordVisible}
+                      onToggle={() =>
+                        setIsConfirmPasswordVisible(!isConfirmPasswordVisible)
+                      }
+                    />
+                  }
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="mx-auto mt-12 w-[460px]">
+            <Button
+              title="회원가입"
+              variant="primary"
               size="large"
-              value={name}
-              onChange={handleNameChange}
-              onBlur={handleNameBlur}
-              errorMessage={nameError}
+              isFullWidth={true}
+              disabled={!isFormValid} //click event 예외처리 코드 리팩토링
+              onClick={handleSignUpButtonClick}
             />
+            {/* 회원가입 완료시 로그인 페이지로 이동하게 만들기 (스웨거에 api는 나오지만 로그인때 생성되는 토큰만 사용) */}
           </div>
-
-          <div className={nameError ? "mt-12" : "mt-6"}>
-            <div className="h-[80px] w-[460px]">
-              <InputLabel
-                label="이메일"
-                id="email"
-                type="email"
-                placeholder="이메일을 입력해주세요."
-                size="large"
-                value={email}
-                onChange={handleEmailChange}
-                onBlur={handleEmailBlur}
-                errorMessage={emailError}
-              />
-            </div>
-          </div>
-
-          <div className={emailError ? "mt-12" : "mt-6"}>
-            <div className="h-[80px] w-[460px]">
-              <InputLabel
-                label="비밀번호"
-                id="password"
-                type={isPasswordVisible ? "text" : "password"}
-                placeholder="비밀번호를 입력해주세요."
-                size="large"
-                value={password}
-                onChange={handlePasswordChange}
-                onBlur={handlePasswordBlur}
-                errorMessage={passwordError}
-                trailing={
-                  <PasswordVisible
-                    isVisible={isPasswordVisible}
-                    onToggle={() => setIsPasswordVisible(!isPasswordVisible)}
-                  />
-                }
-              />
-            </div>
-          </div>
-
-          <div className={passwordError ? "mt-12" : "mt-6"}>
-            <div className="h-[80px] w-[460px]">
-              <InputLabel
-                label="비밀번호 확인"
-                id="confirmPassword"
-                type={isConfirmPasswordVisible ? "text" : "password"}
-                placeholder="비밀번호를 다시 한 번 입력해주세요."
-                size="large"
-                value={confirmPassword}
-                onChange={handleConfirmPasswordChange}
-                onBlur={handleConfirmPasswordBlur}
-                errorMessage={confirmPasswordError}
-                trailing={
-                  <PasswordVisible
-                    isVisible={isConfirmPasswordVisible}
-                    onToggle={() =>
-                      setIsConfirmPasswordVisible(!isConfirmPasswordVisible)
-                    }
-                  />
-                }
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="mx-auto mt-12 w-[460px]">
-          <Button
-            title="회원가입"
-            variant="primary"
-            size="large"
-            isFullWidth={true}
-            onClick={handleSignUpButtonClick}
-          />
-          {/* 회원가입 완료시 로그인 페이지로 이동하게 만들기 (스웨거에 api는 나오지만 로그인때 생성되는 토큰만 사용) */}
-        </div>
+        </form>
 
         <div className="mx-auto mt-[60px] flex h-[20px] w-[460px] items-center">
           <div className="h-px flex-1 bg-border-primary"></div>
