@@ -3,17 +3,42 @@ import AvatarSM from "@/assets/images/avatar-placeholder-sm.svg";
 import Dropdown from "@/components/dropdown";
 import Icon from "@/components/icon";
 import { useResponsive } from "@/hooks/use-responsive";
-import { Article, Comment } from "@/types/article";
+import { Comment } from "@/types/boards-comment";
 import { formatDate } from "@/utils/format-date";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
+import { useState } from "react";
+import { postCommentById } from "../api";
 
 export default function ArticleComment({
   commentCount,
   comment,
   articleDropdownOptions,
   userImage,
+  id,
+  currentUserId,
 }) {
   const { isMobile } = useResponsive();
+  const queryClient = useQueryClient();
+  const [commentContent, setCommentContent] = useState("");
+
+  const commnetMutation = useMutation({
+    mutationFn: (data: { id: number; content: string }) =>
+      postCommentById(data.id, { content: data.content }),
+    onSuccess: (newComment) => {
+      queryClient.invalidateQueries({ queryKey: ["comment", id] });
+      setCommentContent("");
+    },
+    onError: (error) => {
+      console.error("댓글 작성 실패:", error);
+    },
+  });
+
+  const handleSubmitComment = () => {
+    if (commentContent.trim() === "") return;
+    commnetMutation.mutate({ id, content: commentContent });
+  };
+
   return (
     <>
       <div className="mb-5 flex flex-col gap-3">
@@ -41,49 +66,70 @@ export default function ArticleComment({
           <div className="flex h-12 flex-1 items-center justify-between border-t border-b border-border-primary">
             <input
               type="text"
+              value={commentContent}
+              onChange={(e) => setCommentContent(e.target.value)}
               placeholder="댓글을 달아주세요"
-              className="w-52 text-text-default placeholder:text-xs-r focus:outline-none tablet:w-[420px]"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleSubmitComment();
+                }
+              }}
+              className="w-52 text-text-default placeholder:text-xs-r focus:outline-none tablet:w-[420px] desktop:w-[660px]"
             />
-            <button className="flex h-6 w-6 items-center justify-center rounded-full bg-icon-primary">
+            <button
+              onClick={handleSubmitComment}
+              disabled={
+                commnetMutation.isPending || commentContent.trim() === ""
+              }
+              className="flex h-6 w-6 cursor-pointer items-center justify-center rounded-full bg-icon-primary"
+            >
               <Icon name="arrowUp" />
             </button>
           </div>
         </div>
       </div>
       {comment && comment.length > 0 ? (
-        comment.map((article: Comment) => (
+        comment.map((item: Comment) => (
           <div
-            key={article.id}
+            key={item.id}
             className="border-t border-t-border-primary py-3 tablet:py-5"
           >
             <div className="flex h-[54px] gap-2">
               <div className="relative h-6 w-6 tablet:h-8 tablet:w-8">
-                <Image
-                  src={article.writer.image}
-                  alt="댓글작성자 이미지"
-                  fill
-                  className="rounded-md"
-                />
+                {item.writer.image ? (
+                  <Image
+                    src={item.writer.image}
+                    alt="댓글작성자 이미지"
+                    fill
+                    className="rounded-md"
+                  />
+                ) : isMobile ? (
+                  <AvatarSM className="h-6 w-6" />
+                ) : (
+                  <AvatarMD className="h-8 w-8" />
+                )}
               </div>
               <div className="flex w-full flex-col gap-1">
                 <div className="flex justify-between">
                   <div className="text-xs-s text-text-primary tablet:text-md-b">
-                    {article.writer.nickname}
+                    {item.writer.nickname}
                   </div>
-                  <button className="cursor-pointer">
-                    <Dropdown
-                      anchor={<Icon name="dots" size="small" />}
-                      options={articleDropdownOptions}
-                      direction="bottom"
-                      alignment="right"
-                    />
-                  </button>
+                  {item.writer.id === currentUserId && (
+                    <button className="cursor-pointer">
+                      <Dropdown
+                        anchor={<Icon name="dots" size="small" />}
+                        options={articleDropdownOptions}
+                        direction="bottom"
+                        alignment="right"
+                      />
+                    </button>
+                  )}
                 </div>
                 <div className="text-sm-m text-text-primary tablet:text-md-r">
-                  {article.content}
+                  {item.content}
                 </div>
                 <span className="text-xs-r text-slate-400 tablet:text-md-m">
-                  {formatDate(article.createdAt)}
+                  {formatDate(item.createdAt)}
                 </span>
               </div>
             </div>

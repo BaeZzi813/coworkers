@@ -6,8 +6,8 @@ import BestPost from "@/features/boards/BestPost";
 import PostCard from "@/features/boards/PostCard";
 import SearchBar from "@/features/boards/SearchBar";
 import { useSidebarStore } from "@/stores/sidebar-store";
-import { Article } from "@/types/article";
-import { keepPreviousData, useInfiniteQuery } from "@tanstack/react-query";
+import { Article } from "@/types/boards-article";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { useDebounce } from "@uidotdev/usehooks";
 import clsx from "clsx";
 import { useRouter } from "next/router";
@@ -41,7 +41,6 @@ export default function BoardsPage() {
         orderBy: selectedOption.value as "recent" | "like",
         keyword: debounceQuery,
       }),
-    placeholderData: keepPreviousData,
     getNextPageParam: (lastPage, allPages) => {
       const loaded = allPages.length * PAGE_SIZE;
       if (loaded >= lastPage.totalCount) return undefined;

@@ -1,8 +1,6 @@
 import AvatarSM from "@/assets/images/avatar-placeholder-sm.svg";
 import Dropdown from "@/components/dropdown";
 import Icon from "@/components/icon";
-import { UserGroup } from "@/types/user-group";
-import { useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 
 export default function ArticleHeader({
@@ -11,19 +9,23 @@ export default function ArticleHeader({
   nickname,
   formattedDate,
   userImage,
+  currentUserId,
+  writerId,
 }) {
   return (
     <div className="flex h-[68px] flex-col gap-2 border-b border-b-border-primary tablet:h-[76px]">
       <div className="flex justify-between">
         <div className="line-clamp-1 text-2lg-b tablet:text-xl-b">{title}</div>
-        <button className="cursor-pointer">
-          <Dropdown
-            anchor={<Icon name="dots" />}
-            options={articleDropdownOptions}
-            direction="bottom"
-            alignment="right"
-          />
-        </button>
+        {writerId === currentUserId && (
+          <button className="cursor-pointer">
+            <Dropdown
+              anchor={<Icon name="dots" />}
+              options={articleDropdownOptions}
+              direction="bottom"
+              alignment="right"
+            />
+          </button>
+        )}
       </div>
       <div className="flex h-9 items-center gap-2">
         <div>
