@@ -110,10 +110,8 @@ export default function SignUpPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background-secondary">
       <div className="relative w-[550px] rounded-2xl bg-background-primary">
-        <div className="flex flex-col items-center pt-[72px]">
-          <h1 className="h-[28px] w-[96px] text-2xl-b text-text-primary">
-            회원가입
-          </h1>
+        <div className="flex flex-col items-center pt-18">
+          <h1 className="h-7 w-24 text-2xl-b text-text-primary">회원가입</h1>
         </div>
 
         <form
@@ -122,8 +120,8 @@ export default function SignUpPage() {
             handleSignUpButtonClick();
           }}
         >
-          <div className="mx-auto mt-[64px] w-[460px]">
-            <div className="h-[80px] w-[460px]">
+          <div className="mx-auto mt-16 w-[460px]">
+            <div className="h-20 w-[460px]">
               <InputLabel
                 label="이름"
                 id="name"
@@ -143,7 +141,7 @@ export default function SignUpPage() {
             </div>
 
             <div className={inputFormError.nameError ? "mt-12" : "mt-6"}>
-              <div className="h-[80px] w-[460px]">
+              <div className="h-20 w-[460px]">
                 <InputLabel
                   label="이메일"
                   id="email"
@@ -164,7 +162,7 @@ export default function SignUpPage() {
             </div>
 
             <div className={inputFormError.emailError ? "mt-12" : "mt-6"}>
-              <div className="h-[80px] w-[460px]">
+              <div className="h-20 w-[460px]">
                 <InputLabel
                   label="비밀번호"
                   id="password"
@@ -191,7 +189,7 @@ export default function SignUpPage() {
             </div>
 
             <div className={inputFormError.passwordError ? "mt-12" : "mt-6"}>
-              <div className="h-[80px] w-[460px]">
+              <div className="h-20 w-[460px]">
                 <InputLabel
                   label="비밀번호 확인"
                   id="confirmPassword"
@@ -233,13 +231,13 @@ export default function SignUpPage() {
           </div>
         </form>
 
-        <div className="mx-auto mt-[60px] flex h-[20px] w-[460px] items-center">
+        <div className="mx-auto mt-[60px] flex h-5 w-[460px] items-center">
           <div className="h-px flex-1 bg-border-primary"></div>
           <span className="px-10 text-xl-r text-text-default">OR</span>
           <div className="h-px flex-1 bg-border-primary"></div>
         </div>
 
-        <div className="mx-auto mt-6 flex h-[44px] w-[460px] items-center justify-between pb-[72px]">
+        <div className="mx-auto mt-6 flex h-11 w-[460px] items-center justify-between pb-18">
           <span className="text-lg-m text-text-default">간편 회원가입하기</span>
           <button
             type="button"

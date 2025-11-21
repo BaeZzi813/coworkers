@@ -7,6 +7,7 @@ import { useAuthStore } from "@/stores/auth-store";
 import { validateEmail, validatePassword } from "@/utils/login-validator";
 import clsx from "clsx";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { FormEvent, useState } from "react";
 
 export default function LoginPage() {
@@ -39,21 +40,23 @@ export default function LoginPage() {
   const isFormValid =
     validateEmail(email).valid && validatePassword(password).valid;
 
-  const handleLoginButtonClick = () => {
+  const handleLoginButtonClick = async () => {
     const emailResult = validateEmail(email);
     const passwordResult = validatePassword(password);
 
     setEmailError(emailResult.valid ? undefined : emailResult.reason);
     setPasswordError(passwordResult.valid ? undefined : passwordResult.reason);
 
-    // 로그인 로직 추가하기
+    const response = await postSignIn({ email, password });
+    login({ accessToken: response.accessToken, user: response.user });
+    router.push("/dashboard");
   };
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background-secondary">
       <div className="relative h-[720px] w-[550px] rounded-2xl bg-background-primary">
-        <div className="flex flex-col items-center pt-[72px]">
-          <h1 className="h-7 w-[72px] text-2xl-b text-text-primary">로그인</h1>
+        <div className="flex flex-col items-center pt-18">
+          <h1 className="h-7 w-18 text-2xl-b text-text-primary">로그인</h1>
         </div>
 
         <form
@@ -62,8 +65,8 @@ export default function LoginPage() {
             handleLoginButtonClick();
           }}
         >
-          <div className="mx-auto mt-[64px] h-[184px] w-[460px]">
-            <div className="h-[80px] w-[460px]">
+          <div className="mx-auto mt-16 h-[184px] w-[460px]">
+            <div className="h-20 w-[460px]">
               <InputLabel
                 label="이메일"
                 id="email"
@@ -78,7 +81,7 @@ export default function LoginPage() {
             </div>
 
             <div className={emailError ? "mt-12" : "mt-6"}>
-              <div className="h-[80px] w-[460px]">
+              <div className="h-20 w-[460px]">
                 <InputLabel
                   label="비밀번호"
                   id="password"
@@ -105,7 +108,7 @@ export default function LoginPage() {
           >
             <button
               type="button"
-              className="h-6 w-[176px] cursor-pointer text-right text-lg-m text-brand-primary underline hover:text-lg-s"
+              className="h-6 w-44 cursor-pointer text-right text-lg-m text-brand-primary underline hover:text-lg-s"
             >
               비밀번호를 잊으셨나요?
               {/* 비밀번호 재설정 모달이 나오게 */}
@@ -143,7 +146,7 @@ export default function LoginPage() {
           <div className="h-px flex-1 bg-border-primary"></div>
         </div>
 
-        <div className="mx-auto mt-6 flex h-11 w-[460px] items-center justify-between pb-[72px]">
+        <div className="mx-auto mt-6 flex h-11 w-[460px] items-center justify-between pb-18">
           <span className="text-lg-m text-text-default">간편 로그인하기</span>
           <button
             type="button"
