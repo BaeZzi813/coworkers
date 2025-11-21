@@ -100,10 +100,12 @@ export default function BoardsPage() {
         <div ref={observerRef} className="h-10" />
         <div
           className={clsx(
-            "fixed top-[800px] hidden desktop:block",
+            "fixed",
+            "right-6 bottom-6",
+            "desktop:top-[800px]",
             isSidebarFolded
-              ? "right-[calc((100vw-1024px)/2-130px)]"
-              : "right-[calc((100vw-1024px)/2-130px-98px)]"
+              ? "desktop:right-[calc((100vw-1024px)/2-130px)]"
+              : "desktop:right-[calc((100vw-1024px)/2-130px-98px)]"
           )}
         >
           <FloatingButton
