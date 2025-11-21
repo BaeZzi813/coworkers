@@ -1,5 +1,6 @@
 import KakaotalkIcon from "@/assets/icons/ic-kakaotalk.svg";
 import { Button } from "@/components/button";
+import { Alert } from "@/components/modal";
 import { postSignIn } from "@/features/auth/apis";
 import InputLabel from "@/features/login/components/FormField";
 import PasswordVisible from "@/features/login/components/PasswordVisible";
@@ -16,6 +17,13 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState<string | undefined>();
   const [passwordError, setPasswordError] = useState<string | undefined>();
+
+  // 비밀번호 재설정 모달 열림/닫힘 상태
+  const [isPasswordResetModalOpen, setIsPasswordResetModalOpen] =
+    useState(false);
+  // 비밀번호 재설정 모달의 이메일 입력값
+  const [resetEmail, setResetEmail] = useState("");
+
   const login = useAuthStore((state) => state.logIn);
   const router = useRouter();
 
@@ -27,6 +35,12 @@ export default function LoginPage() {
   const handlePasswordBlurValidate = () => {
     const passwordResult = validatePassword(password);
     setPasswordError(passwordResult.valid ? undefined : passwordResult.reason);
+  };
+
+  // 비밀번호 재설정 모달 닫기
+  const handlePasswordResetModalClose = () => {
+    setIsPasswordResetModalOpen(false);
+    setResetEmail("");
   };
 
   //인지부하 고려, 중첩된 if문,복잡한 조건문 정리
@@ -109,9 +123,13 @@ export default function LoginPage() {
             <button
               type="button"
               className="h-6 w-44 cursor-pointer text-right text-lg-m text-brand-primary underline hover:text-lg-s"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setIsPasswordResetModalOpen(true);
+              }}
             >
               비밀번호를 잊으셨나요?
-              {/* 비밀번호 재설정 모달이 나오게 */}
             </button>
           </div>
 
@@ -126,19 +144,18 @@ export default function LoginPage() {
             />
             {/* 로그인시 엑세스토큰 받고 팀페이지로 이동 */}
           </div>
+          <div className="mx-auto mt-6 flex h-5 w-[268px] items-center justify-center gap-3">
+            <span className="text-lg-m text-text-secondary">
+              아직 계정이 없으신가요?
+            </span>
+            <Link
+              href="/signup"
+              className="cursor-pointer text-lg-m text-brand-primary underline hover:text-lg-s"
+            >
+              가입하기
+            </Link>
+          </div>
         </form>
-
-        <div className="mx-auto mt-6 flex h-5 w-[268px] items-center justify-center gap-3">
-          <span className="text-lg-m text-text-secondary">
-            아직 계정이 없으신가요?
-          </span>
-          <Link
-            href="/signup"
-            className="cursor-pointer text-lg-m text-brand-primary underline hover:text-lg-s"
-          >
-            가입하기
-          </Link>
-        </div>
 
         <div className="mx-auto mt-[60px] flex h-5 w-[460px] items-center">
           <div className="h-px flex-1 bg-border-primary"></div>
@@ -157,6 +174,44 @@ export default function LoginPage() {
           </button>
         </div>
       </div>
+
+      {/* 모달 - 클라이언트 사이드에서만 렌더링 */}
+      {typeof window !== "undefined" && (
+        <Alert
+          isOpen={isPasswordResetModalOpen}
+          onClose={handlePasswordResetModalClose}
+          title="비밀번호 재설정"
+          message="비밀번호 재설정 링크를 보내드립니다."
+          content={
+            <InputLabel
+              label=""
+              type="email"
+              placeholder="이메일을 입력하세요."
+              size="large"
+              value={resetEmail}
+              onChange={(e) => setResetEmail(e.target.value)}
+            />
+          }
+          actions={[
+            <Button
+              key="close"
+              title="닫기"
+              variant="outlinedPrimary"
+              size="large"
+              isFullWidth={true}
+              onClick={handlePasswordResetModalClose}
+            />,
+            <Button
+              key="send"
+              title="링크 보내기"
+              variant="primary"
+              size="large"
+              isFullWidth={true}
+              onClick={handlePasswordResetModalClose}
+            />,
+          ]}
+        />
+      )}
     </div>
   );
 }
