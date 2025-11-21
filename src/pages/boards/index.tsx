@@ -1,29 +1,24 @@
 import { FloatingButton } from "@/components/button";
 import Icon from "@/components/icon";
-import Pagination from "@/components/pagination/Pagination";
 import Select, { SelectOption } from "@/components/select";
 import { getArticle } from "@/features/boards/api";
 import BestPost from "@/features/boards/BestPost";
 import PostCard from "@/features/boards/PostCard";
 import SearchBar from "@/features/boards/SearchBar";
 import { useSidebarStore } from "@/stores/sidebar-store";
-import { Article, GetArticleResponse } from "@/types/article";
-import {
-  keepPreviousData,
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { Article } from "@/types/article";
+import { keepPreviousData, useInfiniteQuery } from "@tanstack/react-query";
 import { useDebounce } from "@uidotdev/usehooks";
 import clsx from "clsx";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+
+const PAGE_SIZE = 8;
 
 const options: SelectOption[] = [
   { label: "최신순", value: "recent" },
   { label: "좋아요순", value: "like" },
 ];
-
-const PAGE_SIZE = 6;
 
 export default function BoardsPage() {
   const router = useRouter();
@@ -33,42 +28,46 @@ export default function BoardsPage() {
   const [selectedOption, setSelectedOption] = useState<SelectOption>(
     options[0]
   );
-  const [page, setPage] = useState(1);
-  const queryClient = useQueryClient();
 
-  const { data } = useQuery<GetArticleResponse>({
-    queryKey: ["articles", page, debounceQuery, selectedOption.value],
-    queryFn: () =>
+  const observerRef = useRef<HTMLDivElement>(null);
+
+  const { data, fetchNextPage, hasNextPage } = useInfiniteQuery({
+    queryKey: ["articles", debounceQuery, selectedOption.value],
+    initialPageParam: 1,
+    queryFn: ({ pageParam }) =>
       getArticle({
-        page,
+        page: pageParam,
         pageSize: PAGE_SIZE,
         orderBy: selectedOption.value as "recent" | "like",
         keyword: debounceQuery,
       }),
     placeholderData: keepPreviousData,
+    getNextPageParam: (lastPage, allPages) => {
+      const loaded = allPages.length * PAGE_SIZE;
+      if (loaded >= lastPage.totalCount) return undefined;
+      return allPages.length + 1;
+    },
   });
 
   useEffect(() => {
-    const nextPage = page + 1;
-    queryClient.prefetchQuery({
-      queryKey: ["articles", nextPage, debounceQuery, selectedOption.value],
-      queryFn: () =>
-        getArticle({
-          page: nextPage,
-          pageSize: PAGE_SIZE,
-          orderBy: selectedOption.value as "recent" | "like",
-          keyword: debounceQuery,
-        }),
-    });
-  }, [page, debounceQuery, selectedOption.value, queryClient]);
+    if (!observerRef.current) return;
+    if (!hasNextPage) return;
 
-  console.log(data);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          fetchNextPage();
+        }
+      },
+      { threshold: 1 }
+    );
+    observer.observe(observerRef.current);
+    return () => observer.disconnect();
+  }, [hasNextPage, fetchNextPage]);
 
   const handleChange = (value: SelectOption) => {
     setSelectedOption(value);
   };
-
-  const totalPages = Math.ceil((data?.totalCount ?? 0) / PAGE_SIZE);
 
   return (
     <>
@@ -91,17 +90,14 @@ export default function BoardsPage() {
             />
           </div>
           <div className="flex flex-col gap-4 desktop:grid desktop:grid-cols-2 desktop:gap-5">
-            {data?.list.map((post: Article) => (
-              <PostCard key={post.id} article={post} />
-            ))}
+            {data?.pages
+              ?.flatMap((page) => page.list)
+              .map((post: Article) => (
+                <PostCard key={post.id} article={post} />
+              ))}
           </div>
-          <Pagination
-            page={page}
-            totalPages={totalPages}
-            onPageChange={setPage}
-            className="mt-6"
-          />
         </div>
+        <div ref={observerRef} className="h-10" />
         <div
           className={clsx(
             "fixed top-[800px] hidden desktop:block",

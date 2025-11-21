@@ -1,12 +1,16 @@
+import AvatarSM from "@/assets/images/avatar-placeholder-sm.svg";
 import Dropdown from "@/components/dropdown";
 import Icon from "@/components/icon";
-import { Article } from "@/types/article";
+import { UserGroup } from "@/types/user-group";
+import { useQueryClient } from "@tanstack/react-query";
+import Image from "next/image";
 
 export default function ArticleHeader({
   title,
   articleDropdownOptions,
   nickname,
   formattedDate,
+  userImage,
 }) {
   return (
     <div className="flex h-[68px] flex-col gap-2 border-b border-b-border-primary tablet:h-[76px]">
@@ -21,14 +25,23 @@ export default function ArticleHeader({
           />
         </button>
       </div>
-      <div>
-        <span className="text-xs-m text-text-primary tablet:text-md-m">
-          {nickname}
-        </span>
-        <div className="mx-2 inline-block h-3 -translate-y-[0.05rem] border-l border-slate-700 align-middle" />
-        <span className="text-xs-m text-slate-400 tablet:text-md-m">
-          {formattedDate}
-        </span>
+      <div className="flex h-9 items-center gap-2">
+        <div>
+          {userImage ? (
+            <Image src={userImage} alt="유저 이미지" width={24} height={24} />
+          ) : (
+            <AvatarSM className="h-6 w-6" />
+          )}
+        </div>
+        <div>
+          <span className="text-xs-m text-text-primary tablet:text-md-m">
+            {nickname}
+          </span>
+          <div className="mx-2 inline-block h-3 -translate-y-[0.05rem] border-l border-slate-700 align-middle" />
+          <span className="text-xs-m text-slate-400 tablet:text-md-m">
+            {formattedDate}
+          </span>
+        </div>
       </div>
     </div>
   );

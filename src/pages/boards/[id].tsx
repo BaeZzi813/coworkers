@@ -3,13 +3,15 @@ import ArticleComment from "@/features/boards/article/ArticleComment";
 import ArticleContent from "@/features/boards/article/ArticleContent";
 import ArticleHeader from "@/features/boards/article/ArticleHeader";
 import ArticleLikeButton from "@/features/boards/article/ArticleLikeButton";
+import { UserGroup } from "@/types/user-group";
 import { formatDate } from "@/utils/format-date";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 
 export default function ArticlePage() {
   const router = useRouter();
   const { id } = router.query;
+  const queryClient = useQueryClient();
 
   const { data } = useQuery({
     queryKey: ["article", id],
@@ -17,6 +19,7 @@ export default function ArticlePage() {
     enabled: !!id,
   });
 
+  console.log(data);
   const formattedDate = formatDate(data?.createdAt ?? "");
 
   const articleDropdownOptions = [
@@ -32,6 +35,12 @@ export default function ArticlePage() {
     },
   ];
 
+  const cachedGroups = queryClient.getQueryData<UserGroup[]>([
+    "user",
+    "groups",
+  ]);
+  const userImage = cachedGroups?.[0]?.image;
+
   return (
     <>
       <section className="min-h-screen w-full bg-background-secondary py-5 tablet:py-[68px]">
@@ -42,6 +51,7 @@ export default function ArticlePage() {
               articleDropdownOptions={articleDropdownOptions}
               nickname={data?.writer.nickname}
               formattedDate={formattedDate}
+              userImage={userImage}
             />
             <ArticleContent content={data?.content} image={data?.image} />
             <ArticleLikeButton likeCount={data?.likeCount} />
@@ -49,6 +59,7 @@ export default function ArticlePage() {
               commentCount={data?.commentCount}
               comment={data?.comment}
               articleDropdownOptions={articleDropdownOptions}
+              userImage={userImage}
             />
           </div>
         </div>

@@ -1,6 +1,6 @@
 import Pagination from "@/components/pagination/Pagination";
 import { useResponsive } from "@/hooks/use-responsive";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { getArticle } from "./api";
 import PostCard from "./PostCard";
@@ -13,6 +13,7 @@ export default function BestPost() {
   const { data } = useQuery({
     queryKey: ["bestPosts"],
     queryFn: () => getArticle({ page: 1, pageSize: 12, orderBy: "like" }),
+    placeholderData: keepPreviousData,
   });
 
   const article = useMemo(() => data?.list ?? [], [data]);
@@ -21,7 +22,7 @@ export default function BestPost() {
 
   const visiblePage = useMemo(() => {
     const start = (safePage - 1) * cardPerPage;
-    return article.slice(start, start + cardPerPage);
+    return article.slice(start, start + cardPerPage) ?? [];
   }, [article, safePage, cardPerPage]);
 
   return (

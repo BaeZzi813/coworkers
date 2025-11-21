@@ -1,5 +1,9 @@
+import AvatarMD from "@/assets/images/avatar-placeholder-md.svg";
+import AvatarSM from "@/assets/images/avatar-placeholder-sm.svg";
 import Dropdown from "@/components/dropdown";
 import Icon from "@/components/icon";
+import { useResponsive } from "@/hooks/use-responsive";
+import { Article, Comment } from "@/types/article";
 import { formatDate } from "@/utils/format-date";
 import Image from "next/image";
 
@@ -7,7 +11,9 @@ export default function ArticleComment({
   commentCount,
   comment,
   articleDropdownOptions,
+  userImage,
 }) {
+  const { isMobile } = useResponsive();
   return (
     <>
       <div className="mb-5 flex flex-col gap-3">
@@ -17,8 +23,21 @@ export default function ArticleComment({
             {commentCount}
           </span>
         </div>
-        <div className="flex items-center">
-          <div>사진</div>
+        <div className="flex items-center gap-2">
+          <div>
+            {userImage ? (
+              <Image
+                src={userImage}
+                alt="유저 이미지"
+                width={isMobile ? 24 : 32}
+                height={isMobile ? 24 : 32}
+              />
+            ) : isMobile ? (
+              <AvatarSM className="h-6 w-6" />
+            ) : (
+              <AvatarMD className="h-8 w-8" />
+            )}
+          </div>
           <div className="flex h-12 flex-1 items-center justify-between border-t border-b border-border-primary">
             <input
               type="text"
@@ -32,7 +51,7 @@ export default function ArticleComment({
         </div>
       </div>
       {comment && comment.length > 0 ? (
-        comment.map((article) => (
+        comment.map((article: Comment) => (
           <div
             key={article.id}
             className="border-t border-t-border-primary py-3 tablet:py-5"
