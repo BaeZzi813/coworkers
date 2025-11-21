@@ -4,7 +4,7 @@ import {
   gsspWithAuth,
   serverSideComponentWithAuth,
 } from "@/libs/ssr/with-auth";
-import { UserGroup } from "@/types/user-group";
+import { UserGroup } from "@/types/group";
 
 /**
  * SSR 환경에서 API 호출을 위해 access token을 사용하는 예시 코드
