@@ -1,7 +1,7 @@
 import { getUserGroups } from "@/features/group/apis";
 import { gsspPropsWithTokenReturn } from "@/libs/ssr/gssp-return";
 import {
-  getServerSidePropsWithAuth,
+  gsspWithAuth,
   serverSideComponentWithAuth,
 } from "@/libs/ssr/with-auth";
 import { UserGroup } from "@/types/user-group";
@@ -14,12 +14,10 @@ interface DashboardPageData {
   groups: UserGroup[];
 }
 
-export const getServerSideProps = getServerSidePropsWithAuth(
-  async (context, accessToken) => {
-    const groups = await getUserGroups({ accessToken });
-    return gsspPropsWithTokenReturn({ groups }, accessToken);
-  }
-);
+export const getServerSideProps = gsspWithAuth(async (context, accessToken) => {
+  const groups = await getUserGroups({ accessToken });
+  return gsspPropsWithTokenReturn({ groups }, accessToken);
+});
 
 export default serverSideComponentWithAuth<DashboardPageData>(({ groups }) => {
   return (

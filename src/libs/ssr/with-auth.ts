@@ -6,7 +6,7 @@ import { useUpdateAccessToken } from "./use-update-access-token";
 
 type Props<Data> = Data & { accessToken: string };
 
-export function getServerSidePropsWithAuth<Data>(
+export function gsspWithAuth<Data>(
   getServerSidePropsFunc: (
     context: GetServerSidePropsContext,
     accessToken: string
