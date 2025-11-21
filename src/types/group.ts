@@ -1,5 +1,5 @@
 import { Member } from "./member";
-import { Task, TaskGroup } from "./task";
+import { TaskList } from "./task";
 
 export interface UserGroup {
   teamId: string;
@@ -20,5 +20,3 @@ export interface Group {
   members: Member[];
   taskLists: TaskList[];
 }
-
-type TaskList = TaskGroup & { tasks: Task[] };
