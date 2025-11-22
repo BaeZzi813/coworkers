@@ -18,13 +18,13 @@ export async function getArticle(params: GetArticleParams) {
   return res.data;
 }
 
-export async function deleteArticleById(id: number) {
-  const res = await apiClient.delete(`/articles/${id}`);
+export async function getArticleById(id: number) {
+  const res = await apiClient.get<Article>(`/articles/${id}`);
   return res.data;
 }
 
-export async function getArticleById(id: number) {
-  const res = await apiClient.get<Article>(`/articles/${id}`);
+export async function deleteArticleById(id: number) {
+  const res = await apiClient.delete(`/articles/${id}`);
   return res.data;
 }
 
@@ -51,5 +51,15 @@ export async function patchCommentById(id: number, body: PostCommentBody) {
 
 export async function deleteCommentById(id: number) {
   const res = await apiClient.delete<Comment>(`comments/${id}`);
+  return res.data;
+}
+
+export async function postLikeById(id: number) {
+  const res = await apiClient.post<Article>(`/articles/${id}/like`);
+  return res.data;
+}
+
+export async function deleteLikeById(id: number) {
+  const res = await apiClient.delete<Article>(`/articles/${id}/like`);
   return res.data;
 }

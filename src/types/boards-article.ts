@@ -12,6 +12,7 @@ export interface Article {
   updatedAt: string;
   commentCount?: number;
   comment?: Comment[];
+  isLiked?: boolean;
 }
 
 export interface GetArticleResponse {

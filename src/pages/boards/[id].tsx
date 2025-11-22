@@ -1,16 +1,19 @@
 import {
   deleteArticleById,
   deleteCommentById,
+  deleteLikeById,
   getArticleById,
   getCommentById,
   patchCommentById,
   postCommentById,
+  postLikeById,
 } from "@/features/boards/api";
 import ArticleComment from "@/features/boards/article/ArticleComment";
 import ArticleContent from "@/features/boards/article/ArticleContent";
 import ArticleHeader from "@/features/boards/article/ArticleHeader";
 import ArticleLikeButton from "@/features/boards/article/ArticleLikeButton";
 import { useAuthStore } from "@/stores/auth-store";
+import { Article } from "@/types/boards-article";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 
@@ -70,12 +73,52 @@ export default function ArticlePage() {
   const deleteCommentMutation = useMutation({
     mutationFn: (id: number) => deleteCommentById(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["comment"] });
+      queryClient.invalidateQueries({ queryKey: ["comment", id] });
     },
     onError: (error) => {
       console.log("삭제 실패:", error);
     },
   });
+
+  const likeMutation = useMutation({
+    mutationFn: async ({
+      articleId,
+      isLiked,
+    }: {
+      articleId: number;
+      isLiked: boolean;
+    }) => (isLiked ? deleteLikeById(articleId) : postLikeById(articleId)),
+    onMutate: async ({ isLiked }) => {
+      await queryClient.cancelQueries({ queryKey: ["article", id] });
+      const prevArticle = queryClient.getQueryData<Article>(["article", id]);
+      if (prevArticle) {
+        queryClient.setQueryData<Article>(["article", id], {
+          ...prevArticle,
+          isLiked: !isLiked,
+          likeCount: isLiked
+            ? prevArticle.likeCount - 1
+            : prevArticle.likeCount + 1,
+        });
+      }
+      return { prevArticle };
+    },
+    onError: (error, variables, context) => {
+      if (context?.prevArticle) {
+        queryClient.setQueryData(["article", id], context.prevArticle);
+      }
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["article", id] });
+    },
+  });
+
+  const handleToggleLike = () => {
+    if (!article) return;
+    likeMutation.mutate({
+      articleId: article.id,
+      isLiked: article.isLiked || false,
+    });
+  };
 
   const user = useAuthStore((state) => state.user);
   const userImage = user?.image;
@@ -93,7 +136,11 @@ export default function ArticlePage() {
               deleteArticleMutation={deleteArticleMutation}
             />
             <ArticleContent article={article} />
-            <ArticleLikeButton likeCount={article?.likeCount} />
+            <ArticleLikeButton
+              likeCount={article?.likeCount}
+              isLiked={article?.isLiked || false}
+              handleToggleLike={handleToggleLike}
+            />
             <ArticleComment
               id={Number(id)}
               commentCount={article?.commentCount}
