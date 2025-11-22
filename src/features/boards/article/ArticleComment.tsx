@@ -122,7 +122,7 @@ export default function ArticleComment({
     if (editCommentId !== null && editInputRef.current) {
       editInputRef.current.focus();
     }
-  });
+  }, [editCommentId]);
 
   return (
     <>

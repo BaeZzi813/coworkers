@@ -14,6 +14,7 @@ import ArticleHeader from "@/features/boards/article/ArticleHeader";
 import ArticleLikeButton from "@/features/boards/article/ArticleLikeButton";
 import { useAuthStore } from "@/stores/auth-store";
 import { Article } from "@/types/boards-article";
+import { GetCommentResponse } from "@/types/boards-comment";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 
@@ -66,8 +67,30 @@ export default function ArticlePage() {
       commentId: number;
       content: string;
     }) => patchCommentById(commentId, { content }),
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: ["comment", id] }),
+    onMutate: async ({ commentId, content }) => {
+      await queryClient.cancelQueries({ queryKey: ["comment", id] });
+      const prevComment = queryClient.getQueryData<GetCommentResponse>([
+        "comment",
+        id,
+      ]);
+      if (prevComment) {
+        queryClient.setQueryData<GetCommentResponse>(["comment", id], {
+          ...prevComment,
+          list: prevComment.list.map((comment) =>
+            comment.id === commentId ? { ...comment, content } : comment
+          ),
+        });
+      }
+      return { prevComment };
+    },
+    onError: (_error, _variables, context) => {
+      if (context?.prevComment) {
+        queryClient.setQueryData(["comment", id], context.prevComment);
+      }
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["comment", id] });
+    },
   });
 
   const deleteCommentMutation = useMutation({
@@ -102,7 +125,7 @@ export default function ArticlePage() {
       }
       return { prevArticle };
     },
-    onError: (error, variables, context) => {
+    onError: (_error, _variables, context) => {
       if (context?.prevArticle) {
         queryClient.setQueryData(["article", id], context.prevArticle);
       }
