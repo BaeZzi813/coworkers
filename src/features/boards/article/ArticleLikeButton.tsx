@@ -21,7 +21,7 @@ export default function ArticleLikeButton({
               onClick={handleToggleLike}
               className="flex h-16 w-16 cursor-pointer items-center justify-center rounded-full bg-background-inverse"
             >
-              <Icon name="heart" color={`${isLiked ? "red" : "white"}`} />
+              <Icon name={`${isLiked ? "heartFill" : "heart"}`} color="white" />
             </button>
             <span className="text-lg-r text-state-400">{likeCount}</span>
           </div>
@@ -34,15 +34,15 @@ export default function ArticleLikeButton({
           >
             {isMobile ? (
               <Icon
-                name="heart"
+                name={`${isLiked ? "heartFill" : "heart"}`}
                 size="small"
-                color={`${isLiked ? "red" : "white"}`}
+                color="white"
               />
             ) : (
               <Icon
-                name="heart"
+                name={`${isLiked ? "heartFill" : "heart"}`}
                 size="large"
-                color={`${isLiked ? "red" : "white"}`}
+                color="white"
               />
             )}
           </button>
