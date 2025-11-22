@@ -57,6 +57,7 @@ export default serverSideComponentWithAuth<PageProps>(({ groupId }) => {
         )}
       >
         <TeamPageHeader
+          group={group}
           title={group.name}
           members={isDesktop ? undefined : group.members}
           tasks={tasks}

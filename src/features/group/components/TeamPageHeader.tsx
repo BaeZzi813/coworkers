@@ -1,14 +1,19 @@
 import PatternImage from "@/assets/images/bg-team-pattern.png";
 import Avatar from "@/components/avatar";
+import { Button } from "@/components/button";
 import EditDropdown from "@/components/dropdown/EditDropdown";
 import Icon from "@/components/icon";
+import { Alert } from "@/components/modal";
 import { useResponsive } from "@/hooks/use-responsive";
+import { Group } from "@/types/group";
 import { Member } from "@/types/member";
 import { Task } from "@/types/task";
 import clsx from "clsx";
+import { overlay } from "overlay-kit";
 
 interface Props {
   title: string;
+  group: Group;
   members?: Member[];
   tasks?: Task[];
   isAdmin: boolean;
@@ -16,6 +21,7 @@ interface Props {
 
 export default function TeamPageHeader({
   title,
+  group,
   members = [],
   tasks = [],
   isAdmin,
@@ -46,9 +52,11 @@ export default function TeamPageHeader({
             <h2 className="text-xl-b tablet:text-2xl-b">{title}</h2>
             {members.length > 0 && <MembersList members={members} />}
           </div>
-          {isDesktop || <SettingsBugton />}
+          {isDesktop || <SettingsButton group={group} />}
         </div>
-        {isAdmin && <TasksReport tasks={tasks} isDesktop={isDesktop} />}
+        {isAdmin && (
+          <TasksReport group={group} tasks={tasks} isDesktop={isDesktop} />
+        )}
       </div>
     </header>
   );
@@ -56,7 +64,7 @@ export default function TeamPageHeader({
 
 /* Settings Button */
 
-function SettingsBugton() {
+function SettingsButton({ group }: { group: Group }) {
   const { isDesktop } = useResponsive();
 
   const handleEdit = () => {
@@ -64,7 +72,36 @@ function SettingsBugton() {
   };
 
   const handleDelete = () => {
-    console.log("Delete clicked");
+    overlay.open(({ isOpen, close, unmount }) => {
+      const handleDelete = async () => {
+        close();
+        // TODO: Group 삭제 API 연동
+      };
+
+      return (
+        <Alert
+          isOpen={isOpen}
+          onClose={close}
+          onExit={unmount}
+          title={`‘${group.name}' 팀을 정말 삭제하시겠어요?`}
+          message="삭제 후에는 되돌릴 수 없습니다."
+          actions={[
+            <Button
+              key="delete-group-close"
+              variant="outlinedSecondary"
+              title="닫기"
+              onClick={close}
+            />,
+            <Button
+              key="delete-group-delete"
+              variant="danger"
+              title="삭제하기"
+              onClick={handleDelete}
+            />,
+          ]}
+        />
+      );
+    });
   };
 
   return (
@@ -86,9 +123,11 @@ function calculateProgress(done: number, total: number) {
 }
 
 function TasksReport({
+  group,
   tasks,
   isDesktop,
 }: {
+  group: Group;
   tasks: Task[];
   isDesktop: boolean;
 }) {
@@ -108,7 +147,7 @@ function TasksReport({
       </div>
       <div className="flex items-center gap-5">
         <ProgressBar progress={progress} />
-        {isDesktop && <SettingsBugton />}
+        {isDesktop && <SettingsButton group={group} />}
       </div>
     </div>
   );
