@@ -14,27 +14,19 @@ interface TaskItemProps {
 export default function TaskItem({ title, tasks, onClick }: TaskItemProps) {
   const { isDesktop } = useResponsive();
 
+  const hasTask = tasks.length > 0;
   const totalCount = tasks.length;
   const doneCount = tasks.filter((task) => task.doneAt).length;
 
   const options: DropdownOption[] = [
-    { label: "수정하기", value: "edit" },
-    { label: "삭제하기", value: "delete" },
+    { label: "수정하기", value: "edit", action: () => {} },
+    { label: "삭제하기", value: "delete", action: () => {} },
   ];
-
-  const handleSelect = (option: DropdownOption) => {
-    switch (option.value) {
-      case "edit":
-        break;
-      case "delete":
-        break;
-    }
-  };
 
   return (
     <div
       className={clsx(
-        "flex items-center justify-start",
+        "flex items-center justify-start bg-background-primary",
         isDesktop &&
           "h-[54px] cursor-pointer rounded-xl border border-border-primary pr-3 pl-5"
       )}
@@ -44,7 +36,7 @@ export default function TaskItem({ title, tasks, onClick }: TaskItemProps) {
       <div className="desktop:ml-auto">
         <DoneBadge current={doneCount} total={totalCount} size="small" />
       </div>
-      {isDesktop && (
+      {isDesktop && hasTask && (
         <Dropdown
           anchor={
             <div
@@ -57,7 +49,6 @@ export default function TaskItem({ title, tasks, onClick }: TaskItemProps) {
           }
           options={options}
           alignment="right"
-          onSelect={(option) => handleSelect(option as DropdownOption)}
         />
       )}
     </div>

@@ -1,4 +1,5 @@
 import { FloatingButton as FloatingButtonComponent } from "@/components/button";
+import Icon from "@/components/icon";
 import type { Meta } from "@storybook/nextjs";
 
 const meta = {
@@ -20,12 +21,12 @@ export function FloatingButton() {
     <div className="flex items-center gap-4">
       <FloatingButtonComponent
         variant="primary"
-        iconName="plus"
+        icon={<Icon name="plus" color="white" />}
         onClick={handleClick}
       />
       <FloatingButtonComponent
         variant="inverse"
-        iconName="heart"
+        icon={<Icon name="heart" color="transparent" />}
         onClick={handleClick}
       />
     </div>
