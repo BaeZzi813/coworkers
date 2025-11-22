@@ -153,9 +153,7 @@ function ProgressBar({ progress }: { progress: number }) {
         ))}
       </div>
       <div
-        className={
-          "absolute top-0 bottom-0 left-0 rounded-full bg-brand-primary"
-        }
+        className="absolute top-0 bottom-0 left-0 rounded-full bg-brand-primary"
         style={{ right: `${100 - progress * 100}%` }}
       />
     </div>
