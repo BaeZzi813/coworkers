@@ -1,6 +1,7 @@
 import PatternImage from "@/assets/images/bg-team-pattern.png";
 import Avatar from "@/components/avatar";
 import Icon from "@/components/icon";
+import { useResponsive } from "@/hooks/use-responsive";
 import { Member } from "@/types/member";
 import { Task } from "@/types/task";
 import clsx from "clsx";
@@ -18,6 +19,7 @@ export default function TeamPageHeader({
   tasks = [],
   isAdmin,
 }: Props) {
+  const { isDesktop } = useResponsive();
   const backgroundPatternStyle = isAdmin
     ? undefined
     : {
@@ -42,38 +44,52 @@ export default function TeamPageHeader({
             <h2 className="text-xl-b tablet:text-2xl-b">{title}</h2>
             {members.length > 0 && <MembersList members={members} />}
           </div>
-          {isAdmin && <Icon name="gear" />}
+          {isDesktop || <SettingsBugton />}
         </div>
-        {isAdmin && <TasksReport tasks={tasks} />}
+        {isAdmin && <TasksReport tasks={tasks} isDesktop={isDesktop} />}
       </div>
     </header>
   );
 }
 
-/* Tasks Report */
+/* Settings Button */
 
-function progress(done: number, total: number) {
-  if (total === 0) return "0%";
-  return `${Math.round((done / total) * 100)}%`;
+function SettingsBugton() {
+  return <Icon name="gear" />;
 }
 
-function TasksReport({ tasks }: { tasks: Task[] }) {
-  const doneTasks = tasks.filter((task) => Boolean(task.doneAt));
+/* Tasks Report */
+
+function calculateProgress(done: number, total: number) {
+  if (total === 0) return 0;
+  return done / total;
+}
+
+function TasksReport({
+  tasks,
+  isDesktop,
+}: {
+  tasks: Task[];
+  isDesktop: boolean;
+}) {
   const totalCount = tasks.length;
-  const doneCount = doneTasks.length;
+  const doneCount = tasks.filter((task) => Boolean(task.doneAt)).length;
+  const progress = calculateProgress(doneCount, totalCount);
+  console.log(progress);
 
   return (
-    <div className="mt-9">
+    <div className="mt-9 flex flex-col gap-4">
       <div className="flex items-center justify-between">
-        <ProgressLabel
-          title="오늘의 진행 상황"
-          progress={progress(doneCount, totalCount)}
-        />
+        <ProgressLabel title="오늘의 진행 상황" progress={progress} />
         <div className="flex">
           <CountLabel title="오늘의 할 일" count={totalCount} />
           <div className="mx-6 w-px bg-border-primary" />
           <CountLabel title="완료 🙌" count={doneCount} highlighted />
         </div>
+      </div>
+      <div className="flex items-center gap-5">
+        <ProgressBar progress={progress} />
+        {isDesktop && <SettingsBugton />}
       </div>
     </div>
   );
@@ -84,13 +100,13 @@ function ProgressLabel({
   progress,
 }: {
   title: string;
-  progress: string;
+  progress: number;
 }) {
   return (
     <div className="flex flex-col">
       <span className="text-xs-m text-state-400 tablet:text-md-m">{title}</span>
       <span className="tablet:text-4xl-b text-3xl-b text-brand-primary">
-        {progress}
+        {`${progress * 100}%`}
       </span>
     </div>
   );
@@ -116,6 +132,19 @@ function CountLabel({
       >
         {count}
       </span>
+    </div>
+  );
+}
+
+function ProgressBar({ progress }: { progress: number }) {
+  return (
+    <div className="relative h-5 grow rounded-full bg-background-secondary tablet:h-[27px]">
+      <div
+        className={
+          "absolute top-0 bottom-0 left-0 rounded-full bg-brand-primary"
+        }
+        style={{ right: `${100 - progress * 100}%` }}
+      />
     </div>
   );
 }
