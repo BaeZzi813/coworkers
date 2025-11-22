@@ -5,6 +5,7 @@ import { useResponsive } from "@/hooks/use-responsive";
 import { Member } from "@/types/member";
 import { Task } from "@/types/task";
 import clsx from "clsx";
+import { Attributes } from "react";
 
 interface Props {
   title: string;
@@ -137,8 +138,20 @@ function CountLabel({
 }
 
 function ProgressBar({ progress }: { progress: number }) {
+  const Pattern = ({ key }: Attributes) => (
+    <div
+      key={key}
+      className="h-40 -translate-y-2/4 rotate-45 border-l-40 border-[#EBEFF5]"
+    />
+  );
+
   return (
-    <div className="relative h-5 grow rounded-full bg-background-secondary tablet:h-[27px]">
+    <div className="relative h-5 grow tablet:h-[27px]">
+      <div className="absolute inset-0 flex justify-between overflow-hidden rounded-full bg-background-secondary">
+        {Array.from({ length: 8 }).map((_, index) => (
+          <Pattern key={index} />
+        ))}
+      </div>
       <div
         className={
           "absolute top-0 bottom-0 left-0 rounded-full bg-brand-primary"
