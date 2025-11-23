@@ -1,4 +1,4 @@
-import { postProxyRefreshToken } from "@/features/auth/apis";
+import { postRefreshToken } from "@/features/auth/apis";
 import { getUser } from "@/features/user/apis/get-user";
 import { useAuthStore } from "@/stores/auth-store";
 import { isAxiosError } from "axios";
@@ -19,7 +19,7 @@ export default function AuthProvider({ children }: PropsWithChildren) {
         return;
       }
 
-      const { accessToken } = await postProxyRefreshToken();
+      const accessToken = await postRefreshToken();
       refreshToken({ accessToken });
 
       const user = await getUser();

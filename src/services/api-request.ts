@@ -1,6 +1,7 @@
 import { bearer } from "@/features/auth/utils/token";
 import { AxiosInstance } from "axios";
-import { apiClient } from "./client";
+import { clientApiInstance } from "./instance/client";
+import { serverApiInstance } from "./instance/server";
 
 export interface APIRequestOptions {
   accessToken: string;
@@ -11,16 +12,16 @@ export async function apiRequest<T>(
   options?: APIRequestOptions
 ) {
   if (options) {
-    apiClient.defaults.headers.common["Authorization"] = bearer(
+    serverApiInstance.defaults.headers.common["Authorization"] = bearer(
       options.accessToken
     );
   }
 
   try {
-    return await callback(apiClient);
+    return await callback(options ? serverApiInstance : clientApiInstance);
   } finally {
     if (options) {
-      delete apiClient.defaults.headers.common["Authorization"];
+      delete serverApiInstance.defaults.headers.common["Authorization"];
     }
   }
 }
