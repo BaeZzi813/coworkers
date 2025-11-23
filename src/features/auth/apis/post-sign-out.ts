@@ -1,5 +1,5 @@
-import { proxyClient } from "@/services/client";
+import { clientProxyInstance } from "@/services/instance/client";
 
 export async function postSignOut() {
-  await proxyClient.post("/auth/signOut");
+  await clientProxyInstance.post("/auth/signOut");
 }

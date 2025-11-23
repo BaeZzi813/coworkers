@@ -1,17 +1,15 @@
-import { postSignOut } from "@/features/auth/apis";
-import { postProxyRefreshToken } from "@/features/auth/apis/";
+import { postRefreshToken, postSignOut } from "@/features/auth/apis";
 import { bearer } from "@/features/auth/utils/token";
 import { useAuthStore } from "@/stores/auth-store";
-import {
+import axios, {
   AxiosError,
   AxiosRequestConfig,
   AxiosResponse,
   InternalAxiosRequestConfig,
   isAxiosError,
 } from "axios";
-import { apiClient } from "./client";
 
-export function apiRequestInterceptor(config: InternalAxiosRequestConfig) {
+export function clientRequestInterceptor(config: InternalAxiosRequestConfig) {
   const accessToken = useAuthStore.getState().accessToken;
   if (accessToken) {
     config.headers.Authorization = bearer(accessToken);
@@ -22,12 +20,12 @@ export function apiRequestInterceptor(config: InternalAxiosRequestConfig) {
 const MAX_RETRY_COUNT = 1;
 let retryCount = 0;
 
-export async function apiResponseInterceptor(response: AxiosResponse) {
+export async function clientResponseInterceptor(response: AxiosResponse) {
   retryCount = 0;
   return response;
 }
 
-export async function apiResponseErrorInterceptor(error: AxiosError) {
+export async function clientResponseErrorInterceptor(error: AxiosError) {
   if (error.response?.status !== 401) {
     return Promise.reject(error);
   }
@@ -46,11 +44,11 @@ export async function apiResponseErrorInterceptor(error: AxiosError) {
   }
 
   try {
-    const { accessToken } = await postProxyRefreshToken();
+    const accessToken = await postRefreshToken();
     useAuthStore.getState().refreshToken({ accessToken });
     config.headers.Authorization = bearer(accessToken);
     retryCount++;
-    return apiClient.request(config as AxiosRequestConfig);
+    return axios.request(config as AxiosRequestConfig);
   } catch (refreshError) {
     if (isAxiosError(refreshError) && refreshError.response?.status === 400) {
       window.location.href = "/login";
