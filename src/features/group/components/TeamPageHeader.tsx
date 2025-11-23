@@ -9,6 +9,7 @@ import { Group } from "@/types/group";
 import { Member } from "@/types/member";
 import { Task } from "@/types/task";
 import clsx from "clsx";
+import { useRouter } from "next/router";
 import { overlay } from "overlay-kit";
 
 interface Props {
@@ -66,9 +67,10 @@ export default function TeamPageHeader({
 
 function SettingsButton({ group }: { group: Group }) {
   const { isDesktop } = useResponsive();
+  const router = useRouter();
 
   const handleEdit = () => {
-    console.log("Edit clicked");
+    router.push(`/${group.id}/edit`);
   };
 
   const handleDelete = () => {
