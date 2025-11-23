@@ -63,6 +63,7 @@ export default function LoginPage() {
         </div>
 
         <form
+          //엔터 입력 -> 로그인 버튼 클릭
           onSubmit={(e: FormEvent<HTMLFormElement>) => {
             e.preventDefault();
             handleLoginButtonClick();
