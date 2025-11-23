@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { getGroup, getUserGroups } from "../apis";
 
-interface Props {
+interface Params {
   groupId: number;
 }
 
-export function useGroup({ groupId }: Props) {
+export function useGroupQuery({ groupId }: Params) {
   const { data } = useQuery({
     queryKey: ["groups", groupId],
     queryFn: () => getGroup({ groupId }),
@@ -14,7 +14,7 @@ export function useGroup({ groupId }: Props) {
   return { group: data };
 }
 
-export function useUserGroups() {
+export function useUserGroupsQuery() {
   const { data } = useQuery({
     queryKey: ["user", "groups"],
     queryFn: () => getUserGroups(),

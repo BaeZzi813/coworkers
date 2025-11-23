@@ -2,7 +2,7 @@ import LogoFull from "@/assets/images/logo-full.svg";
 import Logo from "@/assets/images/logo.svg";
 import { Button } from "@/components/button";
 import Icon from "@/components/icon";
-import { useUserGroups } from "@/features/group/query/use-group";
+import { useUserGroupsQuery } from "@/features/group/query";
 import { useResponsive } from "@/hooks/use-responsive";
 import { useAuthStore } from "@/stores/auth-store";
 import { useSidebarStore } from "@/stores/sidebar-store";
@@ -95,7 +95,7 @@ function FoldButton({
 
 function Content({ isFolded }: { isFolded: boolean }) {
   const router = useRouter();
-  const { userGroups } = useUserGroups();
+  const { userGroups } = useUserGroupsQuery();
 
   const handleAddTeamClick = () => {
     router.push("/addteam");

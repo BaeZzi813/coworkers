@@ -1,5 +1,4 @@
-import { prefetchUserGroups } from "@/features/group/query/prefetch-group";
-import { useUserGroups } from "@/features/group/query/use-group";
+import { prefetchUserGroups, useUserGroupsQuery } from "@/features/group/query";
 import { gsspPropsWithTokenReturn } from "@/libs/ssr/gssp-return";
 import {
   gsspWithAuth,
@@ -26,7 +25,7 @@ export const getServerSideProps = gsspWithAuth(async (context, accessToken) => {
 });
 
 export default serverSideComponentWithAuth<DashboardPageData>(() => {
-  const { userGroups } = useUserGroups();
+  const { userGroups } = useUserGroupsQuery();
 
   if (!userGroups) {
     return <div>Loading</div>;

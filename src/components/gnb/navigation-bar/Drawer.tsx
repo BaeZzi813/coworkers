@@ -1,7 +1,7 @@
 import { Button } from "@/components/button";
 import Icon from "@/components/icon";
 import Overlay, { OverlayProps } from "@/components/overlay";
-import { useUserGroups } from "@/features/group/query/use-group";
+import { useUserGroupsQuery } from "@/features/group/query";
 import { motion } from "motion/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -16,7 +16,7 @@ export default function Drawer({
   onExit,
 }: PropsWithChildren<OverlayProps>) {
   const router = useRouter();
-  const { userGroups } = useUserGroups();
+  const { userGroups } = useUserGroupsQuery();
 
   const handleAddTeamClick = () => {
     router.push("/addteam");

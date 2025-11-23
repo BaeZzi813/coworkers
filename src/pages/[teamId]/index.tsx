@@ -1,6 +1,6 @@
 import TeamPageHeader from "@/features/group/components/TeamPageHeader";
-import { prefetchGroup, useGroup } from "@/features/group/query";
-import { prefetchUser, useUser } from "@/features/user/query";
+import { prefetchGroup, useGroupQuery } from "@/features/group/query";
+import { prefetchUser, useUserQuery } from "@/features/user/query";
 import { useResponsive } from "@/hooks/use-responsive";
 import {
   GSSP_NOT_FOUND_RETURN,
@@ -36,8 +36,8 @@ interface PageProps {
 
 export default serverSideComponentWithAuth<PageProps>(({ groupId }) => {
   const { isDesktop } = useResponsive();
-  const { group } = useGroup({ groupId });
-  const { user } = useUser();
+  const { group } = useGroupQuery({ groupId });
+  const { user } = useUserQuery();
   const adminMember = group?.members.find((member) => member.role === "ADMIN");
 
   if (!group || !user || !adminMember) {
