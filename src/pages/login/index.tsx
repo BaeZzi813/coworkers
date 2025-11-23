@@ -59,7 +59,7 @@ export default function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-background-secondary">
       <div className="relative h-[720px] w-[550px] rounded-2xl bg-background-primary">
         <div className="flex flex-col items-center pt-18">
-          <h1 className="h-[28px] w-18 text-2xl-b text-text-primary">로그인</h1>
+          <h1 className="h-7 w-18 text-2xl-b text-text-primary">로그인</h1>
         </div>
 
         <form
