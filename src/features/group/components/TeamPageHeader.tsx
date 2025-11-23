@@ -1,5 +1,6 @@
 import PatternImage from "@/assets/images/bg-team-pattern.png";
 import Avatar from "@/components/avatar";
+import EditDropdown from "@/components/dropdown/EditDropdown";
 import Icon from "@/components/icon";
 import { useResponsive } from "@/hooks/use-responsive";
 import { Member } from "@/types/member";
@@ -32,7 +33,7 @@ export default function TeamPageHeader({
   return (
     <header
       className={clsx(
-        "overflow-hidden bg-background-primary tablet:rounded-[20px] tablet:shadow-card",
+        "bg-background-primary tablet:rounded-[20px] tablet:shadow-card",
         isAdmin || isMobile || "rounded-xl border border-border-primary"
       )}
     >
@@ -56,7 +57,25 @@ export default function TeamPageHeader({
 /* Settings Button */
 
 function SettingsBugton() {
-  return <Icon name="gear" />;
+  const { isDesktop } = useResponsive();
+
+  const handleEdit = () => {
+    console.log("Edit clicked");
+  };
+
+  const handleDelete = () => {
+    console.log("Delete clicked");
+  };
+
+  return (
+    <EditDropdown
+      anchor={<Icon name="gear" />}
+      alignment={isDesktop ? "left" : "right"}
+      alignmentOffset={isDesktop ? -18 : -10}
+      onEdit={handleEdit}
+      onDelete={handleDelete}
+    />
+  );
 }
 
 /* Tasks Report */
