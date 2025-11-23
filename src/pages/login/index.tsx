@@ -18,12 +18,6 @@ export default function LoginPage() {
   const [emailError, setEmailError] = useState<string | undefined>();
   const [passwordError, setPasswordError] = useState<string | undefined>();
 
-  // 비밀번호 재설정 모달 열림/닫힘 상태
-  const [isPasswordResetModalOpen, setIsPasswordResetModalOpen] =
-    useState(false);
-  // 비밀번호 재설정 모달의 이메일 입력값
-  const [resetEmail, setResetEmail] = useState("");
-
   const login = useAuthStore((state) => state.logIn);
   const router = useRouter();
 
@@ -35,12 +29,6 @@ export default function LoginPage() {
   const handlePasswordBlurValidate = () => {
     const passwordResult = validatePassword(password);
     setPasswordError(passwordResult.valid ? undefined : passwordResult.reason);
-  };
-
-  // 비밀번호 재설정 모달 닫기
-  const handlePasswordResetModalClose = () => {
-    setIsPasswordResetModalOpen(false);
-    setResetEmail("");
   };
 
   //인지부하 고려, 중첩된 if문,복잡한 조건문 정리
@@ -115,22 +103,6 @@ export default function LoginPage() {
                 />
               </div>
             </div>
-          </div>
-
-          <div
-            className={clsx("mx-auto flex w-[460px] justify-end", marginTop)}
-          >
-            <button
-              type="button"
-              className="h-6 w-44 cursor-pointer text-right text-lg-m text-brand-primary underline hover:text-lg-s"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                setIsPasswordResetModalOpen(true);
-              }}
-            >
-              비밀번호를 잊으셨나요?
-            </button>
           </div>
 
           <div className="mx-auto mt-10 w-[460px]">
