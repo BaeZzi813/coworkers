@@ -1,22 +1,41 @@
 import { Button } from "@/components/button";
 import { TextField } from "@/components/input";
+import { useGroupMutation } from "@/features/group/query/use-group-mutation";
 import TeamEditContainer from "@/features/team/components/TeamEditContainer";
 import TeamEditImageInput from "@/features/team/components/TeamEditImageInput";
 import { useResponsive } from "@/hooks/use-responsive";
+import { useRouter } from "next/router";
 import { ChangeEvent, useId, useState } from "react";
 
 export default function AddTeamPage() {
   const { isMobile } = useResponsive();
-  const [teamName, setTeamName] = useState("");
+  const [imageFile, setImageFile] = useState<File>();
+  const [name, setName] = useState("");
   const textFieldId = useId();
+  const router = useRouter();
+  const { postMutation } = useGroupMutation();
 
   const handleFileChange = (file: File) => {
-    // TODO: File upload
-    console.log(file);
+    setImageFile(file);
   };
 
   const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setTeamName(event.target.value);
+    setName(event.target.value);
+  };
+
+  const handleSubmit = async () => {
+    postMutation.mutate(
+      { imageFile, name },
+      {
+        onSuccess: (newGroup) => {
+          router.push(`/${newGroup.id}`);
+        },
+        onError: (error) => {
+          // TODO: Error handling
+          console.error("Failed to create group:", error);
+        },
+      }
+    );
   };
 
   return (
@@ -34,7 +53,7 @@ export default function AddTeamPage() {
             </label>
             <TextField
               id={textFieldId}
-              value={teamName}
+              value={name}
               placeholder="팀 이름을 입력해주세요."
               size={isMobile ? "small" : "large"}
               onChange={handleNameChange}
@@ -43,7 +62,8 @@ export default function AddTeamPage() {
           <Button
             className="mt-10"
             title="생성하기"
-            disabled={!teamName.trim()}
+            disabled={!name.trim()}
+            onClick={handleSubmit}
           />
         </div>
       </TeamEditContainer>

@@ -11,6 +11,7 @@ import { Task } from "@/types/task";
 import clsx from "clsx";
 import { useRouter } from "next/router";
 import { overlay } from "overlay-kit";
+import { useGroupMutation } from "../query/use-group-mutation";
 
 interface Props {
   title: string;
@@ -67,6 +68,7 @@ export default function TeamPageHeader({
 
 function SettingsButton({ group }: { group: Group }) {
   const { isDesktop } = useResponsive();
+  const { deleteMutation } = useGroupMutation();
   const router = useRouter();
 
   const handleEdit = () => {
@@ -76,8 +78,16 @@ function SettingsButton({ group }: { group: Group }) {
   const handleDelete = () => {
     overlay.open(({ isOpen, close, unmount }) => {
       const handleDelete = async () => {
-        close();
-        // TODO: Group 삭제 API 연동
+        deleteMutation.mutate(group.id, {
+          onSuccess: () => {
+            close();
+            router.replace("/dashboard");
+          },
+          onError: (error) => {
+            // TODO: Error handling
+            console.error("Failed to delete group:", error);
+          },
+        });
       };
 
       return (

@@ -1,6 +1,7 @@
 import { Button } from "@/components/button";
 import { TextField } from "@/components/input";
 import { getGroup } from "@/features/group/apis";
+import { useGroupMutation } from "@/features/group/query/use-group-mutation";
 import TeamEditContainer from "@/features/team/components/TeamEditContainer";
 import TeamEditImageInput from "@/features/team/components/TeamEditImageInput";
 import { useResponsive } from "@/hooks/use-responsive";
@@ -13,6 +14,7 @@ import {
   serverSideComponentWithAuth,
 } from "@/libs/ssr/with-auth";
 import { Group } from "@/types/group";
+import { useRouter } from "next/router";
 import { ChangeEvent, useId, useState } from "react";
 
 interface PageProps {
@@ -34,6 +36,8 @@ export default serverSideComponentWithAuth<PageProps>(({ group }) => {
   const { isMobile } = useResponsive();
   const [teamName, setTeamName] = useState(group.name);
   const textFieldId = useId();
+  const router = useRouter();
+  const { patchMutation } = useGroupMutation();
 
   const handleFileChange = (file: File) => {
     // TODO: File upload
@@ -45,7 +49,16 @@ export default serverSideComponentWithAuth<PageProps>(({ group }) => {
   };
 
   const handleSubmit = () => {
-    // TODO: Group 수정 API 연동
+    patchMutation.mutate(
+      { groupId: group.id, name: teamName },
+      {
+        onSuccess: () => router.push(`/${group.id}`),
+        onError: (error) => {
+          // TODO: Error handling
+          console.error("Failed to update group:", error);
+        },
+      }
+    );
   };
 
   return (
