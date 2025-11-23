@@ -3,7 +3,7 @@ import { Button } from "@/components/button";
 import Dropdown from "@/components/dropdown";
 import Icon from "@/components/icon";
 import { Alert } from "@/components/modal";
-import { Article } from "@/types/boards-article";
+import { Article } from "@/types/article";
 import { formatDate } from "@/utils/format-date";
 import { useMutation } from "@tanstack/react-query";
 import Image from "next/image";

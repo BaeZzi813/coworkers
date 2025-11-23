@@ -1,4 +1,4 @@
-import { Article } from "@/types/boards-article";
+import { Article } from "@/types/article";
 import Image from "next/image";
 
 export default function ArticleContent({ article }: { article?: Article }) {

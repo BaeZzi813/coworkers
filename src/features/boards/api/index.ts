@@ -1,15 +1,32 @@
 import { apiClient } from "@/services/client";
-import {
-  Article,
-  GetArticleParams,
-  GetArticleResponse,
-} from "@/types/boards-article";
-import {
-  Comment,
-  GetCommentResponse,
-  PostComment,
-  PostCommentBody,
-} from "@/types/boards-comment";
+import { Article } from "@/types/article";
+import { Comment } from "@/types/ArticleComment";
+
+interface GetArticleResponse {
+  totalCount: number;
+  list: Article[];
+}
+
+interface GetArticleParams {
+  page: number;
+  pageSize: number;
+  orderBy: "recent" | "like";
+  keyword?: string;
+}
+
+export interface GetCommentResponse {
+  nextCursor: number;
+  list: Comment[];
+}
+
+export interface PostComment {
+  id: number;
+  content: string;
+}
+
+interface PostCommentBody {
+  content: string;
+}
 
 export async function getArticle(params: GetArticleParams) {
   const res = await apiClient.get<GetArticleResponse>("/articles", {

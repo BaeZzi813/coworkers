@@ -8,13 +8,13 @@ import {
   postCommentById,
   postLikeById,
 } from "@/features/boards/api";
+import { GetCommentResponse } from "@/features/boards/api/index";
 import ArticleComment from "@/features/boards/article/ArticleComment";
 import ArticleContent from "@/features/boards/article/ArticleContent";
 import ArticleHeader from "@/features/boards/article/ArticleHeader";
 import ArticleLikeButton from "@/features/boards/article/ArticleLikeButton";
 import { useAuthStore } from "@/stores/auth-store";
-import { Article } from "@/types/boards-article";
-import { GetCommentResponse } from "@/types/boards-comment";
+import { Article } from "@/types/article";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 

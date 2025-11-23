@@ -14,15 +14,3 @@ export interface Article {
   comment?: Comment[];
   isLiked?: boolean;
 }
-
-export interface GetArticleResponse {
-  totalCount: number;
-  list: Article[];
-}
-
-export interface GetArticleParams {
-  page: number;
-  pageSize: number;
-  orderBy: "recent" | "like";
-  keyword?: string;
-}

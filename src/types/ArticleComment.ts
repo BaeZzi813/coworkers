@@ -11,17 +11,3 @@ export interface Comment {
   createdAt: string;
   updatedAt: string;
 }
-
-export interface GetCommentResponse {
-  nextCursor: number;
-  list: Comment[];
-}
-
-export interface PostComment {
-  id: number;
-  content: string;
-}
-
-export interface PostCommentBody {
-  content: string;
-}

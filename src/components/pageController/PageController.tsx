@@ -1,30 +1,30 @@
 import clsx from "clsx";
 import Icon from "../icon";
 
-interface PaginationProps {
+interface PageControllerProps {
   page: number;
   totalPages: number;
   onPageChange: (page: number) => void;
   className?: string;
 }
 
-export default function Pagination({
+export default function PageController({
   page,
   totalPages,
   onPageChange,
   className,
-}: PaginationProps) {
+}: PageControllerProps) {
   const hasPrev = page > 1;
   const hasNext = page < totalPages;
   return (
     <div className={clsx("flex items-center justify-between", className)}>
       <div className="flex flex-1 justify-center gap-1.5">
-        {Array.from({ length: totalPages }).map((_, idx) => {
-          const isActive = idx + 1 === page;
+        {Array.from({ length: totalPages }).map((_, index) => {
+          const isActive = index + 1 === page;
           return (
             <button
-              key={idx}
-              onClick={() => onPageChange(idx + 1)}
+              key={index}
+              onClick={() => onPageChange(index + 1)}
               className={clsx(
                 "h-2 cursor-pointer rounded-full",
                 isActive ? "w-4 bg-slate-400" : "w-2 bg-slate-300"

@@ -6,12 +6,14 @@ import BestPost from "@/features/boards/BestPost";
 import PostCard from "@/features/boards/PostCard";
 import SearchBar from "@/features/boards/SearchBar";
 import { useSidebarStore } from "@/stores/sidebar-store";
-import { Article } from "@/types/boards-article";
+import { Article } from "@/types/article";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useDebounce } from "@uidotdev/usehooks";
+import { useDebounce, useIntersectionObserver } from "@uidotdev/usehooks";
 import clsx from "clsx";
 import { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+
+type ArticleOrderBy = "recent" | "like";
 
 const PAGE_SIZE = 8;
 
@@ -29,44 +31,42 @@ export default function BoardsPage() {
     options[0]
   );
 
-  const observerRef = useRef<HTMLDivElement>(null);
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useInfiniteQuery({
+      queryKey: ["articles", debounceQuery, selectedOption.value],
+      initialPageParam: 1,
+      queryFn: ({ pageParam }) =>
+        getArticle({
+          page: pageParam,
+          pageSize: PAGE_SIZE,
+          orderBy: selectedOption.value as ArticleOrderBy,
+          keyword: debounceQuery,
+        }),
+      getNextPageParam: (lastPage, allPages) => {
+        const loaded = allPages.length * PAGE_SIZE;
+        if (loaded >= lastPage.totalCount) return undefined;
+        return allPages.length + 1;
+      },
+    });
 
-  const { data, fetchNextPage, hasNextPage } = useInfiniteQuery({
-    queryKey: ["articles", debounceQuery, selectedOption.value],
-    initialPageParam: 1,
-    queryFn: ({ pageParam }) =>
-      getArticle({
-        page: pageParam,
-        pageSize: PAGE_SIZE,
-        orderBy: selectedOption.value as "recent" | "like",
-        keyword: debounceQuery,
-      }),
-    getNextPageParam: (lastPage, allPages) => {
-      const loaded = allPages.length * PAGE_SIZE;
-      if (loaded >= lastPage.totalCount) return undefined;
-      return allPages.length + 1;
-    },
+  const [observerRef, entry] = useIntersectionObserver<HTMLDivElement>({
+    threshold: 0,
+    rootMargin: "100px",
   });
 
   useEffect(() => {
-    if (!observerRef.current) return;
-    if (!hasNextPage) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          fetchNextPage();
-        }
-      },
-      { threshold: 1 }
-    );
-    observer.observe(observerRef.current);
-    return () => observer.disconnect();
-  }, [hasNextPage, fetchNextPage]);
+    if (entry?.isIntersecting && hasNextPage && !isFetchingNextPage) {
+      console.log("Fetching next page...");
+      fetchNextPage();
+    }
+  }, [entry?.isIntersecting, hasNextPage, fetchNextPage, isFetchingNextPage]);
 
   const handleChange = (value: SelectOption) => {
     setSelectedOption(value);
   };
+
+  const articles = data?.pages.flatMap((page) => page.list) ?? [];
+  const isEmpty = articles.length === 0;
 
   return (
     <>
@@ -88,15 +88,28 @@ export default function BoardsPage() {
               className="h-10 w-[94px] tablet:h-11 tablet:w-[120px]"
             />
           </div>
-          <div className="flex flex-col gap-4 desktop:grid desktop:grid-cols-2 desktop:gap-5">
-            {data?.pages
-              ?.flatMap((page) => page.list)
-              .map((post: Article) => (
-                <PostCard key={post.id} article={post} />
-              ))}
-          </div>
+          {isEmpty ? (
+            <div className="flex flex-col items-center justify-center gap-2 pt-25 text-lg-r text-text-default">
+              <span>아직 게시글이 없습니다.</span>
+              <span>자유롭게 글을 남겨주세요.</span>
+            </div>
+          ) : (
+            <>
+              <div className="flex flex-col gap-4 desktop:grid desktop:grid-cols-2 desktop:gap-5">
+                {articles.map((post: Article) => (
+                  <PostCard key={post.id} article={post} />
+                ))}
+              </div>
+              {isFetchingNextPage && (
+                <div className="mt-10 flex justify-center text-lg-r text-text-default">
+                  로딩 중...
+                </div>
+              )}
+              <div ref={observerRef} className="h-20" />
+            </>
+          )}
         </div>
-        <div ref={observerRef} className="h-10" />
+
         <div
           className={clsx(
             "fixed",
