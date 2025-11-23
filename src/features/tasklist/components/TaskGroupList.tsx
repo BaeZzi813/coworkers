@@ -2,7 +2,9 @@ import { Button } from "@/components/button";
 import Select, { SelectOption } from "@/components/select";
 import { useResponsive } from "@/hooks/use-responsive";
 import { TaskList } from "@/types/task";
+import { overlay } from "overlay-kit";
 import TaskItem from "./TaskItem";
+import TaskModal from "./TaskModal";
 
 interface Props {
   taskList: TaskList[];
@@ -18,8 +20,23 @@ export default function TaskGroupList({
   const { isDesktop } = useResponsive();
   const hasTask = taskList.length > 0;
 
+  const handlePostTask = async (name: string) => {
+    console.log(`Add TaskItem ${name}`);
+  };
+
   const handleAddTaskClick = () => {
-    console.log("Add TaskItem");
+    overlay.open(
+      ({ isOpen, close, unmount }) => (
+        <TaskModal
+          isOpen={isOpen}
+          onClose={close}
+          onExit={unmount}
+          title="할 일 목록"
+          onSubmit={handlePostTask}
+        />
+      ),
+      { overlayId: "todo-list-alert" }
+    );
   };
 
   const mobileTaskOptions: SelectOption[] = taskList.map((task) => ({
