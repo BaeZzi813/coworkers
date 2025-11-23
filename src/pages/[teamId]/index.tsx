@@ -59,6 +59,7 @@ export default serverSideComponentWithAuth<PageProps>(({ groupId }) => {
         <TeamPageHeader
           title={group.name}
           members={isDesktop ? undefined : group.members}
+          tasks={tasks}
           isAdmin={isAdmin}
         />
         <div>{isAdmin ? "You are an admin" : "You are not an admin"}</div>

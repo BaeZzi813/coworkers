@@ -2,17 +2,20 @@ import PatternImage from "@/assets/images/bg-team-pattern.png";
 import Avatar from "@/components/avatar";
 import Icon from "@/components/icon";
 import { Member } from "@/types/member";
+import { Task } from "@/types/task";
 import clsx from "clsx";
 
 interface Props {
   title: string;
   members?: Member[];
+  tasks?: Task[];
   isAdmin: boolean;
 }
 
 export default function TeamPageHeader({
   title,
   members = [],
+  tasks = [],
   isAdmin,
 }: Props) {
   const backgroundPatternStyle = isAdmin
@@ -41,10 +44,83 @@ export default function TeamPageHeader({
           </div>
           {isAdmin && <Icon name="gear" />}
         </div>
+        {isAdmin && <TasksReport tasks={tasks} />}
       </div>
     </header>
   );
 }
+
+/* Tasks Report */
+
+function progress(done: number, total: number) {
+  if (total === 0) return "0%";
+  return `${Math.round((done / total) * 100)}%`;
+}
+
+function TasksReport({ tasks }: { tasks: Task[] }) {
+  const doneTasks = tasks.filter((task) => Boolean(task.doneAt));
+  const totalCount = tasks.length;
+  const doneCount = doneTasks.length;
+
+  return (
+    <div className="mt-9">
+      <div className="flex items-center justify-between">
+        <ProgressLabel
+          title="오늘의 진행 상황"
+          progress={progress(doneCount, totalCount)}
+        />
+        <div className="flex">
+          <CountLabel title="오늘의 할 일" count={totalCount} />
+          <div className="mx-6 w-px bg-border-primary" />
+          <CountLabel title="완료 🙌" count={doneCount} highlighted />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ProgressLabel({
+  title,
+  progress,
+}: {
+  title: string;
+  progress: string;
+}) {
+  return (
+    <div className="flex flex-col">
+      <span className="text-xs-m text-state-400 tablet:text-md-m">{title}</span>
+      <span className="tablet:text-4xl-b text-3xl-b text-brand-primary">
+        {progress}
+      </span>
+    </div>
+  );
+}
+
+function CountLabel({
+  title,
+  count,
+  highlighted,
+}: {
+  title: string;
+  count: number;
+  highlighted?: boolean;
+}) {
+  return (
+    <div className="flex flex-col items-center gap-1">
+      <span className="text-xs-m text-state-400">{title}</span>
+      <span
+        className={clsx(
+          "text-2xl-b tablet:text-3xl-b",
+          highlighted ? "text-brand-primary" : "text-text-default"
+        )}
+      >
+        {count}
+      </span>
+    </div>
+  );
+}
+
+/* Members List */
 
 function avatarsWidth(numberOfMembers: number) {
   if (numberOfMembers === 1) return 24;
