@@ -1,5 +1,5 @@
 import { postRefreshToken } from "@/features/auth/apis";
-import { getUser } from "@/features/user/apis/get-user";
+import { getUser } from "@/features/user/apis";
 import { useAuthStore } from "@/stores/auth-store";
 import { isAxiosError } from "axios";
 import { useRouter } from "next/router";

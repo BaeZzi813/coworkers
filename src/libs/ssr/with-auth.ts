@@ -1,5 +1,6 @@
 import { postRefreshToken } from "@/features/auth/apis";
 import { GSSP_LOGIN_REDIRECT_RETURN } from "@/libs/ssr/gssp-return";
+import { DehydratedState } from "@tanstack/react-query";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
 import { JSX } from "react";
 import { useUpdateAccessToken } from "./use-update-access-token";
@@ -13,6 +14,7 @@ export function gsspWithAuth<Data>(
   ) =>
     | GetServerSidePropsResult<Props<Data>>
     | Promise<GetServerSidePropsResult<Props<Data>>>
+    | Promise<GetServerSidePropsResult<DehydratedState>>
 ) {
   return async (context: GetServerSidePropsContext) => {
     const refreshToken = context.req.cookies.refreshToken;
