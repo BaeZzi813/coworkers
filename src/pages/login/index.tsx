@@ -9,6 +9,7 @@ import { validateEmail, validatePassword } from "@/utils/login-validator";
 import clsx from "clsx";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { overlay } from "overlay-kit";
 import { FormEvent, useState } from "react";
 
 export default function LoginPage() {
@@ -58,7 +59,7 @@ export default function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-background-secondary">
       <div className="relative h-[720px] w-[550px] rounded-2xl bg-background-primary">
         <div className="flex flex-col items-center pt-18">
-          <h1 className="h-7 w-18 text-2xl-b text-text-primary">로그인</h1>
+          <h1 className="h-[28px] w-18 text-2xl-b text-text-primary">로그인</h1>
         </div>
 
         <form
@@ -105,13 +106,64 @@ export default function LoginPage() {
             </div>
           </div>
 
+          <div
+            className={clsx("mx-auto flex w-[460px] justify-end", marginTop)}
+          >
+            <button
+              type="button"
+              className="h-6 w-44 cursor-pointer text-right text-lg-m text-brand-primary underline hover:text-lg-s"
+              onClick={() => {
+                overlay.open(
+                  ({ isOpen, close, unmount }) => (
+                    <Alert
+                      isOpen={isOpen}
+                      onClose={close}
+                      onExit={unmount}
+                      title="비밀번호 재설정"
+                      message="비밀번호 재설정 링크를 보내드립니다."
+                      content={
+                        <InputLabel
+                          label=""
+                          type="email"
+                          placeholder="이메일을 입력하세요."
+                          size="large"
+                        />
+                      }
+                      actions={[
+                        <Button
+                          key="close"
+                          title="닫기"
+                          variant="outlinedPrimary"
+                          size="large"
+                          isFullWidth={true}
+                          onClick={close}
+                        />,
+                        <Button
+                          key="send"
+                          title="링크 보내기"
+                          variant="primary"
+                          size="large"
+                          isFullWidth={true}
+                          onClick={close}
+                        />,
+                      ]}
+                    />
+                  ),
+                  { overlayId: "password-reset-alert" }
+                );
+              }}
+            >
+              비밀번호를 잊으셨나요?
+            </button>
+          </div>
+
           <div className="mx-auto mt-10 w-[460px]">
             <Button
               title="로그인"
               variant="primary"
               size="large"
               isFullWidth={true}
-              disabled={!isFormValid} //회원가입 ui 수정하면서 코드 일관성 유지
+              disabled={!isFormValid}
               onClick={handleLoginButtonClick}
             />
             {/* 로그인시 엑세스토큰 받고 팀페이지로 이동 */}
@@ -146,44 +198,6 @@ export default function LoginPage() {
           </button>
         </div>
       </div>
-
-      {/* 모달 - 클라이언트 사이드에서만 렌더링 */}
-      {typeof window !== "undefined" && (
-        <Alert
-          isOpen={isPasswordResetModalOpen}
-          onClose={handlePasswordResetModalClose}
-          title="비밀번호 재설정"
-          message="비밀번호 재설정 링크를 보내드립니다."
-          content={
-            <InputLabel
-              label=""
-              type="email"
-              placeholder="이메일을 입력하세요."
-              size="large"
-              value={resetEmail}
-              onChange={(e) => setResetEmail(e.target.value)}
-            />
-          }
-          actions={[
-            <Button
-              key="close"
-              title="닫기"
-              variant="outlinedPrimary"
-              size="large"
-              isFullWidth={true}
-              onClick={handlePasswordResetModalClose}
-            />,
-            <Button
-              key="send"
-              title="링크 보내기"
-              variant="primary"
-              size="large"
-              isFullWidth={true}
-              onClick={handlePasswordResetModalClose}
-            />,
-          ]}
-        />
-      )}
     </div>
   );
 }
