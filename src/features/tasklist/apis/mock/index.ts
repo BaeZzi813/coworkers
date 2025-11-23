@@ -47,3 +47,24 @@ export async function getTodo(
 
   return todo ?? null;
 }
+
+export async function patchTodo(
+  taskId: number,
+  todoId: number,
+  body: { done: boolean }
+): Promise<Task> {
+  const list = (taskListMock as TaskList[]).find((task) => task.id === taskId);
+  if (!list) throw new Error("TaskList not found");
+
+  const todo = list.tasks?.find((todo) => todo.id === todoId);
+  if (!todo) throw new Error("Todo not found");
+
+  const now = new Date().toISOString();
+  const updatedTodo: Task = {
+    ...todo,
+    doneAt: body.done ? now : null,
+  };
+
+  Object.assign(todo, updatedTodo);
+  return updatedTodo;
+}
