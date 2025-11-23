@@ -76,7 +76,6 @@ function TasksReport({
   const totalCount = tasks.length;
   const doneCount = tasks.filter((task) => Boolean(task.doneAt)).length;
   const progress = calculateProgress(doneCount, totalCount);
-  console.log(progress);
 
   return (
     <div className="mt-9 flex flex-col gap-4">
