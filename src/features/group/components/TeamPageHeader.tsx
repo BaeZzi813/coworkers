@@ -141,7 +141,7 @@ function ProgressBar({ progress }: { progress: number }) {
   const Pattern = ({ key }: Attributes) => (
     <div
       key={key}
-      className="h-40 -translate-y-2/4 rotate-45 border-l-40 border-[#EBEFF5]"
+      className="h-40 -translate-y-2/4 rotate-45 border-l-20 border-[#EBEFF5] tablet:border-l-40"
     />
   );
 
