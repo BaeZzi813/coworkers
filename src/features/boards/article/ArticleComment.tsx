@@ -1,5 +1,4 @@
-import AvatarMD from "@/assets/images/avatar-placeholder-md.svg";
-import AvatarSM from "@/assets/images/avatar-placeholder-sm.svg";
+import Avatar from "@/components/avatar";
 import { Button } from "@/components/button";
 import Dropdown from "@/components/dropdown";
 import Icon from "@/components/icon";
@@ -9,7 +8,6 @@ import { useResponsive } from "@/hooks/use-responsive";
 import { Comment } from "@/types/ArticleComment";
 import { formatDate } from "@/utils/format-date";
 import { UseMutationResult } from "@tanstack/react-query";
-import Image from "next/image";
 import { overlay } from "overlay-kit";
 import { useEffect, useRef, useState } from "react";
 
@@ -47,12 +45,6 @@ export default function ArticleComment({
   const [editCommentId, setEditCommentId] = useState<number | null>(null);
   const [editContent, setEditContent] = useState("");
   const editInputRef = useRef<HTMLInputElement>(null);
-
-  const handleSubmitComment = () => {
-    if (commentContent.trim() === "") return;
-    postCommentMutation.mutate({ id, content: commentContent });
-    setCommentContent("");
-  };
 
   const commentDropdownOptions = (item: Comment) => [
     {
@@ -104,6 +96,20 @@ export default function ArticleComment({
     );
   };
 
+  const handleSubmitComment = () => {
+    if (commentContent.trim() === "") return;
+    postCommentMutation.mutate({ id, content: commentContent });
+    setCommentContent("");
+  };
+
+  const handleSubmitCommentKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    if (e.key === "Enter") {
+      handleSubmitComment();
+    }
+  };
+
   const handleEditComment = (commentId: number, content: string) => {
     patchCommentMutation.mutate(
       { commentId, content },
@@ -113,6 +119,15 @@ export default function ArticleComment({
         },
       }
     );
+  };
+
+  const handleEditCommentKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    commentId: number
+  ) => {
+    if (e.key === "Enter" && editContent.trim() !== "") {
+      handleEditComment(commentId, editContent);
+    }
   };
 
   const handleDeleteComment = (commentId: number) => {
@@ -135,20 +150,7 @@ export default function ArticleComment({
           </span>
         </div>
         <div className="flex items-center gap-2">
-          <div>
-            {userImage ? (
-              <Image
-                src={userImage}
-                alt="유저 이미지"
-                width={isMobile ? 24 : 32}
-                height={isMobile ? 24 : 32}
-              />
-            ) : isMobile ? (
-              <AvatarSM className="h-6 w-6" />
-            ) : (
-              <AvatarMD className="h-8 w-8" />
-            )}
-          </div>
+          <Avatar source={userImage} size={isMobile ? "small" : "medium"} />
           <div className="flex h-12 flex-1 items-center justify-between border-t border-b border-border-primary">
             <input
               type="text"
@@ -156,9 +158,7 @@ export default function ArticleComment({
               onChange={(e) => setCommentContent(e.target.value)}
               placeholder="댓글을 달아주세요"
               onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  handleSubmitComment();
-                }
+                handleSubmitCommentKeyDown(e);
               }}
               className="w-52 text-text-default placeholder:text-xs-r focus:outline-none tablet:w-[420px] desktop:w-[660px]"
             />
@@ -184,18 +184,10 @@ export default function ArticleComment({
             >
               <div className="flex h-[54px] gap-2">
                 <div className="relative h-6 w-6 tablet:h-8 tablet:w-8">
-                  {item.writer.image ? (
-                    <Image
-                      src={item.writer.image}
-                      alt="댓글작성자 이미지"
-                      fill
-                      className="rounded-md"
-                    />
-                  ) : isMobile ? (
-                    <AvatarSM className="h-6 w-6" />
-                  ) : (
-                    <AvatarMD className="h-8 w-8" />
-                  )}
+                  <Avatar
+                    source={item.writer.image}
+                    size={isMobile ? "small" : "medium"}
+                  />
                 </div>
                 <div className="flex w-full flex-col gap-1">
                   <div className="flex justify-between">
@@ -220,9 +212,7 @@ export default function ArticleComment({
                         value={editContent}
                         onChange={(e) => setEditContent(e.target.value)}
                         onKeyDown={(e) => {
-                          if (e.key === "Enter" && editContent.trim() !== "") {
-                            handleEditComment(item.id, editContent);
-                          }
+                          handleEditCommentKeyDown(e, item.id);
                         }}
                         className="w-full rounded-sm pl-1 text-xs-r text-text-primary focus:outline-1 tablet:text-md-r"
                       />

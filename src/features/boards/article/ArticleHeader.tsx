@@ -1,30 +1,28 @@
-import AvatarSM from "@/assets/images/avatar-placeholder-sm.svg";
+import Avatar from "@/components/avatar";
 import { Button } from "@/components/button";
 import Dropdown from "@/components/dropdown";
 import Icon from "@/components/icon";
 import { Alert } from "@/components/modal";
 import { Article } from "@/types/article";
 import { formatDate } from "@/utils/format-date";
-import { useMutation } from "@tanstack/react-query";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import { overlay } from "overlay-kit";
+import { useDeleteArticleMutation } from "../hooks/mutation";
 
 interface ArticleHeaderProps {
-  article?: Article;
+  article: Article;
   currentUserId?: number;
   userImage?: string;
-  deleteArticleMutation?: ReturnType<typeof useMutation<void, Error, number>>;
 }
 
 export default function ArticleHeader({
   userImage,
   currentUserId,
   article,
-  deleteArticleMutation,
 }: ArticleHeaderProps) {
   const router = useRouter();
   const { id } = router.query;
+  const { deleteArticleMutation } = useDeleteArticleMutation(Number(id));
 
   const articleDropdownOptions = [
     {
@@ -35,9 +33,7 @@ export default function ArticleHeader({
     {
       label: "삭제하기",
       value: "delete",
-      action: () => {
-        alertDeleteArticle();
-      },
+      action: () => alertDeleteArticle(),
     },
   ];
 
@@ -95,13 +91,7 @@ export default function ArticleHeader({
         )}
       </div>
       <div className="flex h-9 items-center gap-2">
-        <div>
-          {userImage ? (
-            <Image src={userImage} alt="유저 이미지" width={24} height={24} />
-          ) : (
-            <AvatarSM className="h-6 w-6" />
-          )}
-        </div>
+        <Avatar size="small" source={userImage} />
         <div>
           <span className="text-xs-m text-text-primary tablet:text-md-m">
             {article?.writer.nickname}

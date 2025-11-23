@@ -1,5 +1,4 @@
 import {
-  deleteArticleById,
   deleteCommentById,
   deleteLikeById,
   getArticleById,
@@ -23,7 +22,7 @@ export default function ArticlePage() {
   const { id } = router.query;
   const queryClient = useQueryClient();
 
-  const { data: article } = useQuery({
+  const { data: article, isLoading } = useQuery({
     queryKey: ["article", id],
     queryFn: () => getArticleById(Number(id)),
     enabled: !!id,
@@ -33,19 +32,6 @@ export default function ArticlePage() {
     queryKey: ["comment", id],
     queryFn: () => getCommentById(Number(id)),
     enabled: !!id,
-  });
-
-  console.log(comments);
-
-  const deleteArticleMutation = useMutation({
-    mutationFn: (id: number) => deleteArticleById(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["articles"] });
-      router.push("/boards");
-    },
-    onError: (error) => {
-      console.log("삭제 실패:", error);
-    },
   });
 
   const postCommentMutation = useMutation({
@@ -132,6 +118,7 @@ export default function ArticlePage() {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["article", id] });
+      queryClient.invalidateQueries({ queryKey: ["articles"] });
     },
   });
 
@@ -147,36 +134,49 @@ export default function ArticlePage() {
   const userImage = user?.image;
   const userId = user?.id;
 
-  return (
-    <>
-      <section className="min-h-screen w-full bg-background-secondary py-5 tablet:py-[68px]">
-        <div className="relative mx-auto w-[343px] rounded-[20px] bg-background-primary tablet:w-[620px] desktop:w-[900px]">
-          <div className="mx-auto w-[300px] pt-10 pb-10 tablet:w-[540px] tablet:pt-[54px] tablet:pb-[54px] desktop:w-[780px]">
-            <ArticleHeader
-              currentUserId={userId}
-              article={article}
-              userImage={userImage}
-              deleteArticleMutation={deleteArticleMutation}
-            />
-            <ArticleContent article={article} />
-            <ArticleLikeButton
-              likeCount={article?.likeCount}
-              isLiked={article?.isLiked || false}
-              handleToggleLike={handleToggleLike}
-            />
-            <ArticleComment
-              id={Number(id)}
-              commentCount={article?.commentCount}
-              currentUserId={userId}
-              comment={comments?.list ?? []}
-              userImage={userImage}
-              postCommentMutation={postCommentMutation}
-              patchCommentMutation={patchCommentMutation}
-              deleteCommentMutation={deleteCommentMutation}
-            />
-          </div>
-        </div>
+  if (isLoading) {
+    return (
+      <section className="flex min-h-screen items-center justify-center">
+        <div>Loading...</div>;
       </section>
-    </>
+    );
+  }
+
+  if (!article) {
+    return (
+      <section className="flex min-h-screen items-center justify-center">
+        <div>존재하지 않는 게시글입니다.</div>;
+      </section>
+    );
+  }
+
+  return (
+    <section className="min-h-screen w-full bg-background-secondary py-5 tablet:py-[68px]">
+      <div className="relative mx-auto w-[343px] rounded-[20px] bg-background-primary tablet:w-[620px] desktop:w-[900px]">
+        <div className="mx-auto w-[300px] pt-10 pb-10 tablet:w-[540px] tablet:pt-[54px] tablet:pb-[54px] desktop:w-[780px]">
+          <ArticleHeader
+            currentUserId={userId}
+            article={article}
+            userImage={userImage}
+          />
+          <ArticleContent article={article} />
+          <ArticleLikeButton
+            likeCount={article?.likeCount}
+            isLiked={article?.isLiked || false}
+            onToggle={handleToggleLike}
+          />
+          <ArticleComment
+            id={Number(id)}
+            commentCount={article?.commentCount}
+            currentUserId={userId}
+            comment={comments?.list ?? []}
+            userImage={userImage}
+            postCommentMutation={postCommentMutation}
+            patchCommentMutation={patchCommentMutation}
+            deleteCommentMutation={deleteCommentMutation}
+          />
+        </div>
+      </div>
+    </section>
   );
 }
