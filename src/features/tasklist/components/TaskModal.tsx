@@ -1,13 +1,16 @@
+// TaskModal.tsx
 import { Button } from "@/components/button";
 import { Input } from "@/components/input";
 import { Alert } from "@/components/modal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface TaskModalProps {
   isOpen: boolean;
   onClose: () => void;
   onExit: () => void;
   title: string;
+  defaultValue?: string;
+  confirmLabel?: string;
   onSubmit: (name: string) => Promise<void>;
 }
 
@@ -16,17 +19,22 @@ export default function TaskModal({
   onClose,
   onExit,
   title,
+  defaultValue = "",
+  confirmLabel = "만들기",
   onSubmit,
 }: TaskModalProps) {
-  const [name, setName] = useState("");
+  const [name, setName] = useState(defaultValue);
+
+  useEffect(() => {
+    setName(defaultValue);
+  }, [defaultValue]);
 
   const trimmed = name.trim();
   const isInvalid = trimmed.length === 0;
 
   const handleSubmit = async () => {
-    if (name.trim().length === 0) return;
-
-    await onSubmit(name.trim());
+    if (isInvalid) return;
+    await onSubmit(trimmed);
     onClose();
   };
 
@@ -45,8 +53,8 @@ export default function TaskModal({
       }
       actions={[
         <Button
-          key="create-todo"
-          title="만들기"
+          key="submit"
+          title={confirmLabel}
           onClick={handleSubmit}
           disabled={isInvalid}
         />,

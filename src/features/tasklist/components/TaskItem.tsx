@@ -8,10 +8,18 @@ import clsx from "clsx";
 interface TaskItemProps {
   title: string;
   tasks: Task[];
-  onClick: () => void;
+  onClick?: () => void;
+  onEdit?: () => void;
+  onDelete?: () => void;
 }
 
-export default function TaskItem({ title, tasks, onClick }: TaskItemProps) {
+export default function TaskItem({
+  title,
+  tasks,
+  onClick,
+  onEdit,
+  onDelete,
+}: TaskItemProps) {
   const { isDesktop } = useResponsive();
 
   const hasTask = tasks.length > 0;
@@ -19,8 +27,8 @@ export default function TaskItem({ title, tasks, onClick }: TaskItemProps) {
   const doneCount = tasks.filter((task) => task.doneAt).length;
 
   const options: DropdownOption[] = [
-    { label: "수정하기", value: "edit", action: () => {} },
-    { label: "삭제하기", value: "delete", action: () => {} },
+    { label: "수정하기", value: "edit", action: onEdit },
+    { label: "삭제하기", value: "delete", action: onDelete },
   ];
 
   return (
