@@ -1,3 +1,4 @@
+import { DehydratedState } from "@tanstack/react-query";
 import { GetServerSidePropsResult } from "next";
 
 export const GSSP_LOGIN_REDIRECT_RETURN = {
@@ -8,11 +9,22 @@ export const GSSP_NOT_FOUND_RETURN = {
   notFound: true,
 } as const;
 
-export function gsspPropsWithTokenReturn<Props>(
-  props: Props,
-  accessToken: string
-): GetServerSidePropsResult<Props & { accessToken: string }> {
+interface GSSPPropsWithTokenReturnProps<Props> {
+  props?: Props;
+  accessToken: string;
+  dehydratedState: DehydratedState;
+}
+
+type GSSPPropsWithTokenReturnResult<Props> = GetServerSidePropsResult<
+  Props & { accessToken: string }
+>;
+
+export function gsspPropsWithTokenReturn<Props>({
+  props = {} as Props,
+  accessToken,
+  dehydratedState,
+}: GSSPPropsWithTokenReturnProps<Props>): GSSPPropsWithTokenReturnResult<Props> {
   return {
-    props: { ...props, accessToken },
+    props: { ...props, accessToken, dehydratedState },
   } as const;
 }
