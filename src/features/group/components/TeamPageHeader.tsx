@@ -119,6 +119,7 @@ function SettingsButton({ group }: { group: Group }) {
   return (
     <EditDropdown
       anchor={<Icon name="gear" />}
+      gap={20}
       alignment={isDesktop ? "left" : "right"}
       alignmentOffset={isDesktop ? -18 : -10}
       onEdit={handleEdit}

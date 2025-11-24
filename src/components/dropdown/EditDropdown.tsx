@@ -3,14 +3,16 @@ import Dropdown, { Alignment, DropdownOption } from ".";
 
 interface Props {
   anchor: ReactNode;
-  alignment: Alignment;
-  alignmentOffset: number;
+  gap?: number;
+  alignment?: Alignment;
+  alignmentOffset?: number;
   onEdit?: () => void;
   onDelete?: () => void;
 }
 
 export default function EditDropdown({
   anchor,
+  gap,
   alignment,
   alignmentOffset,
   onEdit,
@@ -25,7 +27,7 @@ export default function EditDropdown({
       anchor={anchor}
       options={options}
       width={120}
-      gap={20}
+      gap={gap}
       alignment={alignment}
       alignmentOffset={alignmentOffset}
     />
