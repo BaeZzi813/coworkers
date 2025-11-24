@@ -17,10 +17,10 @@ interface Params {
 }
 
 export function useGroupQuery({ groupId }: Params) {
-  const { data } = useQuery({
+  const { data, isFetching } = useQuery({
     queryKey: groupsQueryKey({ groupId }),
     queryFn: () => getGroup({ groupId }),
   });
 
-  return { group: data };
+  return { group: data, isFetching };
 }

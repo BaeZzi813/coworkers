@@ -1,28 +1,24 @@
 import DoneBadge from "@/components/badge/DoneBadge";
 import EditDropdown from "@/components/dropdown/EditDropdown";
 import Icon from "@/components/icon";
+import { useTaskMutation } from "@/features/task/query";
 import { isTaskDone } from "@/features/task/utils";
 import { useResponsive } from "@/hooks/use-responsive";
 import { Task, TaskList } from "@/types/task";
 import { isEmpty } from "@/utils/array-sugar";
-import { Attributes } from "react";
+import { Attributes, useContext } from "react";
+import { groupsQueryKey } from "../query/query-key";
+import { TeamContext } from "./TeamProvider";
 
-export default function TeamPageTaskListCard({
-  key,
-  taskList,
-  done,
-}: {
+interface Props extends Attributes {
   taskList: TaskList;
   done: boolean;
-} & Attributes) {
+}
+
+export default function TeamPageTaskListCard({ key, taskList, done }: Props) {
   const { isDesktop } = useResponsive();
   const tasks = taskList.tasks;
   const doneTasks = tasks.filter(isTaskDone);
-
-  const handleTaskToggle = (task: Task) => {
-    // TODO: Toggle done
-    console.log("Toggle done for task:", task);
-  };
 
   const handleEditClick = () => {
     // TODO: Edit task list
@@ -65,11 +61,7 @@ export default function TeamPageTaskListCard({
       {done || isEmpty(tasks) || (
         <div className="flex flex-col gap-2">
           {taskList.tasks.map((task) => (
-            <TaskCheckbox
-              key={task.id}
-              task={task}
-              onToggle={() => handleTaskToggle(task)}
-            />
+            <TaskCheckbox key={task.id} taskList={taskList} task={task} />
           ))}
         </div>
       )}
@@ -77,14 +69,34 @@ export default function TeamPageTaskListCard({
   );
 }
 
-function TaskCheckbox({
-  key,
-  task,
-  onToggle,
-}: { task: Task; onToggle: () => void } & Attributes) {
+interface TaskCheckboxProps extends Attributes {
+  taskList: TaskList;
+  task: Task;
+}
+
+function TaskCheckbox({ key, taskList, task }: TaskCheckboxProps) {
+  const groupId = useContext(TeamContext)!.group.id;
+  const { patchMutation } = useTaskMutation({
+    groupId,
+    taskListId: taskList.id,
+  });
+
+  const handleToggle = () => {
+    patchMutation.mutate(
+      { taskId: task.id, done: !isTaskDone(task) },
+      {
+        onSuccess: (data, variables, onMutationResult, context) => {
+          context.client.invalidateQueries({
+            queryKey: groupsQueryKey({ groupId }),
+          });
+        },
+      }
+    );
+  };
+
   return (
     <div key={key} className="flex items-center gap-2">
-      <button className="shrink-0 cursor-pointer" onClick={onToggle}>
+      <button className="shrink-0 cursor-pointer" onClick={handleToggle}>
         <Icon
           name={isTaskDone(task) ? "checkboxCheck" : "checkbox"}
           color={isTaskDone(task) ? undefined : "white"}
