@@ -51,7 +51,7 @@ export default serverSideComponentWithAuth<PageProps>(({ groupId }) => {
     <div className="h-full bg-background-secondary">
       <div
         className={clsx(
-          "w-full max-w-5xl",
+          "w-full max-w-7xl",
           "tablet:px-6 tablet:pt-18",
           "desktop:px-21 desktop:pt-30"
         )}
