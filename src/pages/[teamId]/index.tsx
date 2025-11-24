@@ -1,4 +1,5 @@
 import TeamPageHeader from "@/features/group/components/TeamPageHeader";
+import TeamPageTasksBoard from "@/features/group/components/TeamPageTasksBoard";
 import { prefetchGroup, useGroupQuery } from "@/features/group/query";
 import { prefetchUser, useUserQuery } from "@/features/user/query";
 import { useResponsive } from "@/hooks/use-responsive";
@@ -63,19 +64,23 @@ export default serverSideComponentWithAuth<PageProps>(({ groupId }) => {
           tasks={tasks}
           isAdmin={isAdmin}
         />
-        <div>{isAdmin ? "You are an admin" : "You are not an admin"}</div>
-        <div>Group Name : {group.name}</div>
-        <div>
-          <div>Members</div>
-          {group.members.map((member) => member.userName)}
-        </div>
-        <div>
-          <div>Task Lists</div>
-          {group.taskLists.map((taskList) => taskList.name)}
-        </div>
-        <div>
-          <div>Tasks</div>
-          {tasks.map((task) => task.name)}
+        {isDesktop && isAdmin && (
+          <div className="mt-9 border-t border-border-primary" />
+        )}
+        <div
+          className={clsx(
+            "flex gap-8",
+            isAdmin
+              ? "mt-[34px] tablet:mt-[43px] desktop:mt-7"
+              : "mt-6 tablet:mt-[34px] desktop:mt-11"
+          )}
+        >
+          <TeamPageTasksBoard className="grow" taskLists={group.taskLists} />
+          {isDesktop && (
+            <div className="w-60 shrink-0 bg-background-primary">
+              Members List Placeholder
+            </div>
+          )}
         </div>
       </div>
     </div>
