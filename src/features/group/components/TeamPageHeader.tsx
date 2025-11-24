@@ -19,20 +19,21 @@ export default function TeamPageHeader({
   tasks = [],
   isAdmin,
 }: Props) {
-  const { isDesktop } = useResponsive();
-  const backgroundPatternStyle = isAdmin
-    ? undefined
-    : {
-        background: `url(${PatternImage.src})`,
-        backgroundRepeat: "no-repeat",
-        backgroundPosition: "center right 68px",
-      };
+  const { isDesktop, isMobile } = useResponsive();
+  const backgroundPatternStyle =
+    isAdmin || isMobile
+      ? undefined
+      : {
+          background: `url(${PatternImage.src})`,
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center right 68px",
+        };
 
   return (
     <header
       className={clsx(
         "overflow-hidden bg-background-primary tablet:rounded-[20px] tablet:shadow-card",
-        isAdmin || "rounded-xl border border-border-primary"
+        isAdmin || isMobile || "rounded-xl border border-border-primary"
       )}
     >
       <div
