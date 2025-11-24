@@ -11,7 +11,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
 export default function TaskListPage() {
-  const { isDesktop } = useResponsive();
+  const { isDesktop, isMobile } = useResponsive();
   const { setFold } = useSidebarStore();
 
   useEffect(() => {
@@ -122,7 +122,7 @@ export default function TaskListPage() {
               transition: { duration: 0.2, ease: "easeIn" },
             }}
             className="fixed top-[52px] right-0 h-[calc(100dvh-52px)] bg-background-primary shadow-2xl tablet:top-0 tablet:h-full"
-            style={{ width: isDesktop ? panelWidth : "100%" }}
+            style={{ width: isMobile ? "100%" : panelWidth }}
           >
             {isDesktop && (
               <div
