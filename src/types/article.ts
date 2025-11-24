@@ -10,4 +10,7 @@ export interface Article {
   };
   createdAt: string;
   updatedAt: string;
+  commentCount?: number;
+  comment?: Comment[];
+  isLiked?: boolean;
 }
