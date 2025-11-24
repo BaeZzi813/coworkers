@@ -22,7 +22,7 @@ export default function LoginPage() {
   const login = useAuthStore((state) => state.logIn);
   const router = useRouter();
 
-  const validateForm = () => {
+  const validateTotalForm = () => {
     const emailResult = validateEmail(email);
     const passwordResult = validatePassword(password);
 
@@ -35,7 +35,7 @@ export default function LoginPage() {
     };
   };
 
-  const validateField = (field: "email" | "password") => {
+  const validateBlurField = (field: "email" | "password") => {
     if (field === "email") {
       const emailResult = validateEmail(email);
       setEmailError(emailResult.valid ? undefined : emailResult.reason);
@@ -48,11 +48,11 @@ export default function LoginPage() {
   };
 
   const handleEmailBlur = () => {
-    validateField("email");
+    validateBlurField("email");
   };
 
   const handlePasswordBlur = () => {
-    validateField("password");
+    validateBlurField("password");
   };
 
   const marginTop = (() => {
@@ -62,10 +62,10 @@ export default function LoginPage() {
     return "mt-3";
   })();
 
-  const isFormValid = validateForm().isValid;
+  const isFormValid = validateTotalForm().isValid;
 
   const handleLoginButtonClick = async () => {
-    const validation = validateForm();
+    const validation = validateTotalForm();
 
     setEmailError(validation.errors.emailError);
     setPasswordError(validation.errors.passwordError);
