@@ -2,7 +2,7 @@ import KakaotalkIcon from "@/assets/icons/ic-kakaotalk.svg";
 import { Button } from "@/components/button";
 import { Alert } from "@/components/modal";
 import { postSignIn } from "@/features/auth/apis";
-import InputLabel from "@/features/login/components/FormField";
+import InputLabel from "@/features/login/components/InputLabel";
 import PasswordVisible from "@/features/login/components/PasswordVisible";
 import { useAuthStore } from "@/stores/auth-store";
 import { validateEmail, validatePassword } from "@/utils/login-validator";
@@ -22,17 +22,39 @@ export default function LoginPage() {
   const login = useAuthStore((state) => state.logIn);
   const router = useRouter();
 
-  const handleEmailBlurValidate = () => {
+  const validateForm = () => {
     const emailResult = validateEmail(email);
-    setEmailError(emailResult.valid ? undefined : emailResult.reason);
-  };
-
-  const handlePasswordBlurValidate = () => {
     const passwordResult = validatePassword(password);
-    setPasswordError(passwordResult.valid ? undefined : passwordResult.reason);
+
+    return {
+      isValid: emailResult.valid && passwordResult.valid,
+      errors: {
+        emailError: emailResult.valid ? undefined : emailResult.reason,
+        passwordError: passwordResult.valid ? undefined : passwordResult.reason,
+      },
+    };
   };
 
-  //인지부하 고려, 중첩된 if문,복잡한 조건문 정리
+  const validateField = (field: "email" | "password") => {
+    if (field === "email") {
+      const emailResult = validateEmail(email);
+      setEmailError(emailResult.valid ? undefined : emailResult.reason);
+    } else if (field === "password") {
+      const passwordResult = validatePassword(password);
+      setPasswordError(
+        passwordResult.valid ? undefined : passwordResult.reason
+      );
+    }
+  };
+
+  const handleEmailBlur = () => {
+    validateField("email");
+  };
+
+  const handlePasswordBlur = () => {
+    validateField("password");
+  };
+
   const marginTop = (() => {
     if (emailError && passwordError) return "mt-12";
     if (emailError) return "mt-9";
@@ -40,19 +62,62 @@ export default function LoginPage() {
     return "mt-3";
   })();
 
-  const isFormValid =
-    validateEmail(email).valid && validatePassword(password).valid;
+  const isFormValid = validateForm().isValid;
 
   const handleLoginButtonClick = async () => {
-    const emailResult = validateEmail(email);
-    const passwordResult = validatePassword(password);
+    const validation = validateForm();
 
-    setEmailError(emailResult.valid ? undefined : emailResult.reason);
-    setPasswordError(passwordResult.valid ? undefined : passwordResult.reason);
+    setEmailError(validation.errors.emailError);
+    setPasswordError(validation.errors.passwordError);
+
+    if (!validation.isValid) {
+      return;
+    }
 
     const response = await postSignIn({ email, password });
     login({ accessToken: response.accessToken, user: response.user });
     router.push("/dashboard");
+  };
+
+  const handleForgotPasswordClick = () => {
+    overlay.open(
+      ({ isOpen, close, unmount }) => (
+        <Alert
+          isOpen={isOpen}
+          onClose={close}
+          onExit={unmount}
+          title="비밀번호 재설정"
+          message="비밀번호 재설정 링크를 보내드립니다."
+          content={
+            <InputLabel
+              label=""
+              type="email"
+              placeholder="이메일을 입력하세요."
+              size="large"
+            />
+          }
+          actions={[
+            <Button
+              key="close"
+              title="닫기"
+              variant="outlinedPrimary"
+              size="large"
+              isFullWidth={true}
+              onClick={close}
+            />,
+            <Button
+              key="send"
+              title="링크 보내기"
+              variant="primary"
+              size="large"
+              isFullWidth={true}
+              onClick={close}
+            />,
+          ]}
+        />
+      ),
+      { overlayId: "password-reset-alert" }
+    );
   };
 
   return (
@@ -63,9 +128,8 @@ export default function LoginPage() {
         </div>
 
         <form
-          //엔터 입력 -> 로그인 버튼 클릭
-          onSubmit={(e: FormEvent<HTMLFormElement>) => {
-            e.preventDefault();
+          onSubmit={(event: FormEvent<HTMLFormElement>) => {
+            event.preventDefault();
             handleLoginButtonClick();
           }}
         >
@@ -78,8 +142,8 @@ export default function LoginPage() {
                 placeholder="이메일을 입력해주세요."
                 size="large"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                onBlur={handleEmailBlurValidate}
+                onChange={(event) => setEmail(event.target.value)}
+                onBlur={handleEmailBlur}
                 errorMessage={emailError}
               />
             </div>
@@ -93,8 +157,8 @@ export default function LoginPage() {
                   placeholder="비밀번호를 입력해주세요."
                   size="large"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  onBlur={handlePasswordBlurValidate}
+                  onChange={(event) => setPassword(event.target.value)}
+                  onBlur={handlePasswordBlur}
                   errorMessage={passwordError}
                   trailing={
                     <PasswordVisible
@@ -113,46 +177,7 @@ export default function LoginPage() {
             <button
               type="button"
               className="h-6 w-44 cursor-pointer text-right text-lg-m text-brand-primary underline hover:text-lg-s"
-              onClick={() => {
-                overlay.open(
-                  ({ isOpen, close, unmount }) => (
-                    <Alert
-                      isOpen={isOpen}
-                      onClose={close}
-                      onExit={unmount}
-                      title="비밀번호 재설정"
-                      message="비밀번호 재설정 링크를 보내드립니다."
-                      content={
-                        <InputLabel
-                          label=""
-                          type="email"
-                          placeholder="이메일을 입력하세요."
-                          size="large"
-                        />
-                      }
-                      actions={[
-                        <Button
-                          key="close"
-                          title="닫기"
-                          variant="outlinedPrimary"
-                          size="large"
-                          isFullWidth={true}
-                          onClick={close}
-                        />,
-                        <Button
-                          key="send"
-                          title="링크 보내기"
-                          variant="primary"
-                          size="large"
-                          isFullWidth={true}
-                          onClick={close}
-                        />,
-                      ]}
-                    />
-                  ),
-                  { overlayId: "password-reset-alert" }
-                );
-              }}
+              onClick={handleForgotPasswordClick}
             >
               비밀번호를 잊으셨나요?
             </button>
@@ -167,7 +192,6 @@ export default function LoginPage() {
               disabled={!isFormValid}
               onClick={handleLoginButtonClick}
             />
-            {/* 로그인시 엑세스토큰 받고 팀페이지로 이동 */}
           </div>
           <div className="mx-auto mt-6 flex h-5 w-[268px] items-center justify-center gap-3">
             <span className="text-lg-m text-text-secondary">

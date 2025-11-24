@@ -16,7 +16,7 @@ export function isValidName(name: string): boolean {
 }
 
 export function validateEmail(email: string): ValidationResult {
-  const trimmed = String(email ?? "").trim();
+  const trimmed = (email ?? "").trim();
   if (trimmed.length === 0) {
     return { valid: false, reason: "이메일을 입력해주세요." };
   }
@@ -28,7 +28,7 @@ export function validateEmail(email: string): ValidationResult {
 }
 
 export function validatePassword(password: string): ValidationResult {
-  const value = String(password ?? "");
+  const value = password ?? "";
   if (value.length === 0) {
     return { valid: false, reason: "비밀번호를 입력해주세요." };
   }
@@ -43,7 +43,7 @@ export function validatePassword(password: string): ValidationResult {
 }
 
 export function validateName(name: string): ValidationResult {
-  const trimmed = String(name ?? "").trim();
+  const trimmed = (name ?? "").trim();
   if (trimmed.length === 0) {
     return { valid: false, reason: "이름을 입력해주세요." };
   }
@@ -57,7 +57,7 @@ export function validatePasswordConfirm(
   password: string,
   confirmPassword: string
 ): ValidationResult {
-  const value = String(confirmPassword ?? "");
+  const value = confirmPassword ?? "";
   if (value.length === 0) {
     return { valid: false, reason: "비밀번호를 다시 한 번 입력해주세요." };
   }
