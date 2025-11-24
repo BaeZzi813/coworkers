@@ -2,6 +2,7 @@ import DoneBadge from "@/components/badge/DoneBadge";
 import EditDropdown from "@/components/dropdown/EditDropdown";
 import Icon from "@/components/icon";
 import { isTaskDone } from "@/features/task/utils";
+import { useResponsive } from "@/hooks/use-responsive";
 import { Task, TaskList } from "@/types/task";
 import { isEmpty } from "@/utils/array-sugar";
 import { Attributes } from "react";
@@ -14,6 +15,7 @@ export default function TeamPageTaskListCard({
   taskList: TaskList;
   done: boolean;
 } & Attributes) {
+  const { isDesktop } = useResponsive();
   const tasks = taskList.tasks;
   const doneTasks = tasks.filter(isTaskDone);
 
@@ -52,7 +54,8 @@ export default function TeamPageTaskListCard({
               <Icon name="dots" size="large" color="var(--color-state-300)" />
             }
             gap={10}
-            alignment="left"
+            direction={isDesktop ? undefined : "left"}
+            alignment={isDesktop ? "left" : "bottom"}
             alignmentOffset={-6}
             onEdit={handleEditClick}
             onDelete={handleDeleteClick}

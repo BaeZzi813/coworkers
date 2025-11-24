@@ -36,7 +36,7 @@ interface PageProps {
 }
 
 export default serverSideComponentWithAuth<PageProps>(({ groupId }) => {
-  const { isDesktop } = useResponsive();
+  const { isDesktop, isMobile } = useResponsive();
   const { group } = useGroupQuery({ groupId });
   const { user } = useUserQuery();
   const adminMember = group?.members.find((member) => member.role === "ADMIN");
@@ -52,9 +52,9 @@ export default serverSideComponentWithAuth<PageProps>(({ groupId }) => {
     <div className="h-full bg-background-secondary">
       <div
         className={clsx(
-          "w-full max-w-7xl",
-          "tablet:px-6 tablet:pt-18",
-          "desktop:px-21 desktop:pt-30"
+          "h-full max-w-7xl overflow-y-scroll pb-[54px]",
+          "tablet:px-6 tablet:pt-18 tablet:pb-[74px]",
+          "desktop:px-21 desktop:pt-30 desktop:pb-20"
         )}
       >
         <TeamPageHeader
@@ -70,6 +70,7 @@ export default serverSideComponentWithAuth<PageProps>(({ groupId }) => {
         <div
           className={clsx(
             "flex gap-8",
+            isMobile && "px-4",
             isAdmin
               ? "mt-[34px] tablet:mt-[43px] desktop:mt-7"
               : "mt-6 tablet:mt-[34px] desktop:mt-11"

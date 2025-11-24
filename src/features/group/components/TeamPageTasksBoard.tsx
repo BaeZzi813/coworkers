@@ -36,14 +36,14 @@ export default function TeamPageTasksBoard({ className, taskLists }: Props) {
   );
 
   return (
-    <div className={clsx("flex flex-col gap-[30px]", className)}>
+    <div className={clsx("flex flex-col gap-4 desktop:gap-[30px]", className)}>
       <div>
         할 일 목록{" "}
         <span className="text-lg-r text-text-default">
           ({taskLists.length}개)
         </span>
       </div>
-      <div className="flex w-full gap-4">
+      <div className="flex w-full flex-col gap-8 desktop:flex-row desktop:gap-4">
         <Column title="할 일" taskLists={toDoLists} />
         <Column title="진행중" taskLists={inProgressLists} />
         <Column title="완료" taskLists={doneLists} done />
@@ -67,7 +67,7 @@ function Column({
   };
 
   return (
-    <div className="flex w-full grow flex-col gap-5">
+    <div className="flex w-full grow flex-col gap-3 desktop:gap-5">
       <div className="flex h-[38px] items-center justify-between rounded-xl bg-state-200 pr-2 pl-5">
         <span className="text-md-m text-text-primary">{title}</span>
         <button
