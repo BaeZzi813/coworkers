@@ -1,5 +1,6 @@
 import { QueryClient } from "@tanstack/react-query";
 import { getGroup, getGroups } from "../apis";
+import { groupsQueryKey } from "./query-key";
 
 interface Props {
   accessToken: string;
@@ -10,7 +11,7 @@ export async function prefetchGroups(
   { accessToken }: Props
 ) {
   await queryClient.prefetchQuery({
-    queryKey: ["groups"],
+    queryKey: groupsQueryKey(),
     queryFn: () => getGroups({ accessToken }),
   });
 }
@@ -20,7 +21,7 @@ export async function prefetchGroup(
   { groupId, accessToken }: Props & { groupId: number }
 ) {
   await queryClient.prefetchQuery({
-    queryKey: ["groups", groupId],
+    queryKey: groupsQueryKey({ groupId }),
     queryFn: () => getGroup({ groupId }, { accessToken }),
   });
 }
