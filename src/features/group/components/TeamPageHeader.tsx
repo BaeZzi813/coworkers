@@ -31,7 +31,7 @@ export default function TeamPageHeader({
   return (
     <header
       className={clsx(
-        "overflow-hidden bg-background-primary tablet:rounded-[20px]",
+        "overflow-hidden bg-background-primary tablet:rounded-[20px] tablet:shadow-card",
         isAdmin || "rounded-xl border border-border-primary"
       )}
     >
