@@ -1,6 +1,6 @@
 import { clientApiInstance } from "@/services/instance/client";
 import { Article } from "@/types/article";
-import { Comment } from "@/types/ArticleComment";
+import { ArticleComment } from "@/types/comment";
 
 interface GetArticleResponse {
   totalCount: number;
@@ -16,7 +16,7 @@ interface GetArticleParams {
 
 export interface GetCommentResponse {
   nextCursor: number;
-  list: Comment[];
+  list: ArticleComment[];
 }
 
 export interface PostComment {
@@ -62,12 +62,15 @@ export async function postCommentById(id: number, body: PostCommentBody) {
 }
 
 export async function patchCommentById(id: number, body: PostCommentBody) {
-  const res = await clientApiInstance.patch<Comment>(`comments/${id}`, body);
+  const res = await clientApiInstance.patch<ArticleComment>(
+    `comments/${id}`,
+    body
+  );
   return res.data;
 }
 
 export async function deleteCommentById(id: number) {
-  const res = await clientApiInstance.delete<Comment>(`comments/${id}`);
+  const res = await clientApiInstance.delete<ArticleComment>(`comments/${id}`);
   return res.data;
 }
 

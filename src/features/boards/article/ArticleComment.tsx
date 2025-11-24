@@ -5,15 +5,16 @@ import Icon from "@/components/icon";
 import { Alert } from "@/components/modal";
 import { PostComment } from "@/features/boards/api/index";
 import { useResponsive } from "@/hooks/use-responsive";
-import { Comment } from "@/types/ArticleComment";
+import type { ArticleComment } from "@/types/comment";
 import { formatDate } from "@/utils/format-date";
 import { UseMutationResult } from "@tanstack/react-query";
 import { overlay } from "overlay-kit";
+import type { KeyboardEvent } from "react";
 import { useEffect, useRef, useState } from "react";
 
 interface ArticleCommentProps {
   commentCount?: number;
-  comment?: Comment[];
+  comment?: ArticleComment[];
   userImage?: string;
   id: number;
   currentUserId?: number;
@@ -23,11 +24,11 @@ interface ArticleCommentProps {
     { id: number; content: string }
   >;
   patchCommentMutation: UseMutationResult<
-    Comment,
+    ArticleComment,
     Error,
     { commentId: number; content: string }
   >;
-  deleteCommentMutation: UseMutationResult<Comment, Error, number>;
+  deleteCommentMutation: UseMutationResult<ArticleComment, Error, number>;
 }
 
 export default function ArticleComment({
@@ -46,7 +47,7 @@ export default function ArticleComment({
   const [editContent, setEditContent] = useState("");
   const editInputRef = useRef<HTMLInputElement>(null);
 
-  const commentDropdownOptions = (item: Comment) => [
+  const commentDropdownOptions = (item: ArticleComment) => [
     {
       label: "수정하기",
       value: "edit",
@@ -102,9 +103,7 @@ export default function ArticleComment({
     setCommentContent("");
   };
 
-  const handleSubmitCommentKeyDown = (
-    e: React.KeyboardEvent<HTMLInputElement>
-  ) => {
+  const handleSubmitCommentKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       handleSubmitComment();
     }
@@ -122,7 +121,7 @@ export default function ArticleComment({
   };
 
   const handleEditCommentKeyDown = (
-    e: React.KeyboardEvent<HTMLInputElement>,
+    e: KeyboardEvent<HTMLInputElement>,
     commentId: number
   ) => {
     if (e.key === "Enter" && editContent.trim() !== "") {
@@ -175,7 +174,7 @@ export default function ArticleComment({
         </div>
       </div>
       {comment && comment.length > 0 ? (
-        comment.map((item: Comment) => {
+        comment.map((item: ArticleComment) => {
           const getCommentDropdownOptions = commentDropdownOptions(item);
           return (
             <div

@@ -1,13 +1,13 @@
-export interface CommentWriter {
+export interface ArticleCommentWriter {
   id: number;
   nickname: string;
   image: string;
 }
 
-export interface Comment {
+export interface ArticleComment {
   id: number;
   content: string;
-  writer: CommentWriter;
+  writer: ArticleCommentWriter;
   createdAt: string;
   updatedAt: string;
 }
