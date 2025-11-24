@@ -32,19 +32,11 @@ export default function ArticleLikeButton({
             onClick={onToggle}
             className="mr-1 inline-block cursor-pointer"
           >
-            {isMobile ? (
-              <Icon
-                name={isLiked ? "heartFill" : "heart"}
-                size="small"
-                color="white"
-              />
-            ) : (
-              <Icon
-                name={isLiked ? "heartFill" : "heart"}
-                size="large"
-                color="white"
-              />
-            )}
+            <Icon
+              name={isLiked ? "heartFill" : "heart"}
+              size={isMobile ? "small" : "large"}
+              color="white"
+            />
           </button>
           {likeCount}
         </span>
