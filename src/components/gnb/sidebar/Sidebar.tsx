@@ -2,7 +2,7 @@ import LogoFull from "@/assets/images/logo-full.svg";
 import Logo from "@/assets/images/logo.svg";
 import { Button } from "@/components/button";
 import Icon from "@/components/icon";
-import { useUserGroupsQuery } from "@/features/group/query";
+import { useUserGroupsQuery } from "@/features/user/query";
 import { useResponsive } from "@/hooks/use-responsive";
 import { useAuthStore } from "@/stores/auth-store";
 import { useSidebarStore } from "@/stores/sidebar-store";

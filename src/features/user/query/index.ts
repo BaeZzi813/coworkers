@@ -1,2 +1,2 @@
 export { prefetchUser } from "./prefetch-user";
-export { useUserQuery } from "./use-user-query";
+export { useUserGroupsQuery, useUserQuery } from "./use-user-query";

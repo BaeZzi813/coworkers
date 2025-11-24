@@ -1,7 +1,6 @@
 import { Button } from "@/components/button";
 import Icon from "@/components/icon";
 import Overlay, { OverlayProps } from "@/components/overlay";
-import { useUserGroupsQuery } from "@/features/group/query";
 import { motion } from "motion/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -9,6 +8,7 @@ import { MouseEvent, PropsWithChildren } from "react";
 import Separator from "../common/Separator";
 import SidebarMenu from "../common/SidebarMenu";
 import UserGroupList from "../common/UserGroupList";
+import { useUserGroupsQuery } from "@/features/user/query";
 
 export default function Drawer({
   isOpen,
