@@ -35,7 +35,7 @@ export default function ProfileMenu({
     {
       label: "계정 설정",
       value: "mypage",
-      action: () => console.log("Go to my page"),
+      action: () => router.push("/mypage"),
     },
     {
       label: "팀 참여",
