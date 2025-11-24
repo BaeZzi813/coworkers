@@ -1,2 +1,2 @@
-export { prefetchGroup, prefetchUserGroups } from "./prefetch-group";
-export { useGroupQuery, useUserGroupsQuery } from "./use-group-query";
+export { prefetchGroup, prefetchGroups } from "./prefetch-group";
+export { useGroupQuery, useGroupsQuery } from "./use-group-query";

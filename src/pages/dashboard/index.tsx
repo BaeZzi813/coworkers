@@ -2,28 +2,28 @@ import TeamEmptyImageLarge from "@/assets/images/team-empty-large.svg";
 import TeamEmptyImageMedium from "@/assets/images/team-empty-medium.svg";
 import TeamEmptyImageSmall from "@/assets/images/team-empty-small.svg";
 import { Button } from "@/components/button";
-import { prefetchUserGroups, useUserGroupsQuery } from "@/features/group/query";
+import { prefetchGroups, useGroupsQuery } from "@/features/group/query";
+
 import { useResponsive } from "@/hooks/use-responsive";
 import { gsspPropsWithTokenReturn } from "@/libs/ssr/gssp-return";
 import {
   gsspWithAuth,
   serverSideComponentWithAuth,
 } from "@/libs/ssr/with-auth";
-import { UserGroup } from "@/types/group";
+import { Group } from "@/types/group";
+import { Task } from "@/types/task";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
+import clsx from "clsx";
 import { useRouter } from "next/router";
-
-/**
- * SSR 환경에서 API 호출을 위해 access token을 사용하는 예시 코드
- */
+import { Attributes } from "react";
 
 interface DashboardPageData {
-  groups: UserGroup[];
+  groups: Group[];
 }
 
 export const getServerSideProps = gsspWithAuth(async (context, accessToken) => {
   const queryClient = new QueryClient();
-  await prefetchUserGroups(queryClient, { accessToken });
+  await prefetchGroups(queryClient, { accessToken });
   return gsspPropsWithTokenReturn({
     accessToken,
     dehydratedState: dehydrate(queryClient),
@@ -31,24 +31,96 @@ export const getServerSideProps = gsspWithAuth(async (context, accessToken) => {
 });
 
 export default serverSideComponentWithAuth<DashboardPageData>(() => {
-  const { userGroups } = useUserGroupsQuery();
+  const { groups, isPending } = useGroupsQuery();
 
-  if (!userGroups) {
-    return <div>Loading</div>;
-  }
-
-  if (userGroups.length === 0) {
+  if (groups?.length === 0) {
     return <EmptyPage />;
   }
 
   return (
-    <div>
-      {userGroups.map((group) => (
-        <div key={group.id}>{group.name}</div>
-      ))}
+    <div className="h-full bg-background-secondary px-6 pt-5 tablet:px-10 tablet:pt-10 desktop:px-16 desktop:pt-20">
+      {isPending || (
+        <div className="flex max-w-5xl flex-col gap-4 tablet:gap-6 desktop:gap-10">
+          <h2 className="text-xl-b text-text-primary tablet:text-2xl-b">
+            Dashboard
+          </h2>
+          {groups && <GroupList groups={groups} />}
+        </div>
+      )}
     </div>
   );
 });
+
+function GroupList({ groups }: { groups: Group[] }) {
+  return (
+    <div className="flex flex-col gap-6">
+      {groups.map((group) => {
+        const tasks = group.taskLists.flatMap((taskList) => taskList.tasks);
+        return (
+          <GroupListItem key={group.id} title={group.name} tasks={tasks} />
+        );
+      })}
+    </div>
+  );
+}
+
+function calculateProgress(done: number, total: number) {
+  if (total === 0) return 0;
+  return done / total;
+}
+
+function GroupListItem({
+  key,
+  title,
+  tasks,
+}: { title: string; tasks: Task[] } & Attributes) {
+  const totalCount = tasks.length;
+  const doneCount = tasks.filter((task) => Boolean(task.doneAt)).length;
+  const progress = calculateProgress(doneCount, totalCount);
+
+  return (
+    <div
+      key={key}
+      className="flex flex-col rounded-[20px] border border-border-primary bg-background-primary px-6 py-5"
+    >
+      <h3 className="text-lg-s tablet:text-2lg-s">{title}</h3>
+      <div className="flex self-end">
+        <Label
+          title="오늘의 진행 상황"
+          value={`${(progress * 100).toFixed(0)}%`}
+        />
+        <div className="mx-6 w-px bg-border-primary" />
+        <Label title="오늘의 할 일" value={totalCount} highlighted={false} />
+        <div className="mx-6 w-px bg-border-primary" />
+        <Label title="완료 🙌" value={doneCount} />
+      </div>
+    </div>
+  );
+}
+
+function Label({
+  title,
+  value,
+  highlighted = true,
+}: {
+  title: string;
+  value: string | number;
+  highlighted?: boolean;
+}) {
+  return (
+    <div className="flex flex-col items-center gap-1">
+      <span className="text-xs-m text-state-400">{title}</span>
+      <span
+        className={clsx(
+          "text-2xl-b tablet:text-3xl-b",
+          highlighted ? "text-brand-primary" : "text-text-default"
+        )}
+      >
+        {value}
+      </span>
+    </div>
+  );
+}
 
 function EmptyPage() {
   const { isDesktop, isTablet, isMobile } = useResponsive();

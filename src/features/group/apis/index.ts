@@ -1,13 +1,26 @@
+import { bearer } from "@/features/auth/utils/token";
 import { uploadImage } from "@/features/image/apis";
 import { apiRequest, type APIRequestOptions } from "@/services/api-request";
-import { clientApiInstance } from "@/services/instance/client";
-import { Group, UserGroup } from "@/types/group";
+import {
+  clientApiInstance,
+  clientProxyInstance,
+} from "@/services/instance/client";
+import { Group } from "@/types/group";
 
-export async function getUserGroups(options?: APIRequestOptions) {
-  return apiRequest<UserGroup[]>(async (instance) => {
-    const response = await instance.get<UserGroup[]>("/user/groups");
+interface GetGroupsOptions {
+  accessToken: string;
+}
+
+export async function getGroups({ accessToken }: GetGroupsOptions) {
+  const instance = clientProxyInstance;
+
+  try {
+    instance.defaults.headers.common.Authorization = bearer(accessToken);
+    const response = await instance.get<Group[]>("/groups");
     return response.data;
-  }, options);
+  } finally {
+    delete instance.defaults.headers.common.Authorization;
+  }
 }
 
 interface GetGroupParams {
