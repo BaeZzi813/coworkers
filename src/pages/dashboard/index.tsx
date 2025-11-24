@@ -14,6 +14,7 @@ import { Group } from "@/types/group";
 import { Task } from "@/types/task";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
 import clsx from "clsx";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { Attributes } from "react";
 
@@ -57,7 +58,9 @@ function GroupList({ groups }: { groups: Group[] }) {
       {groups.map((group) => {
         const tasks = group.taskLists.flatMap((taskList) => taskList.tasks);
         return (
-          <GroupListItem key={group.id} title={group.name} tasks={tasks} />
+          <Link href={`/${group.id}`} key={group.id}>
+            <GroupListItem title={group.name} tasks={tasks} />
+          </Link>
         );
       })}
     </div>
