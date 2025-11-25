@@ -1,5 +1,9 @@
 import Avatar from "@/components/avatar";
+import { Button } from "@/components/button";
+import { Alert } from "@/components/modal";
 import { Member } from "@/types/member";
+import { useCopyToClipboard } from "@uidotdev/usehooks";
+import { overlay } from "overlay-kit";
 
 interface Props {
   members: Member[];
@@ -36,8 +40,33 @@ export default function TeamPageMembersList({ members }: Props) {
 }
 
 function MemberListItem({ member }: { member: Member }) {
+  const [, setEmail] = useCopyToClipboard();
+
   const handleClick = () => {
-    // TODO: Profile alert
+    overlay.open(({ isOpen, close, unmount }) => {
+      const handleClick = () => {
+        setEmail(member.userEmail);
+        close();
+      };
+
+      return (
+        <Alert
+          isOpen={isOpen}
+          onClose={close}
+          onExit={unmount}
+          header={<Avatar source={member.userImage} size="large" />}
+          title={member.userName}
+          message={member.userEmail}
+          actions={[
+            <Button
+              key="member-detail-alert-action"
+              title="이메일 복사하기"
+              onClick={handleClick}
+            />,
+          ]}
+        />
+      );
+    });
   };
 
   return (
@@ -45,7 +74,7 @@ function MemberListItem({ member }: { member: Member }) {
       className="flex cursor-pointer items-center gap-3"
       onClick={handleClick}
     >
-      <Avatar source={member.userImage} />
+      <Avatar source={member.userImage} size="medium" />
       <div className="text-left">
         <div className="text-sm-s text-text-primary">{member.userName}</div>
         <div className="text-xs-r text-text-secondary">{member.userEmail}</div>
