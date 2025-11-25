@@ -56,6 +56,7 @@ export function Icon() {
       <IconComponent name="person" size="large" />
       <IconComponent name="person" size="small" />
       <IconComponent name="plus" size="large" />
+      <IconComponent name="plus" size="medium" />
       <IconComponent name="plus" size="small" />
       <IconComponent name="progressDone" size="large" />
       <IconComponent name="progressDone" size="small" />

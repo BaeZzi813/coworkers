@@ -54,6 +54,7 @@ import Person24 from "@/assets/icons/ic-person-24.svg";
 import Person40 from "@/assets/icons/ic-person-40.svg";
 import PlusIcon16 from "@/assets/icons/ic-plus-16.svg";
 import PlusIcon24 from "@/assets/icons/ic-plus-24.svg";
+import PlusIcon48 from "@/assets/icons/ic-plus-48.svg";
 import ProgressDoneIcon16 from "@/assets/icons/ic-progress-done-16.svg";
 import ProgressDoneIcon20 from "@/assets/icons/ic-progress-done-20.svg";
 import RepeatIcon12 from "@/assets/icons/ic-repeat-12.svg";
@@ -210,7 +211,8 @@ const Icons: Record<
     small: Person24,
   },
   plus: {
-    large: PlusIcon24,
+    large: PlusIcon48,
+    medium: PlusIcon24,
     small: PlusIcon16,
   },
   progressDone: {

@@ -34,7 +34,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "fastly.picsum.photos",
+        hostname: "sprint-fe-project.s3.ap-northeast-2.amazonaws.com",
       },
     ],
   },
