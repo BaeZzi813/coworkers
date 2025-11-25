@@ -1,5 +1,5 @@
 import Icon from "@/components/icon";
-import InputAlert from "@/components/modal/InputAlert";
+import { InputAlert } from "@/components/modal";
 import TeamPageHeader from "@/features/group/components/TeamPageHeader";
 import TeamPageTasksBoard from "@/features/group/components/TeamPageTasksBoard";
 import TeamProvider from "@/features/group/components/TeamProvider";
