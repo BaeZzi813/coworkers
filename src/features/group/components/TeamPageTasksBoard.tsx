@@ -65,6 +65,7 @@ export default function TeamPageTasksBoard({ className, taskLists }: Props) {
           onExit={unmount}
           title="할 일 목록"
           placeholder="목록 명을 입력해주세요."
+          submitTitle="만들기"
           onSubmit={handleSubmit}
         />
       );

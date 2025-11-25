@@ -1,7 +1,7 @@
 import DoneBadge from "@/components/badge/DoneBadge";
 import EditDropdown from "@/components/dropdown/EditDropdown";
 import Icon from "@/components/icon";
-import { DeleteAlert } from "@/components/modal";
+import { DeleteAlert, InputAlert } from "@/components/modal";
 import { useTaskMutation } from "@/features/task/query";
 import { isTaskDone } from "@/features/task/utils";
 import { useTaskListMutation } from "@/features/tasklist/query";
@@ -23,11 +23,34 @@ export default function TeamPageTaskListCard({ key, taskList, done }: Props) {
   const { isDesktop } = useResponsive();
   const tasks = taskList.tasks;
   const doneTasks = tasks.filter(isTaskDone);
-  const { deleteMutation } = useTaskListMutation();
+  const { deleteMutation, patchMutation } = useTaskListMutation();
 
   const handleEditClick = () => {
-    // TODO: Edit task list
-    console.log("Edit task list:", taskList);
+    const handleSubmit = (newName: string) => {
+      patchMutation.mutate(
+        { groupId, taskListId: taskList.id, name: newName },
+        {
+          onSuccess: (data, variables, onMutationResult, context) => {
+            context.client.invalidateQueries({
+              queryKey: groupsQueryKey({ groupId }),
+            });
+          },
+        }
+      );
+    };
+
+    return overlay.open(({ isOpen, close, unmount }) => (
+      <InputAlert
+        isOpen={isOpen}
+        onClose={close}
+        onExit={unmount}
+        title="할 일 목록 수정"
+        value={taskList.name}
+        placeholder="목록 명을 입력해주세요."
+        submitTitle="수정하기"
+        onSubmit={handleSubmit}
+      />
+    ));
   };
 
   const handleDeleteClick = () => {

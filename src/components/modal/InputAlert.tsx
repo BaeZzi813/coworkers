@@ -6,17 +6,21 @@ import Alert from "./Alert";
 
 interface Props extends OverlayProps {
   title: string;
+  value?: string;
   placeholder: string;
+  submitTitle: string;
   onSubmit: (inputValue: string) => void;
 }
 
 export default function InputAlert({
   title,
+  value,
   placeholder,
+  submitTitle,
   onSubmit,
   ...overlayProps
 }: Props) {
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState(value ?? "");
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
@@ -41,7 +45,7 @@ export default function InputAlert({
       actions={[
         <Button
           key="input-alert-submit-action"
-          title="만들기"
+          title={submitTitle}
           onClick={handleClick}
         />,
       ]}
