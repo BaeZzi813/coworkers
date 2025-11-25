@@ -47,6 +47,7 @@ export default function InputAlert({
           key="input-alert-submit-action"
           title={submitTitle}
           onClick={handleClick}
+          disabled={inputValue.trim() === ""}
         />,
       ]}
     />
