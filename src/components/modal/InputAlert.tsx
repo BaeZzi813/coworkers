@@ -1,0 +1,50 @@
+import { Button } from "@/components/button";
+import { Input } from "@/components/input";
+import { OverlayProps } from "@/components/overlay";
+import { ChangeEvent, useState } from "react";
+import Alert from "./Alert";
+
+interface Props extends OverlayProps {
+  title: string;
+  placeholder: string;
+  onSubmit: (inputValue: string) => void;
+}
+
+export default function InputAlert({
+  title,
+  placeholder,
+  onSubmit,
+  ...overlayProps
+}: Props) {
+  const [inputValue, setInputValue] = useState("");
+
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+  };
+
+  const handleClick = () => {
+    onSubmit(inputValue);
+    overlayProps.onClose();
+  };
+
+  return (
+    <Alert
+      {...overlayProps}
+      title={title}
+      content={
+        <Input
+          value={inputValue}
+          placeholder={placeholder}
+          onChange={handleInputChange}
+        />
+      }
+      actions={[
+        <Button
+          key="input-alert-submit-action"
+          title="만들기"
+          onClick={handleClick}
+        />,
+      ]}
+    />
+  );
+}
