@@ -28,7 +28,7 @@ interface PostCommentBody {
   content: string;
 }
 
-interface PostArticleBody {
+export interface PostArticleBody {
   image?: string;
   content: string;
   title: string;
@@ -99,5 +99,10 @@ export async function postImage(formData: FormData) {
   const res = await clientApiInstance.post("/images/upload", formData, {
     headers: { "Content-Type": "multipart/form-data" },
   });
+  return res.data;
+}
+
+export async function patchArticleById(id: number, body: PostArticleBody) {
+  const res = await clientApiInstance.patch(`/articles/${id}`, body);
   return res.data;
 }

@@ -1,6 +1,6 @@
 import { InputBox } from "@/components/input";
 
-export default function PostContent({ onChange }) {
+export default function PostContent({ value, onChange }) {
   return (
     <div className="flex flex-col gap-2">
       <div>
@@ -9,6 +9,7 @@ export default function PostContent({ onChange }) {
       </div>
       <InputBox
         placeholder="내용을 입력하세요"
+        value={value}
         onChange={onChange}
         height={200}
       />

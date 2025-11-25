@@ -21,6 +21,7 @@ export default function ArticlePage() {
   const router = useRouter();
   const { id } = router.query;
   const queryClient = useQueryClient();
+  const articleId = Number(id);
 
   const { data: article, isLoading } = useQuery({
     queryKey: ["article", id],

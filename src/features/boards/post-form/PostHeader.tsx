@@ -1,6 +1,6 @@
 import { Input } from "@/components/input";
 
-export default function PostHeader({ onChange }) {
+export default function PostHeader({ value, onChange }) {
   return (
     <div className="flex flex-col gap-2">
       <div>
@@ -10,6 +10,7 @@ export default function PostHeader({ onChange }) {
       <Input
         size="small"
         onChange={onChange}
+        value={value}
         placeholder="제목을 입력해주세요."
       />
     </div>
