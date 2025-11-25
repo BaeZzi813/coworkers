@@ -44,7 +44,7 @@ export default function TeamPageMembersList({ members }: Props) {
   };
 
   return (
-    <div className="w-60 rounded-xl border border-border-primary bg-background-primary px-5 py-6">
+    <div className="w-60 shrink-0 rounded-xl border border-border-primary bg-background-primary px-5 py-6">
       <header className="flex items-center justify-between">
         <div className="text-lg-m">
           <span className="text-text-primary">멤버 </span>

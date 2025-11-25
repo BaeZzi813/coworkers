@@ -1,8 +1,11 @@
+import Icon from "@/components/icon";
+import InputAlert from "@/components/modal/InputAlert";
 import TeamPageHeader from "@/features/group/components/TeamPageHeader";
-import TeamPageMembersList from "@/features/group/components/TeamPageMembersList";
 import TeamPageTasksBoard from "@/features/group/components/TeamPageTasksBoard";
 import TeamProvider from "@/features/group/components/TeamProvider";
 import { prefetchGroup, useGroupQuery } from "@/features/group/query";
+import { groupsQueryKey } from "@/features/group/query/query-key";
+import { useTaskListMutation } from "@/features/tasklist/query";
 import { prefetchUser, useUserQuery } from "@/features/user/query";
 import { useResponsive } from "@/hooks/use-responsive";
 import DimmedLayout from "@/layouts/DimmedLayout";
@@ -16,6 +19,7 @@ import {
 } from "@/libs/ssr/with-auth";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
 import clsx from "clsx";
+import { overlay } from "overlay-kit";
 
 export const getServerSideProps = gsspWithAuth(async (context, accessToken) => {
   const params = context.params;
@@ -43,6 +47,7 @@ export default serverSideComponentWithAuth<PageProps>(({ groupId }) => {
   const { group, isFetching } = useGroupQuery({ groupId });
   const { user } = useUserQuery();
   const adminMember = group?.members.find((member) => member.role === "ADMIN");
+  const { postMutation } = useTaskListMutation();
 
   if (!group || !user || !adminMember) {
     return <div>Loading</div>;
@@ -50,6 +55,35 @@ export default serverSideComponentWithAuth<PageProps>(({ groupId }) => {
 
   const isAdmin = adminMember.userId === user.id;
   const tasks = group.taskLists.flatMap((taskList) => taskList.tasks);
+
+  const handleAddClick = () => {
+    overlay.open(({ isOpen, close, unmount }) => {
+      const handleSubmit = (inputValue: string) => {
+        postMutation.mutate(
+          { groupId, name: inputValue },
+          {
+            onSuccess: (data, variables, onMutationResult, context) => {
+              context.client.invalidateQueries({
+                queryKey: groupsQueryKey({ groupId }),
+              });
+            },
+          }
+        );
+      };
+
+      return (
+        <InputAlert
+          isOpen={isOpen}
+          onClose={close}
+          onExit={unmount}
+          title="할 일 목록"
+          placeholder="목록 명을 입력해주세요."
+          submitTitle="만들기"
+          onSubmit={handleSubmit}
+        />
+      );
+    });
+  };
 
   return (
     <div className="h-full bg-background-secondary">
@@ -74,18 +108,32 @@ export default serverSideComponentWithAuth<PageProps>(({ groupId }) => {
             )}
             <div
               className={clsx(
-                "flex items-start gap-8",
+                "flex flex-col gap-4 desktop:gap-[30px]",
                 isMobile && "px-4",
                 isAdmin
                   ? "mt-[34px] tablet:mt-[43px] desktop:mt-7"
                   : "mt-6 tablet:mt-[34px] desktop:mt-11"
               )}
             >
-              <TeamPageTasksBoard
-                className="grow"
-                taskLists={group.taskLists}
-              />
-              {isDesktop && <TeamPageMembersList members={group.members} />}
+              <div className="flex items-center gap-2">
+                <div>
+                  할 일 목록{" "}
+                  <span className="text-lg-r text-text-default">
+                    ({group.taskLists.length}개)
+                  </span>
+                </div>
+                <button
+                  className="cursor-pointer rounded-lg border border-state-300 bg-background-primary p-1"
+                  onClick={handleAddClick}
+                >
+                  <Icon
+                    name="plus"
+                    size="small"
+                    color="var(--color-state-400)"
+                  />
+                </button>
+              </div>
+              <TeamPageTasksBoard taskLists={group.taskLists} />
             </div>
           </div>
         </TeamProvider>

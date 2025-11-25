@@ -1,25 +1,20 @@
-import Icon from "@/components/icon";
-import { InputAlert } from "@/components/modal";
-import { useTaskListMutation } from "@/features/tasklist/query";
 import { isTaskListDone } from "@/features/tasklist/utils";
+import { useResponsive } from "@/hooks/use-responsive";
 import { TaskList } from "@/types/task";
-import { clsx } from "clsx";
-import { overlay } from "overlay-kit";
 import { useContext } from "react";
-import { groupsQueryKey } from "../query/query-key";
+import TeamPageMembersList from "./TeamPageMembersList";
 import TeamPageTaskListCard from "./TeamPageTaskListCard";
 import { TeamContext } from "./TeamProvider";
 
 interface Props {
-  className?: string;
   taskLists: TaskList[];
 }
 
-export default function TeamPageTasksBoard({ className, taskLists }: Props) {
-  const groupId = useContext(TeamContext)!.group.id;
+export default function TeamPageTasksBoard({ taskLists }: Props) {
+  const group = useContext(TeamContext)!.group;
+  const { isDesktop } = useResponsive();
   const doneLists = taskLists.filter(isTaskListDone);
   const doneIds = doneLists.map((taskList) => taskList.id);
-  const { postMutation } = useTaskListMutation();
 
   const now = new Date();
   const inProgressLists = taskLists.filter((taskList) => {
@@ -43,56 +38,14 @@ export default function TeamPageTasksBoard({ className, taskLists }: Props) {
     (taskList) => ![...doneIds, ...inProgressIds].includes(taskList.id)
   );
 
-  const handleAddClick = () => {
-    overlay.open(({ isOpen, close, unmount }) => {
-      const handleSubmit = (inputValue: string) => {
-        postMutation.mutate(
-          { groupId, name: inputValue },
-          {
-            onSuccess: (data, variables, onMutationResult, context) => {
-              context.client.invalidateQueries({
-                queryKey: groupsQueryKey({ groupId }),
-              });
-            },
-          }
-        );
-      };
-
-      return (
-        <InputAlert
-          isOpen={isOpen}
-          onClose={close}
-          onExit={unmount}
-          title="할 일 목록"
-          placeholder="목록 명을 입력해주세요."
-          submitTitle="만들기"
-          onSubmit={handleSubmit}
-        />
-      );
-    });
-  };
-
   return (
-    <div className={clsx("flex flex-col gap-4 desktop:gap-[30px]", className)}>
-      <div className="flex items-center gap-2">
-        <div>
-          할 일 목록{" "}
-          <span className="text-lg-r text-text-default">
-            ({taskLists.length}개)
-          </span>
-        </div>
-        <button
-          className="cursor-pointer rounded-lg border border-state-300 bg-background-primary p-1"
-          onClick={handleAddClick}
-        >
-          <Icon name="plus" size="small" color="var(--color-state-400)" />
-        </button>
-      </div>
-      <div className="flex w-full flex-col gap-8 desktop:flex-row desktop:gap-4">
+    <div className="flex items-start gap-8">
+      <div className="flex w-full grow flex-col gap-8 desktop:flex-row desktop:gap-4">
         <Column title="할 일" taskLists={toDoLists} />
         <Column title="진행중" taskLists={inProgressLists} />
         <Column title="완료" taskLists={doneLists} done />
       </div>
+      {isDesktop && <TeamPageMembersList members={group.members} />}
     </div>
   );
 }
