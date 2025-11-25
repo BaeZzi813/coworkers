@@ -3,7 +3,7 @@ import { postArticle, postImage } from "@/features/boards/api";
 import PostContent from "@/features/boards/post-form/PostContent";
 import PostHeader from "@/features/boards/post-form/PostHeader";
 import PostImage from "@/features/boards/post-form/PostImage";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { ChangeEvent, useState } from "react";
 
@@ -13,6 +13,7 @@ export default function New() {
   const [content, setContent] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
@@ -52,7 +53,10 @@ export default function New() {
 
   const postArticleMutation = useMutation({
     mutationFn: postArticle,
-    onSuccess: () => router.push("/boards"),
+    onSuccess: () => {
+      router.push("/boards");
+      queryClient.invalidateQueries({ queryKey: ["articles"] });
+    },
   });
 
   const handleSubmit = async () => {
