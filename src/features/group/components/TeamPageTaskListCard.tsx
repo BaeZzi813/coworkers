@@ -1,7 +1,7 @@
 import DoneBadge from "@/components/badge/DoneBadge";
 import EditDropdown from "@/components/dropdown/EditDropdown";
 import Icon from "@/components/icon";
-import DeleteAlert from "@/components/modal/DeleteAlert";
+import { DeleteAlert } from "@/components/modal";
 import { useTaskMutation } from "@/features/task/query";
 import { isTaskDone } from "@/features/task/utils";
 import { useTaskListMutation } from "@/features/tasklist/query";

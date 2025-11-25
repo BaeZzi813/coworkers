@@ -1,5 +1,5 @@
 import Icon from "@/components/icon";
-import InputAlert from "@/components/modal/InputAlert";
+import { InputAlert } from "@/components/modal";
 import { useTaskListMutation } from "@/features/tasklist/query";
 import { isTaskListDone } from "@/features/tasklist/utils";
 import { TaskList } from "@/types/task";
