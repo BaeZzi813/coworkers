@@ -1,10 +1,14 @@
 import { useMutation } from "@tanstack/react-query";
-import { deleteTaskList } from "../apis";
+import { deleteTaskList, postTaskList } from "../apis";
 
 export function useTaskListMutation() {
+  const postMutation = useMutation({
+    mutationFn: postTaskList,
+  });
+
   const deleteMutation = useMutation({
     mutationFn: deleteTaskList,
   });
 
-  return { deleteMutation };
+  return { postMutation, deleteMutation };
 }

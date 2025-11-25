@@ -1,5 +1,18 @@
 import { clientApiInstance } from "@/services/instance/client";
 
+export interface PostTaskListParams {
+  groupId: number;
+  name: string;
+}
+
+export async function postTaskList({ groupId, name }: PostTaskListParams) {
+  const response = await clientApiInstance.post(
+    `/groups/${groupId}/task-lists`,
+    { name }
+  );
+  return response.data;
+}
+
 export interface DeleteTaskListParams {
   groupId: number;
   taskListId: number;
