@@ -103,3 +103,22 @@ export async function getInvitationLink({ groupId }: GetInvitationLinkParams) {
   );
   return response.data;
 }
+
+interface PostInvitationParams {
+  userEmail: string;
+  token: string;
+}
+
+export async function postInvitation({
+  userEmail,
+  token,
+}: PostInvitationParams) {
+  const response = await clientApiInstance.post<{ groupId: number }>(
+    "/groups/accept-invitation",
+    {
+      userEmail,
+      token,
+    }
+  );
+  return response.data;
+}
