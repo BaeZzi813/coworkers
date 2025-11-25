@@ -1,10 +1,13 @@
 import { Button } from "@/components/button";
 import { TextField } from "@/components/input";
+import { ErrorAlert } from "@/components/modal";
 import { useGroupMutation } from "@/features/group/query/use-group-mutation";
 import TeamEditContainer from "@/features/team/components/TeamEditContainer";
 import TeamEditImageInput from "@/features/team/components/TeamEditImageInput";
 import { useResponsive } from "@/hooks/use-responsive";
+import { Group } from "@/types/group";
 import { useRouter } from "next/router";
+import { overlay } from "overlay-kit";
 import { ChangeEvent, useId, useState } from "react";
 
 export default function AddTeamPage() {
@@ -23,17 +26,31 @@ export default function AddTeamPage() {
     setName(event.target.value);
   };
 
+  const handleAddSuccess = (newGroup: Group) => {
+    router.push(`/${newGroup.id}`);
+  };
+
+  const handleAddError = (error: Error) => {
+    overlay.open(
+      ({ isOpen, close, unmount }) => (
+        <ErrorAlert
+          isOpen={isOpen}
+          onClose={close}
+          onExit={unmount}
+          title="팀 생성 실패"
+          error={error}
+        />
+      ),
+      { overlayId: "group-add-error-alert" }
+    );
+  };
+
   const handleSubmit = async () => {
     postMutation.mutate(
       { imageFile, name },
       {
-        onSuccess: (newGroup) => {
-          router.push(`/${newGroup.id}`);
-        },
-        onError: (error) => {
-          // TODO: Error handling
-          console.error("Failed to create group:", error);
-        },
+        onSuccess: handleAddSuccess,
+        onError: handleAddError,
       }
     );
   };

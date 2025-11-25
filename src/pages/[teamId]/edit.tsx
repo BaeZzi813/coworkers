@@ -1,5 +1,6 @@
 import { Button } from "@/components/button";
 import { TextField } from "@/components/input";
+import { ErrorAlert } from "@/components/modal";
 import { getGroup } from "@/features/group/apis";
 import { useGroupMutation } from "@/features/group/query/use-group-mutation";
 import TeamEditContainer from "@/features/team/components/TeamEditContainer";
@@ -15,6 +16,7 @@ import {
 } from "@/libs/ssr/with-auth";
 import { Group } from "@/types/group";
 import { useRouter } from "next/router";
+import { overlay } from "overlay-kit";
 import { ChangeEvent, useId, useState } from "react";
 
 interface PageProps {
@@ -48,15 +50,31 @@ export default serverSideComponentWithAuth<PageProps>(({ group }) => {
     setTeamName(event.target.value);
   };
 
+  const handleEditSuccess = () => {
+    router.push(`/${group.id}`);
+  };
+
+  const handleEditError = (error: Error) => {
+    overlay.open(
+      ({ isOpen, close, unmount }) => (
+        <ErrorAlert
+          isOpen={isOpen}
+          onClose={close}
+          onExit={unmount}
+          title="팀 수정 실패"
+          error={error}
+        />
+      ),
+      { overlayId: "group-edit-error-alert" }
+    );
+  };
+
   const handleSubmit = () => {
     patchMutation.mutate(
       { groupId: group.id, name: teamName },
       {
-        onSuccess: () => router.push(`/${group.id}`),
-        onError: (error) => {
-          // TODO: Error handling
-          console.error("Failed to update group:", error);
-        },
+        onSuccess: handleEditSuccess,
+        onError: handleEditError,
       }
     );
   };

@@ -1,6 +1,6 @@
 import { Button } from "@/components/button";
 import { TextField } from "@/components/input";
-import { Alert } from "@/components/modal";
+import { Alert, ErrorAlert } from "@/components/modal";
 import { useGroupMutation } from "@/features/group/query/use-group-mutation";
 import TeamEditContainer from "@/features/team/components/TeamEditContainer";
 import { useResponsive } from "@/hooks/use-responsive";
@@ -16,6 +16,10 @@ export default function JoinTeamPage() {
   const textFieldId = useId();
   const { postInvitationMutation } = useGroupMutation();
   const router = useRouter();
+
+  const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setInputValue(event.target.value);
+  };
 
   const handleJoinSuccess = ({ groupId }: { groupId: number }) => {
     overlay.open(
@@ -57,8 +61,19 @@ export default function JoinTeamPage() {
     );
   };
 
-  const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setInputValue(event.target.value);
+  const handleJoinError = (error: Error) => {
+    overlay.open(
+      ({ isOpen, close, unmount }) => (
+        <ErrorAlert
+          isOpen={isOpen}
+          onClose={close}
+          onExit={unmount}
+          title="팀 참여 실패"
+          error={error}
+        />
+      ),
+      { overlayId: "join-team-error-alert" }
+    );
   };
 
   const handleJoinClick = () => {
@@ -73,10 +88,7 @@ export default function JoinTeamPage() {
       },
       {
         onSuccess: handleJoinSuccess,
-        onError: (error) => {
-          // TODO: Error handling
-          console.error("팀 참여 실패:", error);
-        },
+        onError: handleJoinError,
       }
     );
   };
