@@ -1,4 +1,5 @@
 import TeamPageHeader from "@/features/group/components/TeamPageHeader";
+import TeamPageMembersList from "@/features/group/components/TeamPageMembersList";
 import TeamPageTasksBoard from "@/features/group/components/TeamPageTasksBoard";
 import TeamProvider from "@/features/group/components/TeamProvider";
 import { prefetchGroup, useGroupQuery } from "@/features/group/query";
@@ -55,7 +56,7 @@ export default serverSideComponentWithAuth<PageProps>(({ groupId }) => {
       <DimmedLayout isDimmed={isFetching}>
         <div
           className={clsx(
-            "h-full max-w-7xl overflow-y-scroll pb-[54px]",
+            "h-full max-w-7xl overflow-y-auto pb-[54px]",
             "tablet:px-6 tablet:pt-18 tablet:pb-[74px]",
             "desktop:px-21 desktop:pt-30 desktop:pb-20"
           )}
@@ -72,7 +73,7 @@ export default serverSideComponentWithAuth<PageProps>(({ groupId }) => {
           )}
           <div
             className={clsx(
-              "flex gap-8",
+              "flex items-start gap-8",
               isMobile && "px-4",
               isAdmin
                 ? "mt-[34px] tablet:mt-[43px] desktop:mt-7"
@@ -85,11 +86,7 @@ export default serverSideComponentWithAuth<PageProps>(({ groupId }) => {
                 taskLists={group.taskLists}
               />
             </TeamProvider>
-            {isDesktop && (
-              <div className="w-60 shrink-0 bg-background-primary">
-                Members List Placeholder
-              </div>
-            )}
+            {isDesktop && <TeamPageMembersList members={group.members} />}
           </div>
         </div>
       </DimmedLayout>
