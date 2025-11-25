@@ -6,7 +6,7 @@ export default function PostImage({ preview, onChange, onDelete }) {
   const { isMobile } = useResponsive();
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 tablet:gap-3">
       <span className="text-md-b tablet:text-lg-b">이미지</span>
       <div className="flex gap-3">
         <label className="flex h-20 w-20 cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border border-border-primary hover:bg-slate-100 tablet:h-[120px] tablet:w-[120px]">
