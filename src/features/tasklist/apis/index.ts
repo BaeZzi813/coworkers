@@ -1,6 +1,6 @@
 import { clientApiInstance } from "@/services/instance/client";
 
-export interface PostTaskListParams {
+interface PostTaskListParams {
   groupId: number;
   name: string;
 }
@@ -31,7 +31,7 @@ export async function patchTaskList({
   return response.data;
 }
 
-export interface DeleteTaskListParams {
+interface DeleteTaskListParams {
   groupId: number;
   taskListId: number;
 }
