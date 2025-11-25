@@ -57,32 +57,35 @@ export default serverSideComponentWithAuth<PageProps>(({ groupId }) => {
   const tasks = group.taskLists.flatMap((taskList) => taskList.tasks);
 
   const handleAddClick = () => {
-    overlay.open(({ isOpen, close, unmount }) => {
-      const handleSubmit = (inputValue: string) => {
-        postMutation.mutate(
-          { groupId, name: inputValue },
-          {
-            onSuccess: (data, variables, onMutationResult, context) => {
-              context.client.invalidateQueries({
-                queryKey: groupsQueryKey({ groupId }),
-              });
-            },
-          }
-        );
-      };
+    overlay.open(
+      ({ isOpen, close, unmount }) => {
+        const handleSubmit = (inputValue: string) => {
+          postMutation.mutate(
+            { groupId, name: inputValue },
+            {
+              onSuccess: (data, variables, onMutationResult, context) => {
+                context.client.invalidateQueries({
+                  queryKey: groupsQueryKey({ groupId }),
+                });
+              },
+            }
+          );
+        };
 
-      return (
-        <InputAlert
-          isOpen={isOpen}
-          onClose={close}
-          onExit={unmount}
-          title="할 일 목록"
-          placeholder="목록 명을 입력해주세요."
-          submitTitle="만들기"
-          onSubmit={handleSubmit}
-        />
-      );
-    });
+        return (
+          <InputAlert
+            isOpen={isOpen}
+            onClose={close}
+            onExit={unmount}
+            title="할 일 목록"
+            placeholder="목록 명을 입력해주세요."
+            submitTitle="만들기"
+            onSubmit={handleSubmit}
+          />
+        );
+      },
+      { overlayId: "add-tasklist-alert" }
+    );
   };
 
   return (

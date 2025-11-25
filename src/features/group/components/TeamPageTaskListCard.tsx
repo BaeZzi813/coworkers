@@ -39,47 +39,53 @@ export default function TeamPageTaskListCard({ key, taskList, done }: Props) {
       );
     };
 
-    return overlay.open(({ isOpen, close, unmount }) => (
-      <InputAlert
-        isOpen={isOpen}
-        onClose={close}
-        onExit={unmount}
-        title="할 일 목록 수정"
-        value={taskList.name}
-        placeholder="목록 명을 입력해주세요."
-        submitTitle="수정하기"
-        onSubmit={handleSubmit}
-      />
-    ));
-  };
-
-  const handleDeleteClick = () => {
-    overlay.open(({ isOpen, close, unmount }) => {
-      const title = `'${taskList.name}'\n할 일을 정말 삭제하시겠어요?`;
-      const handleDelete = () => {
-        deleteMutation.mutate(
-          { groupId, taskListId: taskList.id },
-          {
-            onSuccess: (data, variables, onMutationResult, context) => {
-              context.client.invalidateQueries({
-                queryKey: groupsQueryKey({ groupId }),
-              });
-            },
-          }
-        );
-      };
-
-      return (
-        <DeleteAlert
+    return overlay.open(
+      ({ isOpen, close, unmount }) => (
+        <InputAlert
           isOpen={isOpen}
           onClose={close}
           onExit={unmount}
-          title={title}
-          message="삭제 후에는 되돌릴 수 없습니다."
-          onDelete={handleDelete}
+          title="할 일 목록 수정"
+          value={taskList.name}
+          placeholder="목록 명을 입력해주세요."
+          submitTitle="수정하기"
+          onSubmit={handleSubmit}
         />
-      );
-    });
+      ),
+      { overlayId: "edit-tasklist-alert" }
+    );
+  };
+
+  const handleDeleteClick = () => {
+    overlay.open(
+      ({ isOpen, close, unmount }) => {
+        const title = `'${taskList.name}'\n할 일을 정말 삭제하시겠어요?`;
+        const handleDelete = () => {
+          deleteMutation.mutate(
+            { groupId, taskListId: taskList.id },
+            {
+              onSuccess: (data, variables, onMutationResult, context) => {
+                context.client.invalidateQueries({
+                  queryKey: groupsQueryKey({ groupId }),
+                });
+              },
+            }
+          );
+        };
+
+        return (
+          <DeleteAlert
+            isOpen={isOpen}
+            onClose={close}
+            onExit={unmount}
+            title={title}
+            message="삭제 후에는 되돌릴 수 없습니다."
+            onDelete={handleDelete}
+          />
+        );
+      },
+      { overlayId: "delete-tasklist-alert" }
+    );
   };
 
   return (

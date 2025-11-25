@@ -18,40 +18,43 @@ export default function JoinTeamPage() {
   const router = useRouter();
 
   const handleJoinSuccess = ({ groupId }: { groupId: number }) => {
-    overlay.open(({ isOpen, close, unmount }) => {
-      const handleDashboardClick = () => {
-        router.push("/dashboard");
-        close();
-      };
+    overlay.open(
+      ({ isOpen, close, unmount }) => {
+        const handleDashboardClick = () => {
+          router.push("/dashboard");
+          close();
+        };
 
-      const handleTeamPageClick = () => {
-        router.push(`/${groupId}`);
-        close();
-      };
+        const handleTeamPageClick = () => {
+          router.push(`/${groupId}`);
+          close();
+        };
 
-      return (
-        <Alert
-          isOpen={isOpen}
-          onClose={close}
-          onExit={unmount}
-          title="팀 참여 성공"
-          message="팀 페이지로 이동할까요?"
-          actions={[
-            <Button
-              key="join-team-success-alert-dashboard"
-              variant="outlinedPrimary"
-              title="대시보드로 이동"
-              onClick={handleDashboardClick}
-            />,
-            <Button
-              key="join-team-success-alert-action"
-              title="팀 페이지로 이동"
-              onClick={handleTeamPageClick}
-            />,
-          ]}
-        />
-      );
-    });
+        return (
+          <Alert
+            isOpen={isOpen}
+            onClose={close}
+            onExit={unmount}
+            title="팀 참여 성공"
+            message="팀 페이지로 이동할까요?"
+            actions={[
+              <Button
+                key="join-team-success-alert-dashboard"
+                variant="outlinedPrimary"
+                title="대시보드로 이동"
+                onClick={handleDashboardClick}
+              />,
+              <Button
+                key="join-team-success-alert-action"
+                title="팀 페이지로 이동"
+                onClick={handleTeamPageClick}
+              />,
+            ]}
+          />
+        );
+      },
+      { overlayId: "join-team-success-alert" }
+    );
   };
 
   const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {

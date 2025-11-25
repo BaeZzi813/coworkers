@@ -76,44 +76,47 @@ function SettingsButton({ group }: { group: Group }) {
   };
 
   const handleDelete = () => {
-    overlay.open(({ isOpen, close, unmount }) => {
-      const handleDelete = async () => {
-        deleteMutation.mutate(group.id, {
-          onSuccess: () => {
-            close();
-            router.replace("/dashboard");
-          },
-          onError: (error) => {
-            // TODO: Error handling
-            console.error("Failed to delete group:", error);
-          },
-        });
-      };
+    overlay.open(
+      ({ isOpen, close, unmount }) => {
+        const handleDelete = async () => {
+          deleteMutation.mutate(group.id, {
+            onSuccess: () => {
+              close();
+              router.replace("/dashboard");
+            },
+            onError: (error) => {
+              // TODO: Error handling
+              console.error("Failed to delete group:", error);
+            },
+          });
+        };
 
-      return (
-        <Alert
-          isOpen={isOpen}
-          onClose={close}
-          onExit={unmount}
-          title={`‘${group.name}' 팀을 정말 삭제하시겠어요?`}
-          message="삭제 후에는 되돌릴 수 없습니다."
-          actions={[
-            <Button
-              key="delete-group-close"
-              variant="outlinedSecondary"
-              title="닫기"
-              onClick={close}
-            />,
-            <Button
-              key="delete-group-delete"
-              variant="danger"
-              title="삭제하기"
-              onClick={handleDelete}
-            />,
-          ]}
-        />
-      );
-    });
+        return (
+          <Alert
+            isOpen={isOpen}
+            onClose={close}
+            onExit={unmount}
+            title={`‘${group.name}' 팀을 정말 삭제하시겠어요?`}
+            message="삭제 후에는 되돌릴 수 없습니다."
+            actions={[
+              <Button
+                key="delete-group-close"
+                variant="outlinedSecondary"
+                title="닫기"
+                onClick={close}
+              />,
+              <Button
+                key="delete-group-delete"
+                variant="danger"
+                title="삭제하기"
+                onClick={handleDelete}
+              />,
+            ]}
+          />
+        );
+      },
+      { overlayId: "delete-group-alert" }
+    );
   };
 
   return (

@@ -17,30 +17,33 @@ export default function TeamPageMembersList({ members }: Props) {
   const [, setInvitationLink] = useCopyToClipboard();
 
   const handleInviteClick = () => {
-    overlay.open(({ isOpen, close, unmount }) => {
-      const handleClick = async () => {
-        const invitationLink = await getInvitationLink({ groupId });
-        setInvitationLink(invitationLink);
-        close();
-      };
+    overlay.open(
+      ({ isOpen, close, unmount }) => {
+        const handleClick = async () => {
+          const invitationLink = await getInvitationLink({ groupId });
+          setInvitationLink(invitationLink);
+          close();
+        };
 
-      return (
-        <Alert
-          isOpen={isOpen}
-          onClose={close}
-          onExit={unmount}
-          title="멤버 초대"
-          message="그룹에 참여할 수 있는 링크를 복사합니다."
-          actions={[
-            <Button
-              key="member-invite-alert-action"
-              title="링크 복사하기"
-              onClick={handleClick}
-            />,
-          ]}
-        />
-      );
-    });
+        return (
+          <Alert
+            isOpen={isOpen}
+            onClose={close}
+            onExit={unmount}
+            title="멤버 초대"
+            message="그룹에 참여할 수 있는 링크를 복사합니다."
+            actions={[
+              <Button
+                key="member-invite-alert-action"
+                title="링크 복사하기"
+                onClick={handleClick}
+              />,
+            ]}
+          />
+        );
+      },
+      { overlayId: "member-invite-alert" }
+    );
   };
 
   return (
@@ -72,30 +75,33 @@ function MemberListItem({ member }: { member: Member }) {
   const [, setEmail] = useCopyToClipboard();
 
   const handleClick = () => {
-    overlay.open(({ isOpen, close, unmount }) => {
-      const handleClick = () => {
-        setEmail(member.userEmail);
-        close();
-      };
+    overlay.open(
+      ({ isOpen, close, unmount }) => {
+        const handleClick = () => {
+          setEmail(member.userEmail);
+          close();
+        };
 
-      return (
-        <Alert
-          isOpen={isOpen}
-          onClose={close}
-          onExit={unmount}
-          header={<Avatar source={member.userImage} size="large" />}
-          title={member.userName}
-          message={member.userEmail}
-          actions={[
-            <Button
-              key="member-detail-alert-action"
-              title="이메일 복사하기"
-              onClick={handleClick}
-            />,
-          ]}
-        />
-      );
-    });
+        return (
+          <Alert
+            isOpen={isOpen}
+            onClose={close}
+            onExit={unmount}
+            header={<Avatar source={member.userImage} size="large" />}
+            title={member.userName}
+            message={member.userEmail}
+            actions={[
+              <Button
+                key="member-detail-alert-action"
+                title="이메일 복사하기"
+                onClick={handleClick}
+              />,
+            ]}
+          />
+        );
+      },
+      { overlayId: "member-detail-alert" }
+    );
   };
 
   return (
