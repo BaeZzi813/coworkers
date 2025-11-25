@@ -37,7 +37,7 @@ export async function getGroup(
   }, options);
 }
 
-export interface PostGroupParams {
+interface PostGroupParams {
   imageFile?: File;
   name: string;
 }
@@ -57,7 +57,7 @@ export async function postGroup({ imageFile, name }: PostGroupParams) {
   return response.data;
 }
 
-export interface PatchGroupsParams {
+interface PatchGroupsParams {
   groupId: number;
   imageFile?: File;
   name?: string;
@@ -85,10 +85,21 @@ export async function patchGroup({
   return response.data;
 }
 
-export interface DeleteGroupParams {
+interface DeleteGroupParams {
   groupId: number;
 }
 
 export async function deleteGroup({ groupId }: DeleteGroupParams) {
   await clientApiInstance.delete(`/groups/${groupId}`);
+}
+
+interface GetInvitationLinkParams {
+  groupId: number;
+}
+
+export async function getInvitationLink({ groupId }: GetInvitationLinkParams) {
+  const response = await clientApiInstance.get<string>(
+    `/groups/${groupId}/invitation`
+  );
+  return response.data;
 }

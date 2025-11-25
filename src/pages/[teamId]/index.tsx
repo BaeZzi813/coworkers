@@ -54,41 +54,41 @@ export default serverSideComponentWithAuth<PageProps>(({ groupId }) => {
   return (
     <div className="h-full bg-background-secondary">
       <DimmedLayout isDimmed={isFetching}>
-        <div
-          className={clsx(
-            "h-full max-w-7xl overflow-y-auto pb-[54px]",
-            "tablet:px-6 tablet:pt-18 tablet:pb-[74px]",
-            "desktop:px-21 desktop:pt-30 desktop:pb-20"
-          )}
-        >
-          <TeamPageHeader
-            group={group}
-            title={group.name}
-            members={isDesktop ? undefined : group.members}
-            tasks={tasks}
-            isAdmin={isAdmin}
-          />
-          {isDesktop && isAdmin && (
-            <div className="mt-9 border-t border-border-primary" />
-          )}
+        <TeamProvider group={group}>
           <div
             className={clsx(
-              "flex items-start gap-8",
-              isMobile && "px-4",
-              isAdmin
-                ? "mt-[34px] tablet:mt-[43px] desktop:mt-7"
-                : "mt-6 tablet:mt-[34px] desktop:mt-11"
+              "h-full max-w-7xl overflow-y-auto pb-[54px]",
+              "tablet:px-6 tablet:pt-18 tablet:pb-[74px]",
+              "desktop:px-21 desktop:pt-30 desktop:pb-20"
             )}
           >
-            <TeamProvider group={group}>
+            <TeamPageHeader
+              group={group}
+              title={group.name}
+              members={isDesktop ? undefined : group.members}
+              tasks={tasks}
+              isAdmin={isAdmin}
+            />
+            {isDesktop && isAdmin && (
+              <div className="mt-9 border-t border-border-primary" />
+            )}
+            <div
+              className={clsx(
+                "flex items-start gap-8",
+                isMobile && "px-4",
+                isAdmin
+                  ? "mt-[34px] tablet:mt-[43px] desktop:mt-7"
+                  : "mt-6 tablet:mt-[34px] desktop:mt-11"
+              )}
+            >
               <TeamPageTasksBoard
                 className="grow"
                 taskLists={group.taskLists}
               />
-            </TeamProvider>
-            {isDesktop && <TeamPageMembersList members={group.members} />}
+              {isDesktop && <TeamPageMembersList members={group.members} />}
+            </div>
           </div>
-        </div>
+        </TeamProvider>
       </DimmedLayout>
     </div>
   );

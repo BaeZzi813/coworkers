@@ -4,14 +4,43 @@ import { Alert } from "@/components/modal";
 import { Member } from "@/types/member";
 import { useCopyToClipboard } from "@uidotdev/usehooks";
 import { overlay } from "overlay-kit";
+import { useContext } from "react";
+import { getInvitationLink } from "../apis";
+import { TeamContext } from "./TeamProvider";
 
 interface Props {
   members: Member[];
 }
 
 export default function TeamPageMembersList({ members }: Props) {
+  const groupId = useContext(TeamContext)!.group.id;
+  const [, setInvitationLink] = useCopyToClipboard();
+
   const handleInviteClick = () => {
-    // TODO: Invite modal
+    overlay.open(({ isOpen, close, unmount }) => {
+      const handleClick = async () => {
+        const invitationLink = await getInvitationLink({ groupId });
+        setInvitationLink(invitationLink);
+        close();
+      };
+
+      return (
+        <Alert
+          isOpen={isOpen}
+          onClose={close}
+          onExit={unmount}
+          title="멤버 초대"
+          message="그룹에 참여할 수 있는 링크를 복사합니다."
+          actions={[
+            <Button
+              key="member-invite-alert-action"
+              title="링크 복사하기"
+              onClick={handleClick}
+            />,
+          ]}
+        />
+      );
+    });
   };
 
   return (
@@ -22,7 +51,7 @@ export default function TeamPageMembersList({ members }: Props) {
           <span className="text-text-default">{`(${members.length}명)`}</span>
         </div>
         <button
-          className="text-lg-s text-brand-primary"
+          className="cursor-pointer text-lg-s text-brand-primary"
           onClick={handleInviteClick}
         >
           초대하기 +
