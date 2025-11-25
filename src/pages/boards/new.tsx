@@ -1,10 +1,12 @@
 import { Button } from "@/components/button";
+import { Alert } from "@/components/modal";
 import { postArticle, postImage } from "@/features/boards/api";
 import PostContent from "@/features/boards/post-form/PostContent";
 import PostHeader from "@/features/boards/post-form/PostHeader";
 import PostImage from "@/features/boards/post-form/PostImage";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/router";
+import { overlay } from "overlay-kit";
 import { ChangeEvent, useState } from "react";
 
 export default function New() {
@@ -60,7 +62,18 @@ export default function New() {
   });
 
   const handleSubmit = async () => {
-    if (!title.trim() || !content.trim()) return;
+    if (!title.trim() || !content.trim()) {
+      overlay.open(({ isOpen, close, unmount }) => (
+        <Alert
+          isOpen={isOpen}
+          onClose={close}
+          onExit={unmount}
+          title="필수 입력 항목을 기입해 주세요"
+          actions={[<Button key="alert-close" title="확인" onClick={close} />]}
+        />
+      ));
+      return;
+    }
     try {
       let imageUrl = "";
       if (file) {
