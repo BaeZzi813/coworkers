@@ -6,5 +6,5 @@
     "source.fixAll.eslint": "explicit",
     "source.organizeImports": "explicit"
   },
-  "tailwindCSS.lint.suggestCanonicalClasses": "warning" //테일윈드 표준클래스 린트 설정
+  "tailwindCSS.lint.suggestCanonicalClasses": "warning"
 }
