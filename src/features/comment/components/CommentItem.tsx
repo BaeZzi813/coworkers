@@ -1,9 +1,8 @@
 import Avatar from "@/components/avatar";
 import { Button } from "@/components/button";
 import Dropdown from "@/components/dropdown";
-import { getUser } from "@/features/user/apis/get-user";
+import { useUserQuery } from "@/features/user/query";
 import { useEditDeleteMenu } from "@/hooks/use-edit-delete-menu";
-import { useQuery } from "@tanstack/react-query";
 import clsx from "clsx";
 import { useState } from "react";
 
@@ -41,10 +40,7 @@ export default function CommentItem({
   const [editContent, setEditContent] = useState(content);
   const isEdited = createdAt !== updatedAt;
 
-  const { data: user } = useQuery({
-    queryKey: ["user"],
-    queryFn: getUser,
-  });
+  const { user } = useUserQuery();
 
   const isMine = user?.id === userId;
 
