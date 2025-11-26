@@ -41,6 +41,10 @@ export default function Sidebar({ className }: Props) {
     toggle();
   };
 
+  if (!isLoggedIn) {
+    return <UnauthorizedSidebar />;
+  }
+
   return (
     <motion.nav
       className={clsx(
@@ -62,6 +66,17 @@ export default function Sidebar({ className }: Props) {
         </div>
       </footer>
     </motion.nav>
+  );
+}
+
+function UnauthorizedSidebar() {
+  return (
+    <div className="flex w-[72px] shrink-0 flex-col border-r border-border-primary bg-background-primary text-text-primary">
+      <header className="relative flex h-24 items-center justify-center gap-2.5">
+        <LogoImage isFolded={true} />
+      </header>
+      <div className="grow" />
+    </div>
   );
 }
 
