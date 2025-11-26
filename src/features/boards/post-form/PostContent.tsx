@@ -1,6 +1,12 @@
 import { InputBox } from "@/components/input";
+import { ChangeEventHandler } from "react";
 
-export default function PostContent({ value, onChange }) {
+interface Props {
+  value: string;
+  onChange: ChangeEventHandler<HTMLTextAreaElement>;
+}
+
+export default function PostContent({ value, onChange }: Props) {
   return (
     <div className="flex flex-col gap-2">
       <div>

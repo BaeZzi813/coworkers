@@ -1,8 +1,15 @@
 import Icon from "@/components/icon";
 import { useResponsive } from "@/hooks/use-responsive";
 import Image from "next/image";
+import { ChangeEventHandler } from "react";
 
-export default function PostImage({ preview, onChange, onDelete }) {
+interface Props {
+  preview: string | null;
+  onChange: ChangeEventHandler<HTMLInputElement>;
+  onDelete: () => void;
+}
+
+export default function PostImage({ preview, onChange, onDelete }: Props) {
   const { isMobile } = useResponsive();
 
   return (

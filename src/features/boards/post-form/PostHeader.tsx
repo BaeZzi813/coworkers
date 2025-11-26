@@ -1,6 +1,12 @@
 import { Input } from "@/components/input";
+import { ChangeEventHandler } from "react";
 
-export default function PostHeader({ value, onChange }) {
+interface Props {
+  value: string;
+  onChange: ChangeEventHandler<HTMLInputElement>;
+}
+
+export default function PostHeader({ value, onChange }: Props) {
   return (
     <div className="flex flex-col gap-2">
       <div>
