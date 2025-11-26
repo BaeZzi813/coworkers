@@ -1,5 +1,5 @@
-import TeamImageEdit18 from "@/assets/images/team-image-edit-18.svg";
-import TeamImageEdit32 from "@/assets/images/team-image-edit-32.svg";
+import ImageInputEdit18 from "@/assets/images/image-input-edit-18.svg";
+import ImageInputEdit32 from "@/assets/images/image-input-edit-32.svg";
 import Icon from "@/components/icon";
 import { useResponsive } from "@/hooks/use-responsive";
 import clsx from "clsx";
@@ -11,7 +11,7 @@ interface Props {
   onChange?: (file: File) => void;
 }
 
-export default function TeamEditImageInput({ source, onChange }: Props) {
+export default function ImageInput({ source, onChange }: Props) {
   const { isMobile } = useResponsive();
   const [previewUrl, setPreviewUrl] = useState<string>();
 
@@ -53,7 +53,7 @@ export default function TeamEditImageInput({ source, onChange }: Props) {
           </ImageContainer>
         )}
         <div className="absolute right-0 bottom-1.5 rounded-full tablet:border-2 tablet:border-white">
-          {isMobile ? <TeamImageEdit18 /> : <TeamImageEdit32 />}
+          {isMobile ? <ImageInputEdit18 /> : <ImageInputEdit32 />}
         </div>
       </label>
       <input
