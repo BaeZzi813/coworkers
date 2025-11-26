@@ -12,7 +12,7 @@ export const GSSP_NOT_FOUND_RETURN = {
 interface GSSPPropsWithTokenReturnProps<Props> {
   props?: Props;
   accessToken: string;
-  dehydratedState: DehydratedState;
+  dehydratedState?: DehydratedState | null;
 }
 
 type GSSPPropsWithTokenReturnResult<Props> = GetServerSidePropsResult<
@@ -22,7 +22,7 @@ type GSSPPropsWithTokenReturnResult<Props> = GetServerSidePropsResult<
 export function gsspPropsWithTokenReturn<Props>({
   props = {} as Props,
   accessToken,
-  dehydratedState,
+  dehydratedState = null,
 }: GSSPPropsWithTokenReturnProps<Props>): GSSPPropsWithTokenReturnResult<Props> {
   return {
     props: { ...props, accessToken, dehydratedState },

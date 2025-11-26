@@ -11,6 +11,7 @@ interface Props extends OverlayProps {
   message?: string;
   content?: ReactNode;
   actions?: ReactNode[];
+  showsCloseButton?: boolean;
 }
 
 export default function Alert({
@@ -22,6 +23,7 @@ export default function Alert({
   message,
   content,
   actions = [],
+  showsCloseButton = true,
 }: Props) {
   const { isMobile } = useResponsive();
 
@@ -37,14 +39,18 @@ export default function Alert({
         transition={{ damping: 0, duration: 0.25 }}
       >
         <div className="flex h-6 justify-end">
-          <button className="cursor-pointer" onClick={onClose}>
-            <Icon name="xmark" />
-          </button>
+          {showsCloseButton && (
+            <button className="cursor-pointer" onClick={onClose}>
+              <Icon name="xmark" />
+            </button>
+          )}
         </div>
         <div className="mx-8 flex flex-col">
           {header && <div className="mb-4 self-center">{header}</div>}
           <div className="flex flex-col items-center gap-2">
-            <div className="text-lg-m">{title}</div>
+            <div className="text-center text-lg-m whitespace-pre-wrap">
+              {title}
+            </div>
             {message && (
               <div className="text-center text-md-m whitespace-pre-wrap">
                 {message}

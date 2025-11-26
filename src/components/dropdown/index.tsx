@@ -15,6 +15,7 @@ export interface DropdownOption {
 interface Props {
   anchor: ReactNode;
   options: DropdownOption[] | string[];
+  width?: number;
   gap?: number;
   direction?: Direction;
   alignment?: Alignment;
@@ -59,6 +60,7 @@ function layoutStyles({
 export default function Dropdown({
   anchor,
   options,
+  width,
   gap = 8,
   direction = "bottom",
   alignment = "left",
@@ -98,7 +100,9 @@ export default function Dropdown({
 
   return (
     <div className="relative w-fit" ref={targetRef}>
-      <div onClick={handleAnchorClick}>{anchor}</div>
+      <div className="cursor-pointer" onClick={handleAnchorClick}>
+        {anchor}
+      </div>
       {isOpen && (
         <ul
           className={clsx(
@@ -108,7 +112,10 @@ export default function Dropdown({
             "bg-background-primary",
             "z-(--z-overlay)"
           )}
-          style={layoutStyles({ gap, direction, alignment, alignmentOffset })}
+          style={{
+            ...layoutStyles({ gap, direction, alignment, alignmentOffset }),
+            width: width || "fit-content",
+          }}
         >
           {options.map((option) => {
             const key = isStringOption(option) ? option : option.value;
@@ -116,7 +123,7 @@ export default function Dropdown({
             return (
               <li
                 key={key}
-                className="cursor-pointer px-6 py-3.5 text-lg-r whitespace-nowrap hover:bg-background-tertiary"
+                className="cursor-pointer px-6 py-3.5 text-center text-lg-r whitespace-nowrap hover:bg-background-tertiary"
                 onClick={(event) => handleOptionClick(event, option)}
               >
                 {label}

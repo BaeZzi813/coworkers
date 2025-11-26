@@ -2,7 +2,7 @@ import LogoFull from "@/assets/images/logo-full.svg";
 import Logo from "@/assets/images/logo.svg";
 import { Button } from "@/components/button";
 import Icon from "@/components/icon";
-import { useUserGroups } from "@/features/group/query/use-group";
+import { useUserGroupsQuery } from "@/features/user/query";
 import { useResponsive } from "@/hooks/use-responsive";
 import { useAuthStore } from "@/stores/auth-store";
 import { useSidebarStore } from "@/stores/sidebar-store";
@@ -41,6 +41,10 @@ export default function Sidebar({ className }: Props) {
     toggle();
   };
 
+  if (!isLoggedIn) {
+    return <UnauthorizedSidebar />;
+  }
+
   return (
     <motion.nav
       className={clsx(
@@ -62,6 +66,17 @@ export default function Sidebar({ className }: Props) {
         </div>
       </footer>
     </motion.nav>
+  );
+}
+
+function UnauthorizedSidebar() {
+  return (
+    <div className="flex w-[72px] shrink-0 flex-col border-r border-border-primary bg-background-primary text-text-primary">
+      <header className="relative flex h-24 items-center justify-center gap-2.5">
+        <LogoImage isFolded={true} />
+      </header>
+      <div className="grow" />
+    </div>
   );
 }
 
@@ -95,7 +110,7 @@ function FoldButton({
 
 function Content({ isFolded }: { isFolded: boolean }) {
   const router = useRouter();
-  const { userGroups } = useUserGroups();
+  const { userGroups } = useUserGroupsQuery();
 
   const handleAddTeamClick = () => {
     router.push("/addteam");

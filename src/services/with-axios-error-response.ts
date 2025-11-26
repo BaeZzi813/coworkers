@@ -3,7 +3,8 @@ import { NextApiResponse } from "next";
 
 export async function withAxiosErrorResponse(
   res: NextApiResponse,
-  callback: () => Promise<void>
+  callback: () => Promise<void>,
+  finallyCallback?: () => void
 ) {
   try {
     await callback();
@@ -17,5 +18,7 @@ export async function withAxiosErrorResponse(
       return;
     }
     res.status(500).json({ message: "Internal Server Error" });
+  } finally {
+    finallyCallback?.();
   }
 }
