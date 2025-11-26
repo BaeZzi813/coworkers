@@ -1,3 +1,23 @@
+import { postArticle, PostArticleBody } from "@/features/boards/api";
+import PostForm from "@/features/boards/post-form/PostForm";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/router";
+
 export default function New() {
-  return <div>자유게시판 게시글 작성 페이지입니다.</div>;
+  const router = useRouter();
+  const queryClient = useQueryClient();
+
+  const postArticleMutation = useMutation({
+    mutationFn: postArticle,
+    onSuccess: () => {
+      router.push("/boards");
+      queryClient.invalidateQueries({ queryKey: ["articles"] });
+    },
+  });
+
+  const handleSubmit = async (data: PostArticleBody) => {
+    await postArticleMutation.mutateAsync(data);
+  };
+
+  return <PostForm mode="post" onSubmit={handleSubmit} />;
 }

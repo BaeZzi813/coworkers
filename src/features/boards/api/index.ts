@@ -28,6 +28,12 @@ interface PostCommentBody {
   content: string;
 }
 
+export interface PostArticleBody {
+  image?: string;
+  content: string;
+  title: string;
+}
+
 export async function getArticle(params: GetArticleParams) {
   const res = await clientApiInstance.get<GetArticleResponse>("/articles", {
     params: params,
@@ -81,5 +87,22 @@ export async function postLikeById(id: number) {
 
 export async function deleteLikeById(id: number) {
   const res = await clientApiInstance.delete<Article>(`/articles/${id}/like`);
+  return res.data;
+}
+
+export async function postArticle(body: PostArticleBody) {
+  const res = await clientApiInstance.post<PostArticleBody>("/articles", body);
+  return res.data;
+}
+
+export async function postImage(formData: FormData) {
+  const res = await clientApiInstance.post("/images/upload", formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  return res.data;
+}
+
+export async function patchArticleById(id: number, body: PostArticleBody) {
+  const res = await clientApiInstance.patch(`/articles/${id}`, body);
   return res.data;
 }
