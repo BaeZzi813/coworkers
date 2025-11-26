@@ -1,11 +1,13 @@
 import Avatar from "@/components/avatar";
 import { Button } from "@/components/button";
-import Dropdown, { DropdownOption } from "@/components/dropdown";
-import Icon from "@/components/icon";
+import Dropdown from "@/components/dropdown";
+import { getUser } from "@/features/user/apis/get-user";
+import { useEditDeleteMenu } from "@/hooks/use-edit-delete-menu";
+import { useQuery } from "@tanstack/react-query";
 import clsx from "clsx";
 import { useState } from "react";
 
-export interface Comment {
+export interface CommentModel {
   commentId: number;
   userId: number;
   name: string;
@@ -15,7 +17,7 @@ export interface Comment {
   updatedAt: string;
 }
 
-export interface CommentItemProps extends Comment {
+export interface CommentItemProps extends CommentModel {
   onEdit?: (commentId: number, newContent: string) => void;
   onDelete?: (commentId: number) => void;
   className?: string;
@@ -39,24 +41,21 @@ export default function CommentItem({
   const [editContent, setEditContent] = useState(content);
   const isEdited = createdAt !== updatedAt;
 
-  const currentUserId = 5; // 테스트용 임시 id
-  const isMine = currentUserId === userId;
+  const { data: user } = useQuery({
+    queryKey: ["user"],
+    queryFn: getUser,
+  });
 
-  const options: DropdownOption[] = [
-    { label: "수정하기", value: "edit" },
-    { label: "삭제하기", value: "delete" },
-  ];
+  const isMine = user?.id === userId;
 
-  const handleSelect = (option: DropdownOption) => {
-    switch (option.value) {
-      case "edit":
-        setIsEditing(true);
-        break;
-      case "delete":
-        handleDelete();
-        break;
-    }
-  };
+  const { anchor, options } = useEditDeleteMenu({
+    onEdit: () => {
+      setIsEditing(true);
+    },
+    onDelete: () => {
+      onDelete?.(commentId);
+    },
+  });
 
   const handleEditSubmit = () => {
     onEdit?.(commentId, editContent);
@@ -65,10 +64,6 @@ export default function CommentItem({
   const handleEditCancel = () => {
     setEditContent(content);
     setIsEditing(false);
-  };
-
-  const handleDelete = () => {
-    onDelete?.(commentId);
   };
 
   return (
@@ -134,16 +129,7 @@ export default function CommentItem({
           </div>
 
           {isMine && !isEditing && (
-            <Dropdown
-              anchor={
-                <button aria-label="댓글 설정 열기" className="cursor-pointer">
-                  <Icon name="dots" size="small" />
-                </button>
-              }
-              options={options}
-              alignment="right"
-              onSelect={(option) => handleSelect(option as DropdownOption)}
-            />
+            <Dropdown anchor={anchor} options={options} alignment="right" />
           )}
         </div>
       </div>

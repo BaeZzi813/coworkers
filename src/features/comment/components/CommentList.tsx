@@ -1,8 +1,8 @@
 import clsx from "clsx";
-import CommentItem, { Comment } from "./CommentItem";
+import CommentItem, { CommentItemProps } from "./CommentItem";
 
 interface CommentListProps {
-  comments: Comment[];
+  comments: CommentItemProps[];
   onEdit?: (commentId: number, newContent: string) => void;
   onDelete?: (commentId: number) => void;
   className?: string;

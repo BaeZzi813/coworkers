@@ -1,5 +1,5 @@
 import Icon from "@/components/icon";
-import { type IconName } from "@/components/icon/icons";
+import Icons, { type IconName } from "@/components/icon/icons";
 import clsx from "clsx";
 import { MouseEventHandler } from "react";
 
@@ -11,6 +11,7 @@ interface Props {
   className?: string;
   title: string;
   iconName?: IconName;
+  iconCustomColor?: string;
   variant?: Variant;
   size?: ButtonSize;
   isFullWidth?: boolean;
@@ -106,6 +107,7 @@ export default function Button({
   className,
   title,
   iconName,
+  iconCustomColor,
   variant = "primary",
   size = "large",
   isFullWidth = true,
@@ -131,7 +133,11 @@ export default function Button({
       <div className="flex items-center gap-2">
         {iconName && (
           <div className="size-4">
-            <Icon name={iconName} size="small" />
+            <Icon
+              name={iconName}
+              size={Icons[iconName]?.small ? "small" : "large"}
+              color={iconCustomColor}
+            />
           </div>
         )}
         <span className="whitespace-nowrap">{title}</span>
