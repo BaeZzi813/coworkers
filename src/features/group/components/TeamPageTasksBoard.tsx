@@ -1,6 +1,7 @@
 import { isTaskListDone } from "@/features/tasklist/utils";
 import { useResponsive } from "@/hooks/use-responsive";
 import { TaskList } from "@/types/task";
+import Link from "next/link";
 import { useContext } from "react";
 import TeamPageMembersList from "./TeamPageMembersList";
 import TeamPageTaskListCard from "./TeamPageTaskListCard";
@@ -59,6 +60,7 @@ function Column({
   taskLists: TaskList[];
   done?: boolean;
 }) {
+  const group = useContext(TeamContext)!.group;
   return (
     <div className="flex w-full grow flex-col gap-3 desktop:gap-5">
       <div className="flex h-[38px] items-center justify-between rounded-xl bg-state-200 pr-2 pl-5">
@@ -66,11 +68,12 @@ function Column({
       </div>
       <div className="flex flex-col gap-2">
         {taskLists.map((taskList) => (
-          <TeamPageTaskListCard
+          <Link
+            href={`/${group.id}/tasklist?id=${taskList.id}`}
             key={taskList.id}
-            taskList={taskList}
-            done={done}
-          />
+          >
+            <TeamPageTaskListCard taskList={taskList} done={done} />
+          </Link>
         ))}
       </div>
     </div>
