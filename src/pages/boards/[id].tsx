@@ -23,23 +23,27 @@ export default function ArticlePage() {
   const queryClient = useQueryClient();
   const articleId = Number(id);
 
+  const user = useAuthStore((state) => state.user);
+  const userImage = user?.image;
+  const userId = user?.id;
+
   const { data: article, isLoading } = useQuery({
-    queryKey: ["article", id],
-    queryFn: () => getArticleById(Number(id)),
-    enabled: !!id,
+    queryKey: ["article", articleId],
+    queryFn: () => getArticleById(articleId),
+    enabled: !!articleId,
   });
 
   const { data: comments } = useQuery({
-    queryKey: ["comment", id],
-    queryFn: () => getCommentById(Number(id)),
-    enabled: !!id,
+    queryKey: ["comment", articleId],
+    queryFn: () => getCommentById(articleId),
+    enabled: !!articleId,
   });
 
   const postCommentMutation = useMutation({
     mutationFn: (data: { id: number; content: string }) =>
-      postCommentById(data.id, { content: data.content }),
+      postCommentById(articleId, { content: data.content }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["comment", id] });
+      queryClient.invalidateQueries({ queryKey: ["comment", articleId] });
     },
     onError: (error) => {
       console.error("댓글 작성 실패:", error);
@@ -55,10 +59,10 @@ export default function ArticlePage() {
       content: string;
     }) => patchCommentById(commentId, { content }),
     onMutate: async ({ commentId, content }) => {
-      await queryClient.cancelQueries({ queryKey: ["comment", id] });
+      await queryClient.cancelQueries({ queryKey: ["comment", articleId] });
       const prevComment = queryClient.getQueryData<GetCommentResponse>([
         "comment",
-        id,
+        articleId,
       ]);
       if (prevComment) {
         queryClient.setQueryData<GetCommentResponse>(["comment", id], {
@@ -72,18 +76,18 @@ export default function ArticlePage() {
     },
     onError: (_error, _variables, context) => {
       if (context?.prevComment) {
-        queryClient.setQueryData(["comment", id], context.prevComment);
+        queryClient.setQueryData(["comment", articleId], context.prevComment);
       }
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["comment", id] });
+      queryClient.invalidateQueries({ queryKey: ["comment", articleId] });
     },
   });
 
   const deleteCommentMutation = useMutation({
     mutationFn: (id: number) => deleteCommentById(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["comment", id] });
+      queryClient.invalidateQueries({ queryKey: ["comment", articleId] });
     },
     onError: (error) => {
       console.log("삭제 실패:", error);
@@ -99,10 +103,13 @@ export default function ArticlePage() {
       isLiked: boolean;
     }) => (isLiked ? deleteLikeById(articleId) : postLikeById(articleId)),
     onMutate: async ({ isLiked }) => {
-      await queryClient.cancelQueries({ queryKey: ["article", id] });
-      const prevArticle = queryClient.getQueryData<Article>(["article", id]);
+      await queryClient.cancelQueries({ queryKey: ["article", articleId] });
+      const prevArticle = queryClient.getQueryData<Article>([
+        "article",
+        articleId,
+      ]);
       if (prevArticle) {
-        queryClient.setQueryData<Article>(["article", id], {
+        queryClient.setQueryData<Article>(["article", articleId], {
           ...prevArticle,
           isLiked: !isLiked,
           likeCount: isLiked
@@ -118,7 +125,7 @@ export default function ArticlePage() {
       }
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["article", id] });
+      queryClient.invalidateQueries({ queryKey: ["article", articleId] });
       queryClient.invalidateQueries({ queryKey: ["articles"] });
     },
   });
@@ -130,10 +137,6 @@ export default function ArticlePage() {
       isLiked: article.isLiked || false,
     });
   };
-
-  const user = useAuthStore((state) => state.user);
-  const userImage = user?.image;
-  const userId = user?.id;
 
   if (isLoading) {
     return (
@@ -167,7 +170,7 @@ export default function ArticlePage() {
             onToggle={handleToggleLike}
           />
           <ArticleComment
-            id={Number(id)}
+            id={articleId}
             commentCount={article?.commentCount}
             currentUserId={userId}
             comment={comments?.list ?? []}
