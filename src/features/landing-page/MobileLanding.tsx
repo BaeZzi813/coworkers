@@ -5,8 +5,10 @@ import landing4small from "@/assets/images/landing-4-small.png";
 import { Button } from "@/components/button";
 import Icon from "@/components/icon";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 export default function MobileLanding() {
+  const router = useRouter();
   return (
     <>
       <section className="mb-[30px]">
@@ -33,7 +35,10 @@ export default function MobileLanding() {
             />
           </div>
           <div className="absolute right-10 bottom-13 w-40">
-            <Button title="지금 시작하기" />
+            <Button
+              title="지금 시작하기"
+              onClick={() => router.push("/login")}
+            />
           </div>
         </div>
       </section>
@@ -123,7 +128,10 @@ export default function MobileLanding() {
             </p>
           </div>
           <div className="w-40">
-            <Button title="지금 시작하기" />
+            <Button
+              title="지금 시작하기"
+              onClick={() => router.push("/login")}
+            />
           </div>
         </div>
       </div>

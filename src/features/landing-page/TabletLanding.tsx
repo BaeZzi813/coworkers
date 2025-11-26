@@ -5,8 +5,10 @@ import landing4medium from "@/assets/images/landing-4-medium.png";
 import { Button } from "@/components/button";
 import Icon from "@/components/icon";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 export default function TabletLanding() {
+  const router = useRouter();
   return (
     <>
       <section>
@@ -35,7 +37,10 @@ export default function TabletLanding() {
             </div>
           </div>
           <div className="absolute right-10 bottom-13 w-40">
-            <Button title="지금 시작하기" />
+            <Button
+              title="지금 시작하기"
+              onClick={() => router.push("/login")}
+            />
           </div>
         </div>
       </section>
@@ -129,7 +134,10 @@ export default function TabletLanding() {
             </p>
           </div>
           <div className="w-40">
-            <Button title="지금 시작하기" />
+            <Button
+              title="지금 시작하기"
+              onClick={() => router.push("/login")}
+            />
           </div>
         </div>
       </div>
