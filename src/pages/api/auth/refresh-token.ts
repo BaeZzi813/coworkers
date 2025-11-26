@@ -1,4 +1,4 @@
-import { apiClient } from "@/services/client";
+import { serverApiInstance } from "@/services/instance/server";
 import { withAxiosErrorResponse } from "@/services/with-axios-error-response";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -16,9 +16,12 @@ export default async function handler(
   }
 
   withAxiosErrorResponse(res, async () => {
-    const response = await apiClient.post<Response>("/auth/refresh-token", {
-      refreshToken: req.cookies.refreshToken,
-    });
+    const response = await serverApiInstance.post<Response>(
+      "/auth/refresh-token",
+      {
+        refreshToken: req.cookies.refreshToken,
+      }
+    );
     res.status(200).json(response.data);
   });
 }

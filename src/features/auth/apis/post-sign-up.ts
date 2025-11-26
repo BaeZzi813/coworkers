@@ -1,4 +1,4 @@
-import { proxyClient } from "@/services/client";
+import { clientProxyInstance } from "@/services/instance/client";
 import { User } from "@/types/user";
 
 interface SignUpParameters {
@@ -16,7 +16,7 @@ interface SignUpResponse {
 export async function postSignUp(
   params: SignUpParameters
 ): Promise<SignUpResponse> {
-  const response = await proxyClient.post<SignUpResponse>(
+  const response = await clientProxyInstance.post<SignUpResponse>(
     "/auth/signUp",
     params
   );

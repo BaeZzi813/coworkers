@@ -2,11 +2,10 @@ import LogoFull from "@/assets/images/logo-full.svg";
 import Logo from "@/assets/images/logo.svg";
 import { Button } from "@/components/button";
 import Icon from "@/components/icon";
-import { getUserGroups } from "@/features/group/apis";
+import { useUserGroups } from "@/features/group/query/use-group";
 import { useResponsive } from "@/hooks/use-responsive";
 import { useAuthStore } from "@/stores/auth-store";
 import { useSidebarStore } from "@/stores/sidebar-store";
-import { useQuery } from "@tanstack/react-query";
 import clsx from "clsx";
 import { motion } from "motion/react";
 import Link from "next/link";
@@ -96,11 +95,7 @@ function FoldButton({
 
 function Content({ isFolded }: { isFolded: boolean }) {
   const router = useRouter();
-
-  const { data: groups } = useQuery({
-    queryKey: ["user", "groups"],
-    queryFn: () => getUserGroups(),
-  });
+  const { userGroups } = useUserGroups();
 
   const handleAddTeamClick = () => {
     router.push("/addteam");
@@ -113,10 +108,10 @@ function Content({ isFolded }: { isFolded: boolean }) {
         isFolded ? "items-center" : "px-4"
       )}
     >
-      {groups && (
+      {userGroups && (
         <div className="flex flex-col gap-2">
           <UserGroupList
-            groups={groups}
+            groups={userGroups}
             compact={isFolded}
             activeGroupId={Number(router.query.teamId)}
           />

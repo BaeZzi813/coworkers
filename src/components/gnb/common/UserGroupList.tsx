@@ -1,4 +1,4 @@
-import { UserGroup } from "@/types/user-group";
+import { UserGroup } from "@/types/group";
 import Link from "next/link";
 import SidebarMenu from "./SidebarMenu";
 

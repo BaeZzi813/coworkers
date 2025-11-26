@@ -3,6 +3,7 @@ import { Article } from "@/types/article";
 import { formatDate } from "@/utils/format-date";
 import clsx from "clsx";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 interface PostCardProps {
   isPopular?: boolean;
@@ -10,12 +11,18 @@ interface PostCardProps {
 }
 
 export default function PostCard({ isPopular, article }: PostCardProps) {
-  const { title, content, writer, createdAt, likeCount, image } = article;
+  const { title, id, writer, createdAt, likeCount, image } = article;
   const formattedDate = formatDate(createdAt);
+  const router = useRouter();
+
+  const handleClick = () => {
+    router.push(`/boards/${id}`);
+  };
   return (
     <div
+      onClick={handleClick}
       className={clsx(
-        "flex w-[340px] flex-col gap-1.5 rounded-[20px] border border-border-primary bg-background-primary p-3 tablet:h-44 tablet:p-4",
+        "flex w-[340px] cursor-pointer flex-col gap-1.5 rounded-[20px] border border-border-primary bg-background-primary p-3 tablet:h-44 tablet:p-4",
         isPopular
           ? "h-[177px] justify-between tablet:w-[304px] desktop:h-[206px] desktop:w-[350px]"
           : "h-[140px] justify-around tablet:h-[156px] tablet:w-[620px] desktop:w-[529px]"
@@ -38,7 +45,6 @@ export default function PostCard({ isPopular, article }: PostCardProps) {
         >
           <div className="flex flex-col gap-2">
             <h3 className="text-lg-b tablet:text-2lg-b">{title}</h3>
-            <p className="line-clamp-2 text-sm-m tablet:text-md-r">{content}</p>
           </div>
           {image && (
             <div className="relative h-20 w-20 tablet:w-[88px] desktop:h-[88px]">

@@ -2,7 +2,10 @@ import { Button } from "@/components/button";
 import Select, { SelectOption } from "@/components/select";
 import { useResponsive } from "@/hooks/use-responsive";
 import { TaskList } from "@/types/task";
+import { overlay } from "overlay-kit";
+import DeleteModal from "./DeleteModal";
 import TaskItem from "./TaskItem";
+import TaskModal from "./TaskModal";
 
 interface Props {
   taskList: TaskList[];
@@ -18,8 +21,64 @@ export default function TaskGroupList({
   const { isDesktop } = useResponsive();
   const hasTask = taskList.length > 0;
 
-  const handleAddTaskClick = () => {
-    console.log("Add TaskItem");
+  const handlePostTask = async (name: string) => {
+    console.log(`Add TaskItem ${name}`);
+  };
+  const handlePatchTask = async (id: number, name: string) => {
+    console.log(`Edit TaskItem ${id}: ${name}`);
+  };
+  const handleDeleteTaskList = async (id: number) => {
+    console.log("DELETE TASK LIST:", id);
+  };
+
+  const openTaskModal = ({
+    mode,
+    taskId,
+    defaultValue,
+  }: {
+    mode: "create" | "edit";
+    taskId?: number;
+    defaultValue?: string;
+  }) => {
+    overlay.open(
+      ({ isOpen, close, unmount }) => (
+        <TaskModal
+          isOpen={isOpen}
+          onClose={close}
+          onExit={unmount}
+          title={mode === "create" ? "할 일 목록 생성" : "할 일 목록 수정"}
+          defaultValue={defaultValue}
+          confirmLabel={mode === "create" ? "만들기" : "수정하기"}
+          onSubmit={(name) =>
+            mode === "create"
+              ? handlePostTask(name)
+              : handlePatchTask(taskId!, name)
+          }
+        />
+      ),
+      { overlayId: `todo-list-${mode}` }
+    );
+  };
+  const openDeleteModal = ({
+    taskId,
+    targetName,
+  }: {
+    taskId: number;
+    targetName: string;
+  }) => {
+    overlay.open(
+      ({ isOpen, close, unmount }) => (
+        <DeleteModal
+          isOpen={isOpen}
+          onClose={close}
+          onExit={unmount}
+          type="taskList"
+          targetName={targetName}
+          onDelete={() => handleDeleteTaskList(taskId)}
+        />
+      ),
+      { overlayId: "taskList-delete" }
+    );
   };
 
   const mobileTaskOptions: SelectOption[] = taskList.map((task) => ({
@@ -28,11 +87,21 @@ export default function TaskGroupList({
         key={task.id}
         title={task.name}
         tasks={task.tasks}
-        onClick={() => {}}
+        onEdit={() =>
+          openTaskModal({
+            mode: "edit",
+            taskId: task.id,
+            defaultValue: task.name,
+          })
+        }
+        onDelete={() =>
+          openDeleteModal({ taskId: task.id, targetName: task.name })
+        }
       />
     ),
     value: String(task.id),
   }));
+
   const selectedOption = mobileTaskOptions.find(
     (opt) => opt.value === String(selectedTaskId)
   );
@@ -45,11 +114,14 @@ export default function TaskGroupList({
       className="h-11 w-[180px] tablet:w-60"
     />
   ) : (
-    <div className="tablet:[240px] flex h-11 w-[180px] cursor-pointer items-center rounded-lg border border-border-primary bg-background-primary p-2 tablet:w-60 tablet:rounded-xl tablet:px-3.5 tablet:py-2.5">
-      <TaskItem title="제목 없음" tasks={[]} onClick={handleAddTaskClick} />
+    <div className="tablet:[240p]x flex h-11 w-[180px] cursor-pointer items-center rounded-lg border border-border-primary bg-background-primary p-2 tablet:w-60 tablet:rounded-xl tablet:px-3.5 tablet:py-2.5">
+      <TaskItem
+        title="제목 없음"
+        tasks={[]}
+        onClick={() => openTaskModal({ mode: "create" })}
+      />
     </div>
   );
-
   const desktopTaskList = (
     <div className="flex w-full min-w-60 flex-col gap-1">
       {hasTask ? (
@@ -59,10 +131,24 @@ export default function TaskGroupList({
             title={task.name}
             tasks={task.tasks}
             onClick={() => onSelectTask(task.id)}
+            onEdit={() =>
+              openTaskModal({
+                mode: "edit",
+                taskId: task.id,
+                defaultValue: task.name,
+              })
+            }
+            onDelete={() =>
+              openDeleteModal({ taskId: task.id, targetName: task.name })
+            }
           />
         ))
       ) : (
-        <TaskItem title="제목 없음" tasks={[]} onClick={handleAddTaskClick} />
+        <TaskItem
+          title="제목 없음"
+          tasks={[]}
+          onClick={() => openTaskModal({ mode: "create" })}
+        />
       )}
     </div>
   );
@@ -83,7 +169,7 @@ export default function TaskGroupList({
             variant="outlinedPrimary"
             isFullWidth={false}
             rounded
-            onClick={handleAddTaskClick}
+            onClick={() => openTaskModal({ mode: "create" })}
           />
         </div>
       </div>

@@ -1,8 +1,7 @@
 import { Button } from "@/components/button";
 import Icon from "@/components/icon";
 import Overlay, { OverlayProps } from "@/components/overlay";
-import { getUserGroups } from "@/features/group/apis";
-import { useQuery } from "@tanstack/react-query";
+import { useUserGroups } from "@/features/group/query/use-group";
 import { motion } from "motion/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -17,11 +16,7 @@ export default function Drawer({
   onExit,
 }: PropsWithChildren<OverlayProps>) {
   const router = useRouter();
-
-  const { data: groups } = useQuery({
-    queryKey: ["user", "groups"],
-    queryFn: () => getUserGroups(),
-  });
+  const { userGroups } = useUserGroups();
 
   const handleAddTeamClick = () => {
     router.push("/addteam");
@@ -54,10 +49,10 @@ export default function Drawer({
           </button>
         </header>
         <div className="px-2">
-          {groups && (
+          {userGroups && (
             <div>
               <UserGroupList
-                groups={groups}
+                groups={userGroups}
                 compact={false}
                 activeGroupId={Number(router.query.teamId)}
               />
