@@ -1,6 +1,6 @@
 import { Button } from "@/components/button";
 import Icon from "@/components/icon";
-import { ImageInput } from "@/components/input";
+import { AvatarInput } from "@/components/input";
 import { Alert } from "@/components/modal";
 import InputLabel from "@/features/login/components/InputLabel";
 import { overlay } from "overlay-kit";
@@ -109,7 +109,7 @@ export default function MyPage() {
         <h1 className="mb-10 text-2xl-b text-text-primary">계정 설정</h1>
 
         <div className="mb-9 flex justify-center">
-          <ImageInput
+          <AvatarInput
             onChange={(file) => {
               console.log(file);
             }}

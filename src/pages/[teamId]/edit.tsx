@@ -1,5 +1,5 @@
 import { Button } from "@/components/button";
-import { ImageInput, TextField } from "@/components/input";
+import { AvatarInput, TextField } from "@/components/input";
 import { ErrorAlert } from "@/components/modal";
 import { getGroup } from "@/features/group/apis";
 import { useGroupMutation } from "@/features/group/query/use-group-mutation";
@@ -86,7 +86,7 @@ export default serverSideComponentWithAuth<PageProps>(({ group }) => {
         footer="팀 이름은 회사명이나 모임 이름 등으로 설정하면 좋아요."
       >
         <div className="flex flex-col items-center">
-          <ImageInput source={group.image} onChange={handleFileChange} />
+          <AvatarInput source={group.image} onChange={handleFileChange} />
           <div className="mt-6 flex w-full flex-col gap-3">
             <label htmlFor={textFieldId} className="text-md-m tablet:text-lg-m">
               팀 이름
