@@ -20,10 +20,16 @@ export default function EditDropdown({
   onEdit,
   onDelete,
 }: Props) {
-  const options: DropdownOption[] = [
-    { label: "수정하기", value: "edit", action: onEdit },
-    { label: "삭제하기", value: "delete", action: onDelete },
-  ];
+  const options: DropdownOption[] = [];
+
+  if (onEdit) {
+    options.push({ label: "수정하기", value: "edit", action: onEdit });
+  }
+
+  if (onDelete) {
+    options.push({ label: "삭제하기", value: "delete", action: onDelete });
+  }
+
   return (
     <Dropdown
       anchor={anchor}

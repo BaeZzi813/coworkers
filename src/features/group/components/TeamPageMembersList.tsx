@@ -1,5 +1,7 @@
 import Avatar from "@/components/avatar";
 import { Button } from "@/components/button";
+import EditDropdown from "@/components/dropdown/EditDropdown";
+import Icon from "@/components/icon";
 import { Alert } from "@/components/modal";
 import { Member } from "@/types/member";
 import { useCopyToClipboard } from "@uidotdev/usehooks";
@@ -104,6 +106,10 @@ function MemberListItem({ member }: { member: Member }) {
     );
   };
 
+  const handleMemberDelete = () => {
+    // TODO: 멤버 삭제 API 연동
+  };
+
   return (
     <button
       className="flex cursor-pointer items-center gap-3"
@@ -114,6 +120,10 @@ function MemberListItem({ member }: { member: Member }) {
         <div className="text-sm-s text-text-primary">{member.userName}</div>
         <div className="text-xs-r text-text-secondary">{member.userEmail}</div>
       </div>
+      <EditDropdown
+        anchor={<Icon name="dots" size="small" />}
+        onDelete={handleMemberDelete}
+      />
     </button>
   );
 }
