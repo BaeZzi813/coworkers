@@ -7,24 +7,23 @@ import { useMemberMutation } from "@/features/member/query/use-member-mutation";
 import { Member } from "@/types/member";
 import { useCopyToClipboard } from "@uidotdev/usehooks";
 import { overlay } from "overlay-kit";
-import { useContext } from "react";
 import { getInvitationLink } from "../apis";
 import { groupsQueryKey } from "../query/query-key";
-import { TeamContext, useTeamContext } from "./TeamProvider";
+import { useTeamContext } from "./TeamProvider";
 
 interface Props {
   members: Member[];
 }
 
 export default function TeamPageMembersList({ members }: Props) {
-  const groupId = useContext(TeamContext)!.group.id;
+  const { group } = useTeamContext();
   const [, setInvitationLink] = useCopyToClipboard();
 
   const handleInviteClick = () => {
     overlay.open(
       ({ isOpen, close, unmount }) => {
         const handleClick = async () => {
-          const invitationLink = await getInvitationLink({ groupId });
+          const invitationLink = await getInvitationLink({ groupId: group.id });
           setInvitationLink(invitationLink);
           close();
         };

@@ -9,9 +9,9 @@ import { useResponsive } from "@/hooks/use-responsive";
 import { Task, TaskList } from "@/types/task";
 import { isEmpty } from "@/utils/array-sugar";
 import { overlay } from "overlay-kit";
-import { Attributes, useContext } from "react";
+import { Attributes } from "react";
 import { groupsQueryKey } from "../query/query-key";
-import { TeamContext } from "./TeamProvider";
+import { useTeamContext } from "./TeamProvider";
 
 interface Props extends Attributes {
   taskList: TaskList;
@@ -19,7 +19,7 @@ interface Props extends Attributes {
 }
 
 export default function TeamPageTaskListCard({ key, taskList, done }: Props) {
-  const groupId = useContext(TeamContext)!.group.id;
+  const { group } = useTeamContext();
   const { isDesktop } = useResponsive();
   const tasks = taskList.tasks;
   const doneTasks = tasks.filter(isTaskDone);
@@ -28,11 +28,15 @@ export default function TeamPageTaskListCard({ key, taskList, done }: Props) {
   const handleEditClick = () => {
     const handleSubmit = (newName: string) => {
       patchMutation.mutate(
-        { groupId, taskListId: taskList.id, name: newName },
+        {
+          groupId: group.id,
+          taskListId: taskList.id,
+          name: newName,
+        },
         {
           onSuccess: (data, variables, onMutationResult, context) => {
             context.client.invalidateQueries({
-              queryKey: groupsQueryKey({ groupId }),
+              queryKey: groupsQueryKey({ groupId: group.id }),
             });
           },
         }
@@ -62,11 +66,11 @@ export default function TeamPageTaskListCard({ key, taskList, done }: Props) {
         const title = `'${taskList.name}'\n할 일을 정말 삭제하시겠어요?`;
         const handleDelete = () => {
           deleteMutation.mutate(
-            { groupId, taskListId: taskList.id },
+            { groupId: group.id, taskListId: taskList.id },
             {
               onSuccess: (data, variables, onMutationResult, context) => {
                 context.client.invalidateQueries({
-                  queryKey: groupsQueryKey({ groupId }),
+                  queryKey: groupsQueryKey({ groupId: group.id }),
                 });
               },
             }
@@ -118,7 +122,12 @@ export default function TeamPageTaskListCard({ key, taskList, done }: Props) {
       {done || isEmpty(tasks) || (
         <div className="flex flex-col gap-2">
           {taskList.tasks.map((task) => (
-            <TaskCheckbox key={task.id} taskList={taskList} task={task} />
+            <TaskCheckbox
+              key={task.id}
+              groupId={group.id}
+              taskList={taskList}
+              task={task}
+            />
           ))}
         </div>
       )}
@@ -127,12 +136,12 @@ export default function TeamPageTaskListCard({ key, taskList, done }: Props) {
 }
 
 interface TaskCheckboxProps extends Attributes {
+  groupId: number;
   taskList: TaskList;
   task: Task;
 }
 
-function TaskCheckbox({ key, taskList, task }: TaskCheckboxProps) {
-  const groupId = useContext(TeamContext)!.group.id;
+function TaskCheckbox({ key, groupId, taskList, task }: TaskCheckboxProps) {
   const { patchMutation } = useTaskMutation({
     groupId,
     taskListId: taskList.id,
