@@ -1,5 +1,5 @@
-import AvatarInputEdit18 from "@/assets/images/image-input-edit-18.svg";
-import AvatarInputEdit32 from "@/assets/images/image-input-edit-32.svg";
+import AvatarInputEdit18 from "@/assets/images/avatar-input-edit-18.svg";
+import AvatarInputEdit32 from "@/assets/images/avatar-input-edit-32.svg";
 import Icon from "@/components/icon";
 import { useResponsive } from "@/hooks/use-responsive";
 import clsx from "clsx";
