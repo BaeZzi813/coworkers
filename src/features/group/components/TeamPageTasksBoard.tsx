@@ -1,7 +1,7 @@
 import { isTaskListDone } from "@/features/tasklist/utils";
 import { useResponsive } from "@/hooks/use-responsive";
 import { TaskList } from "@/types/task";
-import Link from "next/link";
+import { useRouter } from "next/router";
 import { useContext } from "react";
 import TeamPageMembersList from "./TeamPageMembersList";
 import TeamPageTaskListCard from "./TeamPageTaskListCard";
@@ -60,7 +60,13 @@ function Column({
   taskLists: TaskList[];
   done?: boolean;
 }) {
+  const router = useRouter();
   const group = useContext(TeamContext)!.group;
+
+  const handleTaskListClick = (id: number) => {
+    router.push(`/${group.id}/tasklist?id=${id}`);
+  };
+
   return (
     <div className="flex w-full grow flex-col gap-3 desktop:gap-5">
       <div className="flex h-[38px] items-center justify-between rounded-xl bg-state-200 pr-2 pl-5">
@@ -68,12 +74,13 @@ function Column({
       </div>
       <div className="flex flex-col gap-2">
         {taskLists.map((taskList) => (
-          <Link
-            href={`/${group.id}/tasklist?id=${taskList.id}`}
+          <button
             key={taskList.id}
+            className="cursor-pointer text-left"
+            onClick={() => handleTaskListClick(taskList.id)}
           >
             <TeamPageTaskListCard taskList={taskList} done={done} />
-          </Link>
+          </button>
         ))}
       </div>
     </div>
