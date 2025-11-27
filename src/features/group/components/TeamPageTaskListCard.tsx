@@ -79,7 +79,6 @@ export default function TeamPageTaskListCard({ key, taskList, done }: Props) {
             onClose={close}
             onExit={unmount}
             title={title}
-            message="삭제 후에는 되돌릴 수 없습니다."
             onDelete={handleDelete}
           />
         );
