@@ -15,7 +15,7 @@ interface PostFormProps {
   onSubmit: (data: {
     title: string;
     content: string;
-    image?: string;
+    image?: string | null;
   }) => Promise<void>;
 }
 
@@ -93,7 +93,7 @@ export default function PostForm({
       await onSubmit({
         title,
         content,
-        image: imageUrl || undefined,
+        image: preview === "" ? null : imageUrl,
       });
     } catch (error) {
       console.log("업로드 실패:", error);

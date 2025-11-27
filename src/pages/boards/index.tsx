@@ -47,6 +47,7 @@ export default function BoardsPage() {
         if (loaded >= lastPage.totalCount) return undefined;
         return allPages.length + 1;
       },
+      refetchOnMount: "always",
     });
 
   const [observerRef, entry] = useIntersectionObserver<HTMLDivElement>({

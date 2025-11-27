@@ -23,7 +23,7 @@ export default function BestPost() {
   );
   const isEmptyBest = maxLike === 0;
   const bestArticles = articles.filter(
-    (article) => (article.likeCount ?? 0) === maxLike
+    (article) => (article.likeCount ?? 0) > 0
   );
 
   const totalPages = Math.ceil(bestArticles.length / cardPerPage);

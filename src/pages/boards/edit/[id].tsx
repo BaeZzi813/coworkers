@@ -22,10 +22,13 @@ export default function EditPage() {
   });
 
   const patchArticleMutation = useMutation({
-    mutationFn: (data: { title: string; content: string; image?: string }) =>
-      patchArticleById(articleId, data),
+    mutationFn: (data: {
+      title: string;
+      content: string;
+      image?: string | null;
+    }) => patchArticleById(articleId, data),
     onSuccess: () => {
-      router.push("/boards");
+      router.push(`/boards/${articleId}`);
       queryClient.invalidateQueries({ queryKey: ["articles"] });
     },
   });
