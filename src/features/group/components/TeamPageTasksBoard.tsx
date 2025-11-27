@@ -74,13 +74,13 @@ function Column({
       </div>
       <div className="flex flex-col gap-2">
         {taskLists.map((taskList) => (
-          <button
+          <div
             key={taskList.id}
             className="cursor-pointer text-left"
             onClick={() => handleTaskListClick(taskList.id)}
           >
             <TeamPageTaskListCard taskList={taskList} done={done} />
-          </button>
+          </div>
         ))}
       </div>
     </div>
