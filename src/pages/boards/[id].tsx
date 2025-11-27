@@ -133,7 +133,7 @@ export default function ArticlePage() {
   const handleToggleLike = () => {
     if (!article) return;
     if (article.isLiked === null) {
-      alert("로그인이 필요합니다.");
+      router.push("/login");
       return;
     }
     likeMutation.mutate({
