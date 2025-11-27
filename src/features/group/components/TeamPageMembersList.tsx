@@ -112,13 +112,17 @@ function MemberListItem({ member }: { member: Member }) {
 
   return (
     <button
-      className="flex cursor-pointer items-center gap-3"
+      className="flex w-full cursor-pointer items-center gap-3"
       onClick={handleClick}
     >
       <Avatar source={member.userImage} size="medium" />
-      <div className="text-left">
-        <div className="text-sm-s text-text-primary">{member.userName}</div>
-        <div className="text-xs-r text-text-secondary">{member.userEmail}</div>
+      <div className="min-w-0 grow text-left">
+        <div className="overflow-hidden text-sm-s text-ellipsis whitespace-nowrap text-text-primary">
+          {member.userName}
+        </div>
+        <div className="overflow-hidden text-xs-r text-ellipsis whitespace-nowrap text-text-secondary">
+          {member.userEmail}
+        </div>
       </div>
       <EditDropdown
         anchor={<Icon name="dots" size="small" />}
