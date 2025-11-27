@@ -10,7 +10,7 @@ import { overlay } from "overlay-kit";
 import { useContext } from "react";
 import { getInvitationLink } from "../apis";
 import { groupsQueryKey } from "../query/query-key";
-import { TeamContext } from "./TeamProvider";
+import { TeamContext, useTeamContext } from "./TeamProvider";
 
 interface Props {
   members: Member[];
@@ -78,7 +78,7 @@ export default function TeamPageMembersList({ members }: Props) {
 function MemberListItem({ member }: { member: Member }) {
   const [, setEmail] = useCopyToClipboard();
   const { deleteMutation } = useMemberMutation();
-  const groupId = useContext(TeamContext)!.group.id;
+  const { group, isAdmin } = useTeamContext();
 
   const handleClick = () => {
     overlay.open(
@@ -114,11 +114,11 @@ function MemberListItem({ member }: { member: Member }) {
     overlay.open(({ isOpen, close, unmount }) => {
       const handleDelete = () => {
         deleteMutation.mutate(
-          { groupId, memberUserId: member.userId },
+          { groupId: group.id, memberUserId: member.userId },
           {
             onSuccess: (data, variables, onbMutateResult, context) =>
               context.client.invalidateQueries({
-                queryKey: groupsQueryKey({ groupId }),
+                queryKey: groupsQueryKey({ groupId: group.id }),
               }),
           }
         );
@@ -151,10 +151,12 @@ function MemberListItem({ member }: { member: Member }) {
           {member.userEmail}
         </div>
       </div>
-      <EditDropdown
-        anchor={<Icon name="dots" size="small" />}
-        onDelete={handleMemberDelete}
-      />
+      {isAdmin && member.role === "MEMBER" && (
+        <EditDropdown
+          anchor={<Icon name="dots" size="small" />}
+          onDelete={handleMemberDelete}
+        />
+      )}
     </button>
   );
 }
