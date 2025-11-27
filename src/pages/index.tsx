@@ -2,7 +2,7 @@ import {
   DesktopLanding,
   MobileLanding,
   TabletLanding,
-} from "@/features/landing-page";
+} from "@/features/landing-page/components";
 import { useResponsive } from "@/hooks/use-responsive";
 
 export default function Home() {

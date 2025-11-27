@@ -2,13 +2,11 @@ import landing1large from "@/assets/images/landing-1-large.png";
 import landing2large from "@/assets/images/landing-2-large.png";
 import landing3large from "@/assets/images/landing-3-large.png";
 import landing4large from "@/assets/images/landing-4-large.png";
-import { Button } from "@/components/button";
 import Icon from "@/components/icon";
 import Image from "next/image";
-import { useRouter } from "next/router";
+import StartButton from "./StartButton";
 
 export default function DesktopLanding() {
-  const router = useRouter();
   return (
     <>
       <section className="w-full bg-background-secondary">
@@ -26,10 +24,7 @@ export default function DesktopLanding() {
               </p>
             </div>
             <div className="absolute bottom-[228px] left-[106px] w-40">
-              <Button
-                title="지금 시작하기"
-                onClick={() => router.push("/login")}
-              />
+              <StartButton />
             </div>
           </div>
           <div className="relative w-[1330px]">
@@ -128,10 +123,7 @@ export default function DesktopLanding() {
             </p>
           </div>
           <div className="w-40">
-            <Button
-              title="지금 시작하기"
-              onClick={() => router.push("/login")}
-            />
+            <StartButton />
           </div>
         </div>
       </div>
