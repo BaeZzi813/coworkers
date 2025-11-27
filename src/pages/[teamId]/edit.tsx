@@ -36,18 +36,18 @@ export const getServerSideProps = gsspWithAuth(async (context, accessToken) => {
 
 export default serverSideComponentWithAuth<PageProps>(({ group }) => {
   const { isMobile } = useResponsive();
-  const [teamName, setTeamName] = useState(group.name);
+  const [imageFile, setImageFile] = useState<File>();
+  const [name, setName] = useState(group.name);
   const textFieldId = useId();
   const router = useRouter();
   const { patchMutation } = useGroupMutation();
 
   const handleFileChange = (file: File) => {
-    // TODO: File upload
-    console.log(file);
+    setImageFile(file);
   };
 
   const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setTeamName(event.target.value);
+    setName(event.target.value);
   };
 
   const handleEditSuccess = () => {
@@ -71,7 +71,7 @@ export default serverSideComponentWithAuth<PageProps>(({ group }) => {
 
   const handleSubmit = () => {
     patchMutation.mutate(
-      { groupId: group.id, name: teamName },
+      { groupId: group.id, imageFile, name },
       {
         onSuccess: handleEditSuccess,
         onError: handleEditError,
@@ -97,7 +97,7 @@ export default serverSideComponentWithAuth<PageProps>(({ group }) => {
             </label>
             <TextField
               id={textFieldId}
-              value={teamName}
+              value={name}
               placeholder="팀 이름을 입력해주세요."
               size={isMobile ? "small" : "large"}
               onChange={handleNameChange}
@@ -106,7 +106,7 @@ export default serverSideComponentWithAuth<PageProps>(({ group }) => {
           <Button
             className="mt-10"
             title="수정하기"
-            disabled={!teamName.trim()}
+            disabled={!name.trim()}
             onClick={handleSubmit}
           />
         </div>
