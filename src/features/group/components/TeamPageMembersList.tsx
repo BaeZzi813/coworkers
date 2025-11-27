@@ -2,12 +2,14 @@ import Avatar from "@/components/avatar";
 import { Button } from "@/components/button";
 import EditDropdown from "@/components/dropdown/EditDropdown";
 import Icon from "@/components/icon";
-import { Alert } from "@/components/modal";
+import { Alert, DeleteAlert } from "@/components/modal";
+import { useMemberMutation } from "@/features/member/query/use-member-mutation";
 import { Member } from "@/types/member";
 import { useCopyToClipboard } from "@uidotdev/usehooks";
 import { overlay } from "overlay-kit";
 import { useContext } from "react";
 import { getInvitationLink } from "../apis";
+import { groupsQueryKey } from "../query/query-key";
 import { TeamContext } from "./TeamProvider";
 
 interface Props {
@@ -75,6 +77,8 @@ export default function TeamPageMembersList({ members }: Props) {
 
 function MemberListItem({ member }: { member: Member }) {
   const [, setEmail] = useCopyToClipboard();
+  const { deleteMutation } = useMemberMutation();
+  const groupId = useContext(TeamContext)!.group.id;
 
   const handleClick = () => {
     overlay.open(
@@ -107,7 +111,30 @@ function MemberListItem({ member }: { member: Member }) {
   };
 
   const handleMemberDelete = () => {
-    // TODO: 멤버 삭제 API 연동
+    overlay.open(({ isOpen, close, unmount }) => {
+      const handleDelete = () => {
+        deleteMutation.mutate(
+          { groupId, memberUserId: member.userId },
+          {
+            onSuccess: (data, variables, onbMutateResult, context) =>
+              context.client.invalidateQueries({
+                queryKey: groupsQueryKey({ groupId }),
+              }),
+          }
+        );
+        close();
+      };
+
+      return (
+        <DeleteAlert
+          isOpen={isOpen}
+          onClose={close}
+          onExit={unmount}
+          title={`'${member.userName}'님을\n팀에서 정말 삭제하시겠어요?`}
+          onDelete={handleDelete}
+        />
+      );
+    });
   };
 
   return (
