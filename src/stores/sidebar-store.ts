@@ -1,13 +1,21 @@
 import { create } from "zustand";
-import { combine } from "zustand/middleware";
+import { persist } from "zustand/middleware";
 
-const initialState = {
-  isFold: false,
-};
+interface SidebarStore {
+  isFold: boolean;
+  setFold: (isFold: boolean) => void;
+  toggle: () => void;
+}
 
-export const useSidebarStore = create(
-  combine(initialState, (set) => ({
-    toggle: () => set((state) => ({ isFold: !state.isFold })),
-    setFold: (folded: boolean) => set(() => ({ isFold: folded })),
-  }))
+export const useSidebarStore = create<SidebarStore>()(
+  persist(
+    (set) => ({
+      isFold: false,
+      setFold: (isFold: boolean) => set(() => ({ isFold: isFold })),
+      toggle: () => set((state) => ({ isFold: !state.isFold })),
+    }),
+    {
+      name: "sidebar-fold-storage",
+    }
+  )
 );
