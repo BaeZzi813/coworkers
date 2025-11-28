@@ -4,7 +4,7 @@ import { persist } from "zustand/middleware";
 interface SidebarStore {
   isFold: boolean;
   setFold: (isFold: boolean) => void;
-  toggle: () => void;
+  toggleFold: () => void;
   isDropdownOpen: boolean;
   toggleDropdownOpen: () => void;
 }
@@ -14,7 +14,7 @@ export const useSidebarStore = create<SidebarStore>()(
     (set) => ({
       isFold: false,
       setFold: (isFold: boolean) => set(() => ({ isFold: isFold })),
-      toggle: () => set((state) => ({ isFold: !state.isFold })),
+      toggleFold: () => set((state) => ({ isFold: !state.isFold })),
       isDropdownOpen: true,
       toggleDropdownOpen: () =>
         set((state) => ({ isDropdownOpen: !state.isDropdownOpen })),

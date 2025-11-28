@@ -29,8 +29,8 @@ interface Props {
 }
 
 export default function Sidebar({ className }: Props) {
-  const [isFolded, toggle, setFold] = useSidebarStore(
-    useShallow((state) => [state.isFold, state.toggle, state.setFold])
+  const [isFolded, toggleFold, setFold] = useSidebarStore(
+    useShallow((state) => [state.isFold, state.toggleFold, state.setFold])
   );
   const [isLoggedIn, user] = useAuthStore(
     useShallow((state) => [state.loggedIn, state.user])
@@ -38,7 +38,7 @@ export default function Sidebar({ className }: Props) {
   useResponsive({ onTablet: setFold });
 
   const handleFoldClick = () => {
-    toggle();
+    toggleFold();
   };
 
   if (!isLoggedIn) {
