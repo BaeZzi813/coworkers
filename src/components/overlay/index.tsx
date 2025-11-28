@@ -7,6 +7,7 @@ export interface OverlayProps {
   isOpen: boolean;
   onClose: () => void;
   onExit?: () => void;
+  allowsBackgroundDismiss?: boolean;
 }
 
 interface Props extends PropsWithChildren<OverlayProps> {
@@ -21,11 +22,17 @@ export default function Overlay({
   overlayKey,
   portalId,
   className,
+  allowsBackgroundDismiss = true,
   isOpen,
   children,
   onClose,
   onExit,
 }: Props) {
+  const handleBackgroundClick = () => {
+    if (!allowsBackgroundDismiss) return;
+    onClose();
+  };
+
   return createPortal(
     <AnimatePresence onExitComplete={onExit}>
       {isOpen && (
@@ -36,7 +43,7 @@ export default function Overlay({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: ANIMATION_DURATION }}
-          onClick={onClose}
+          onClick={handleBackgroundClick}
         >
           {children}
         </motion.div>
