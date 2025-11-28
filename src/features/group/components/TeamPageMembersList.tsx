@@ -1,26 +1,29 @@
 import Avatar from "@/components/avatar";
 import { Button } from "@/components/button";
-import { Alert } from "@/components/modal";
+import EditDropdown from "@/components/dropdown/EditDropdown";
+import Icon from "@/components/icon";
+import { Alert, DeleteAlert } from "@/components/modal";
+import { useMemberMutation } from "@/features/member/query/use-member-mutation";
 import { Member } from "@/types/member";
 import { useCopyToClipboard } from "@uidotdev/usehooks";
 import { overlay } from "overlay-kit";
-import { useContext } from "react";
 import { getInvitationLink } from "../apis";
-import { TeamContext } from "./TeamProvider";
+import { groupsQueryKey } from "../query/query-key";
+import { useTeamContext } from "./TeamProvider";
 
 interface Props {
   members: Member[];
 }
 
 export default function TeamPageMembersList({ members }: Props) {
-  const groupId = useContext(TeamContext)!.group.id;
+  const { group } = useTeamContext();
   const [, setInvitationLink] = useCopyToClipboard();
 
   const handleInviteClick = () => {
     overlay.open(
       ({ isOpen, close, unmount }) => {
         const handleClick = async () => {
-          const invitationLink = await getInvitationLink({ groupId });
+          const invitationLink = await getInvitationLink({ groupId: group.id });
           setInvitationLink(invitationLink);
           close();
         };
@@ -73,6 +76,8 @@ export default function TeamPageMembersList({ members }: Props) {
 
 function MemberListItem({ member }: { member: Member }) {
   const [, setEmail] = useCopyToClipboard();
+  const { deleteMutation } = useMemberMutation();
+  const { group, isAdmin } = useTeamContext();
 
   const handleClick = () => {
     overlay.open(
@@ -104,16 +109,53 @@ function MemberListItem({ member }: { member: Member }) {
     );
   };
 
+  const handleMemberDelete = () => {
+    overlay.open(({ isOpen, close, unmount }) => {
+      const handleDelete = () => {
+        deleteMutation.mutate(
+          { groupId: group.id, memberUserId: member.userId },
+          {
+            onSuccess: (data, variables, onbMutateResult, context) =>
+              context.client.invalidateQueries({
+                queryKey: groupsQueryKey({ groupId: group.id }),
+              }),
+          }
+        );
+        close();
+      };
+
+      return (
+        <DeleteAlert
+          isOpen={isOpen}
+          onClose={close}
+          onExit={unmount}
+          title={`'${member.userName}'님을\n팀에서 정말 삭제하시겠어요?`}
+          onDelete={handleDelete}
+        />
+      );
+    });
+  };
+
   return (
     <button
-      className="flex cursor-pointer items-center gap-3"
+      className="flex w-full cursor-pointer items-center gap-3"
       onClick={handleClick}
     >
       <Avatar source={member.userImage} size="medium" />
-      <div className="text-left">
-        <div className="text-sm-s text-text-primary">{member.userName}</div>
-        <div className="text-xs-r text-text-secondary">{member.userEmail}</div>
+      <div className="min-w-0 grow text-left">
+        <div className="overflow-hidden text-sm-s text-ellipsis whitespace-nowrap text-text-primary">
+          {member.userName}
+        </div>
+        <div className="overflow-hidden text-xs-r text-ellipsis whitespace-nowrap text-text-secondary">
+          {member.userEmail}
+        </div>
       </div>
+      {isAdmin && member.role === "MEMBER" && (
+        <EditDropdown
+          anchor={<Icon name="dots" size="small" />}
+          onDelete={handleMemberDelete}
+        />
+      )}
     </button>
   );
 }

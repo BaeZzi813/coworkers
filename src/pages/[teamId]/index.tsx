@@ -91,7 +91,7 @@ export default serverSideComponentWithAuth<PageProps>(({ groupId }) => {
   return (
     <div className="h-full bg-background-secondary">
       <DimmedLayout isDimmed={isFetching}>
-        <TeamProvider group={group}>
+        <TeamProvider group={group} isAdmin={isAdmin}>
           <div
             className={clsx(
               "h-full max-w-7xl overflow-y-auto pb-[54px]",

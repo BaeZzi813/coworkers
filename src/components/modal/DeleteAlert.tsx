@@ -4,7 +4,7 @@ import Alert from "./Alert";
 
 interface Props extends OverlayProps {
   title: string;
-  message: string;
+  message?: string;
   onDelete: () => void;
 }
 
@@ -13,7 +13,7 @@ export default function DeleteAlert({
   onClose,
   onExit,
   title,
-  message,
+  message = "삭제 후에는 되돌릴 수 없습니다.",
   onDelete,
 }: Props) {
   const handleDelete = () => {
