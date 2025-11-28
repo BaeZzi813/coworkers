@@ -33,9 +33,9 @@ export default function BestPost() {
   const visiblePage = bestArticles.slice(start, start + cardPerPage) ?? [];
 
   return (
-    <section className="mx-auto">
-      <div className="h-[314px] w-full bg-background-secondary tablet:h-[326px] desktop:mx-auto desktop:h-[370px] desktop:w-[1120px] desktop:rounded-[20px]">
-        <div className="mx-auto flex h-[218px] w-[340px] flex-col gap-5 pt-[27px] tablet:h-[221px] tablet:w-[620px] desktop:w-[1074px]">
+    <section className="mx-auto desktop:w-full desktop:max-w-[1120px]">
+      <div className="h-[314px] w-full bg-background-secondary tablet:h-[326px] desktop:mx-auto desktop:h-[370px] desktop:w-full desktop:max-w-[1120px] desktop:rounded-[20px] desktop:px-6">
+        <div className="mx-auto flex h-[218px] w-[340px] flex-col gap-5 pt-[27px] tablet:h-[221px] tablet:w-[620px] desktop:w-full desktop:max-w-[1074px]">
           <h1 className="text-2lg-b tablet:text-xl-b">베스트 게시글</h1>
           {isEmptyBest ? (
             <div className="flex items-end justify-center pt-25 text-lg-r text-text-default">
@@ -43,7 +43,7 @@ export default function BestPost() {
             </div>
           ) : (
             <>
-              <div className="flex gap-3">
+              <div className="flex gap-3 desktop:w-full desktop:max-w-[1074px]">
                 {visiblePage?.map((post) => (
                   <PostCard key={post.id} article={post} isPopular={true} />
                 ))}

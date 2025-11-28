@@ -24,8 +24,8 @@ export default function PostCard({ isPopular, article }: PostCardProps) {
       className={clsx(
         "flex w-[340px] cursor-pointer flex-col gap-1.5 rounded-[20px] border border-border-primary bg-background-primary p-3 tablet:h-44 tablet:p-4",
         isPopular
-          ? "h-[177px] justify-between tablet:w-[304px] desktop:h-[206px] desktop:w-[350px]"
-          : "h-[140px] justify-around tablet:h-[156px] tablet:w-[620px] desktop:w-[529px]"
+          ? "h-[177px] justify-between tablet:w-[304px] desktop:h-[206px] desktop:w-full desktop:max-w-[350px]"
+          : "h-[140px] justify-around tablet:h-[156px] tablet:w-[620px] desktop:w-full desktop:max-w-[529px]"
       )}
     >
       {isPopular && (
@@ -39,8 +39,8 @@ export default function PostCard({ isPopular, article }: PostCardProps) {
           className={clsx(
             "flex h-20 w-[308px] justify-between tablet:h-[88px]",
             isPopular
-              ? "tablet:w-[264px] desktop:w-[310px]"
-              : "tablet:w-[572px] desktop:w-[504px]"
+              ? "tablet:w-[264px] desktop:w-full desktop:max-w-[310px]"
+              : "tablet:w-[572px] desktop:w-full desktop:max-w-[504px]"
           )}
         >
           <div className="flex flex-col gap-2">
@@ -57,8 +57,8 @@ export default function PostCard({ isPopular, article }: PostCardProps) {
         className={clsx(
           "flex h-4 w-[308px] items-center justify-between",
           isPopular
-            ? "tablet:w-[264px] desktop:w-[310px]"
-            : "tablet:w-[572px] desktop:w-[504px]"
+            ? "tablet:w-[264px] desktop:w-full desktop:max-w-[310px]"
+            : "tablet:w-[572px] desktop:w-full desktop:max-w-[504px]"
         )}
       >
         <div>
