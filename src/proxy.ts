@@ -8,15 +8,16 @@ export async function proxy(request: NextRequest) {
   const isLoginOrSignupPage = ["/login", "/signup"].includes(
     request.nextUrl.pathname
   );
+  const isResetPasswordPage = request.nextUrl.pathname === "/reset-password";
 
   if (isValidToken) {
-    if (isLoginOrSignupPage) {
+    if (isLoginOrSignupPage || isResetPasswordPage) {
       return redirect("/dashboard", request.url);
     } else {
       return next();
     }
   } else {
-    if (isLandingPage || isLoginOrSignupPage) {
+    if (isLandingPage || isLoginOrSignupPage || isResetPasswordPage) {
       return next();
     } else {
       return redirect("/login", request.url);
@@ -43,6 +44,7 @@ export const config = {
     "/myhistory",
     "/mypage",
     "/boards",
+    "/reset-password",
     "/:teamid",
     "/:teamid/tasklist",
     "/:teamid/:taskid",
