@@ -14,3 +14,28 @@ export async function getUserGroups() {
   const response = await clientApiInstance.get<UserGroup[]>("/user/groups");
   return response.data;
 }
+
+interface PostResetPasswordParams {
+  email: string;
+}
+
+interface PostResetPasswordResponse {
+  message: string;
+}
+
+export async function postResetPassword({ email }: PostResetPasswordParams) {
+  const redirectUrl =
+    process.env.NODE_ENV === "production"
+      ? process.env.NEXT_PUBLIC_APP_URL
+      : "http://localhost:3000";
+
+  try {
+    const response = await clientApiInstance.post<PostResetPasswordResponse>(
+      "/user/send-reset-password-email",
+      { email, redirectUrl }
+    );
+    return response.data.message;
+  } catch {
+    throw Error("가입되지 않은 이메일입니다. 이메일 주소를 확인해주세요.");
+  }
+}
