@@ -2,9 +2,9 @@ import landing1medium from "@/assets/images/landing-1-medium.png";
 import landing2medium from "@/assets/images/landing-2-medium.png";
 import landing3medium from "@/assets/images/landing-3-medium.png";
 import landing4medium from "@/assets/images/landing-4-medium.png";
-import { Button } from "@/components/button";
 import Icon from "@/components/icon";
 import Image from "next/image";
+import StartButton from "./StartButton";
 
 export default function TabletLanding() {
   return (
@@ -35,7 +35,7 @@ export default function TabletLanding() {
             </div>
           </div>
           <div className="absolute right-10 bottom-13 w-40">
-            <Button title="지금 시작하기" />
+            <StartButton />
           </div>
         </div>
       </section>
@@ -129,7 +129,7 @@ export default function TabletLanding() {
             </p>
           </div>
           <div className="w-40">
-            <Button title="지금 시작하기" />
+            <StartButton />
           </div>
         </div>
       </div>
