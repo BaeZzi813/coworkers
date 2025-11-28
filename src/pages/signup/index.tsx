@@ -1,9 +1,10 @@
 import KakaotalkIcon from "@/assets/icons/ic-kakaotalk.svg";
 import { Button } from "@/components/button";
-import { Alert } from "@/components/modal";
+import { Alert, ErrorAlert } from "@/components/modal";
 import { postSignUp } from "@/features/auth/apis";
 import InputLabel from "@/features/login/components/InputLabel";
 import PasswordVisible from "@/features/login/components/PasswordVisible";
+import { useAuthStore } from "@/stores/auth-store";
 import {
   validateEmail,
   validateName,
@@ -26,6 +27,8 @@ export default function SignUpPage() {
   const [confirmedPasswordError, setConfirmedPasswordError] = useState<
     string | undefined
   >();
+  const [isEmailErrorModalOpen, setIsEmailErrorModalOpen] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
 
   const validateTotalForm = () => {
     const nameResult = validateName(name);
@@ -95,6 +98,7 @@ export default function SignUpPage() {
   };
 
   const router = useRouter();
+  const login = useAuthStore((state) => state.logIn);
 
   const isFormValid = validateTotalForm().isValid;
 
@@ -111,32 +115,43 @@ export default function SignUpPage() {
     }
 
     try {
-      await postSignUp({
+      const response = await postSignUp({
         email,
         nickname: name,
         password,
         passwordConfirmation: confirmedPassword,
       });
 
+      overlay.close("email-duplicate-error-alert");
+      overlay.unmount("email-duplicate-error-alert");
+      setIsEmailErrorModalOpen(false);
+      setIsSuccessModalOpen(true);
       overlay.open(
         ({ isOpen, close, unmount }) => (
           <Alert
             isOpen={isOpen}
             onClose={() => {}}
-            onExit={unmount}
+            onExit={() => {
+              setIsSuccessModalOpen(false);
+              unmount();
+            }}
             allowsBackgroundDismiss={false}
             showsCloseButton={false}
             title="회원가입이 완료되었습니다!"
             actions={[
               <Button
                 key="move"
-                title="로그인하기"
+                title="팀 페이지로 이동"
                 variant="primary"
                 size="large"
                 isFullWidth={true}
                 onClick={() => {
+                  login({
+                    accessToken: response.accessToken,
+                    user: response.user,
+                  });
                   close();
-                  router.push("/login");
+                  router.push("/dashboard");
                 }}
               />,
             ]}
@@ -165,8 +180,28 @@ export default function SignUpPage() {
           errorData?.email ||
           /이메일|email/i.test(errorData?.message || "");
 
-        if (hasEmailError) {
-          setEmailError("이미 사용중인 이메일입니다.");
+        if (hasEmailError && !isSuccessModalOpen && !isEmailErrorModalOpen) {
+          overlay.close("signup-success-alert");
+          overlay.unmount("signup-success-alert");
+          overlay.close("email-duplicate-error-alert");
+          overlay.unmount("email-duplicate-error-alert");
+
+          setIsEmailErrorModalOpen(true);
+          overlay.open(
+            ({ isOpen, close, unmount }) => (
+              <ErrorAlert
+                isOpen={isOpen}
+                onClose={close}
+                onExit={() => {
+                  setIsEmailErrorModalOpen(false);
+                  unmount();
+                }}
+                title="이미 사용중인 이메일입니다."
+                error={new Error("다른 이메일을 입력해주세요.")}
+              />
+            ),
+            { overlayId: "email-duplicate-error-alert" }
+          );
         } else {
           console.error(
             "회원가입 에러:",
