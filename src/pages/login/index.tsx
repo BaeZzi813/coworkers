@@ -1,7 +1,7 @@
 import KakaotalkIcon from "@/assets/icons/ic-kakaotalk.svg";
 import { Button } from "@/components/button";
-import { Alert } from "@/components/modal";
 import { postSignIn } from "@/features/auth/apis";
+import ResetPasswordAlert from "@/features/auth/components/ResetPasswordAlert";
 import InputLabel from "@/features/login/components/InputLabel";
 import PasswordVisible from "@/features/login/components/PasswordVisible";
 import { useAuthStore } from "@/stores/auth-store";
@@ -82,39 +82,7 @@ export default function LoginPage() {
   const handleForgotPasswordClick = () => {
     overlay.open(
       ({ isOpen, close, unmount }) => (
-        <Alert
-          isOpen={isOpen}
-          onClose={close}
-          onExit={unmount}
-          title="비밀번호 재설정"
-          message="비밀번호 재설정 링크를 보내드립니다."
-          content={
-            <InputLabel
-              label=""
-              type="email"
-              placeholder="이메일을 입력하세요."
-              size="large"
-            />
-          }
-          actions={[
-            <Button
-              key="close"
-              title="닫기"
-              variant="outlinedPrimary"
-              size="large"
-              isFullWidth={true}
-              onClick={close}
-            />,
-            <Button
-              key="send"
-              title="링크 보내기"
-              variant="primary"
-              size="large"
-              isFullWidth={true}
-              onClick={close}
-            />,
-          ]}
-        />
+        <ResetPasswordAlert isOpen={isOpen} onClose={close} onExit={unmount} />
       ),
       { overlayId: "password-reset-alert" }
     );

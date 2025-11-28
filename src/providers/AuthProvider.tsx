@@ -8,17 +8,17 @@ import { useShallow } from "zustand/shallow";
 
 export default function AuthProvider({ children }: PropsWithChildren) {
   const router = useRouter();
-  const [login, logout] = useAuthStore(
-    useShallow((state) => [state.logIn, state.logOut])
+  const [login, logout, refreshToken] = useAuthStore(
+    useShallow((state) => [state.logIn, state.logOut, state.refreshToken])
   );
-  const refreshToken = useAuthStore((state) => state.refreshToken);
 
   const initializeAuth = async () => {
-    try {
-      if (["/", "/login", "/signup"].includes(router.pathname)) {
-        return;
-      }
+    const excludedPaths = ["/", "/login", "/signup", "/reset-password"];
+    if (excludedPaths.includes(router.pathname)) {
+      return;
+    }
 
+    try {
       const accessToken = await postRefreshToken();
       refreshToken({ accessToken });
 
