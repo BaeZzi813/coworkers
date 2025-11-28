@@ -8,6 +8,7 @@ export default function Modal({
   children,
   onClose,
   onExit,
+  dismissable,
 }: PropsWithChildren<OverlayProps>) {
   const { isMobile } = useResponsive();
 
@@ -23,6 +24,7 @@ export default function Modal({
       isOpen={isOpen}
       onClose={onClose}
       onExit={onExit}
+      dismissable={dismissable}
     >
       <div
         className={clsx(isMobile && "fixed right-0 bottom-0 left-0")}

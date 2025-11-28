@@ -18,6 +18,7 @@ export default function Alert({
   isOpen,
   onClose,
   onExit,
+  dismissable,
   header,
   title,
   message,
@@ -28,7 +29,12 @@ export default function Alert({
   const { isMobile } = useResponsive();
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} onExit={onExit}>
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      onExit={onExit}
+      dismissable={dismissable}
+    >
       <motion.div
         className={
           "rounded-t-3xl bg-background-primary px-4 pt-4 pb-8 tablet:w-[384px] tablet:rounded-3xl"
