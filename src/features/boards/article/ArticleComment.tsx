@@ -159,7 +159,7 @@ export default function ArticleComment({
               onKeyDown={(e) => {
                 handleSubmitCommentKeyDown(e);
               }}
-              className="w-52 text-text-default placeholder:text-xs-r focus:outline-none tablet:w-[420px] desktop:w-[660px]"
+              className="w-52 text-text-default placeholder:text-xs-r focus:outline-none tablet:w-[420px] desktop:w-full desktop:max-w-[660px]"
             />
             <button
               onClick={handleSubmitComment}

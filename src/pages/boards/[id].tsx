@@ -160,8 +160,8 @@ export default function ArticlePage() {
 
   return (
     <section className="min-h-screen w-full bg-background-secondary py-5 tablet:py-[68px]">
-      <div className="relative mx-auto w-[343px] rounded-[20px] bg-background-primary tablet:w-[620px] desktop:w-[900px]">
-        <div className="mx-auto w-[300px] pt-10 pb-10 tablet:w-[540px] tablet:pt-[54px] tablet:pb-[54px] desktop:w-[780px]">
+      <div className="relative mx-auto w-[343px] rounded-[20px] bg-background-primary tablet:w-[620px] desktop:mr-20 desktop:ml-[184px] desktop:w-auto desktop:max-w-[900px]">
+        <div className="mx-auto w-[300px] pt-10 pb-10 tablet:w-[540px] tablet:pt-[54px] tablet:pb-[54px] desktop:mx-[60px] desktop:w-auto desktop:max-w-[780px]">
           <ArticleHeader
             currentUserId={userId}
             article={article}
