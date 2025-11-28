@@ -1,9 +1,8 @@
 import { Button } from "@/components/button";
-import { TextField } from "@/components/input";
+import { AvatarInput, TextField } from "@/components/input";
 import { ErrorAlert } from "@/components/modal";
 import { useGroupMutation } from "@/features/group/query/use-group-mutation";
 import TeamEditContainer from "@/features/team/components/TeamEditContainer";
-import TeamEditImageInput from "@/features/team/components/TeamEditImageInput";
 import { useResponsive } from "@/hooks/use-responsive";
 import { Group } from "@/types/group";
 import { useRouter } from "next/router";
@@ -63,7 +62,7 @@ export default function AddTeamPage() {
         footer="팀 이름은 회사명이나 모임 이름 등으로 설정하면 좋아요."
       >
         <div className="flex flex-col items-center">
-          <TeamEditImageInput onChange={handleFileChange} />
+          <AvatarInput onChange={handleFileChange} />
           <div className="mt-6 flex w-full flex-col gap-3">
             <label htmlFor={textFieldId} className="text-md-m tablet:text-lg-m">
               팀 이름
