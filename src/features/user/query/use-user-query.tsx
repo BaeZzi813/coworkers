@@ -12,10 +12,10 @@ export function useUserQuery() {
 }
 
 export function useUserGroupsQuery() {
-  const { data } = useQuery({
+  const { data, isPending, isFetching } = useQuery({
     queryKey: userGroupsQueryKey,
     queryFn: getUserGroups,
   });
 
-  return { userGroups: data };
+  return { userGroups: data, isPending, isFetching };
 }

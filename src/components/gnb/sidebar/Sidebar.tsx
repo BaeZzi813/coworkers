@@ -110,7 +110,7 @@ function FoldButton({
 
 function Content({ isFolded }: { isFolded: boolean }) {
   const router = useRouter();
-  const { userGroups } = useUserGroupsQuery();
+  const { userGroups, isPending, isFetching } = useUserGroupsQuery();
 
   const handleAddTeamClick = () => {
     router.push("/addteam");
@@ -123,6 +123,7 @@ function Content({ isFolded }: { isFolded: boolean }) {
         isFolded ? "items-center" : "px-4"
       )}
     >
+      {(isPending || isFetching) && <UserGroupListLoadingSkeleton />}
       {userGroups && (
         <div className="flex flex-col gap-2">
           <UserGroupList
@@ -152,6 +153,19 @@ function Content({ isFolded }: { isFolded: boolean }) {
           active={router.pathname === "/boards"}
         />
       </Link>
+    </div>
+  );
+}
+
+function UserGroupListLoadingSkeleton() {
+  return (
+    <div className="flex w-full flex-col gap-2">
+      {Array.from({ length: 3 }).map((_, index) => (
+        <div
+          key={index}
+          className="h-13 animate-pulse rounded-xl bg-background-secondary"
+        />
+      ))}
     </div>
   );
 }
