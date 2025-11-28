@@ -1,7 +1,7 @@
 export interface Article {
   id: number;
   title: string;
-  image: string;
+  image: string | null;
   likeCount: number;
   content: string;
   writer: {
@@ -12,5 +12,5 @@ export interface Article {
   updatedAt: string;
   commentCount?: number;
   comment?: Comment[];
-  isLiked?: boolean;
+  isLiked?: boolean | null;
 }
