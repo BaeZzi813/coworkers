@@ -1,5 +1,7 @@
 import KakaotalkIcon from "@/assets/icons/ic-kakaotalk.svg";
 import { Button } from "@/components/button";
+import { Alert } from "@/components/modal";
+import { postSignUp } from "@/features/auth/apis";
 import InputLabel from "@/features/login/components/InputLabel";
 import PasswordVisible from "@/features/login/components/PasswordVisible";
 import {
@@ -8,12 +10,12 @@ import {
   validatePassword,
   validatePasswordConfirm,
 } from "@/utils/login-validator";
+import { useRouter } from "next/router";
+import { overlay } from "overlay-kit";
 import { FormEvent, useState } from "react";
 
 export default function SignUpPage() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
-    useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -92,9 +94,11 @@ export default function SignUpPage() {
     validateBlurField("confirmedPassword");
   };
 
+  const router = useRouter();
+
   const isFormValid = validateTotalForm().isValid;
 
-  const handleSignUpButtonClick = () => {
+  const handleSignUpButtonClick = async () => {
     const validation = validateTotalForm();
 
     setNameError(validation.errors.nameError);
@@ -104,6 +108,74 @@ export default function SignUpPage() {
 
     if (!validation.isValid) {
       return;
+    }
+
+    try {
+      await postSignUp({
+        email,
+        nickname: name,
+        password,
+        passwordConfirmation: confirmedPassword,
+      });
+
+      overlay.open(
+        ({ isOpen, close, unmount }) => (
+          <Alert
+            isOpen={isOpen}
+            onClose={() => {}}
+            onExit={unmount}
+            allowsBackgroundDismiss={false}
+            showsCloseButton={false}
+            title="회원가입이 완료되었습니다!"
+            actions={[
+              <Button
+                key="move"
+                title="로그인하기"
+                variant="primary"
+                size="large"
+                isFullWidth={true}
+                onClick={() => {
+                  close();
+                  router.push("/login");
+                }}
+              />,
+            ]}
+          />
+        ),
+        { overlayId: "signup-success-alert" }
+      );
+    } catch (error) {
+      const axiosError = error as {
+        response?: {
+          status?: number;
+          data?: {
+            message?: string;
+            details?: {
+              email?: { message?: string };
+            };
+            email?: string | { message?: string };
+          };
+        };
+      };
+
+      if (axiosError?.response?.status === 400) {
+        const errorData = axiosError.response.data;
+        const hasEmailError =
+          errorData?.details?.email ||
+          errorData?.email ||
+          /이메일|email/i.test(errorData?.message || "");
+
+        if (hasEmailError) {
+          setEmailError("이미 사용중인 이메일입니다.");
+        } else {
+          console.error(
+            "회원가입 에러:",
+            errorData?.message || "회원가입에 실패했습니다."
+          );
+        }
+      } else {
+        console.error("회원가입 에러:", error);
+      }
     }
   };
 
@@ -178,7 +250,7 @@ export default function SignUpPage() {
                 <InputLabel
                   label="비밀번호 확인"
                   id="confirmPassword"
-                  type={isConfirmPasswordVisible ? "text" : "password"}
+                  type={isPasswordVisible ? "text" : "password"}
                   placeholder="비밀번호를 다시 한 번 입력해주세요."
                   size="large"
                   value={confirmedPassword}
@@ -187,10 +259,8 @@ export default function SignUpPage() {
                   errorMessage={confirmedPasswordError}
                   trailing={
                     <PasswordVisible
-                      isVisible={isConfirmPasswordVisible}
-                      onToggle={() =>
-                        setIsConfirmPasswordVisible(!isConfirmPasswordVisible)
-                      }
+                      isVisible={isPasswordVisible}
+                      onToggle={() => setIsPasswordVisible(!isPasswordVisible)}
                     />
                   }
                 />
