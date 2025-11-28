@@ -7,7 +7,7 @@ export interface OverlayProps {
   isOpen: boolean;
   onClose: () => void;
   onExit?: () => void;
-  dismissable?: boolean;
+  allowsBackgroundDismiss?: boolean;
 }
 
 interface Props extends PropsWithChildren<OverlayProps> {
@@ -22,14 +22,14 @@ export default function Overlay({
   overlayKey,
   portalId,
   className,
-  dismissable = true,
+  allowsBackgroundDismiss = true,
   isOpen,
   children,
   onClose,
   onExit,
 }: Props) {
   const handleBackgroundClick = () => {
-    if (!dismissable) return;
+    if (!allowsBackgroundDismiss) return;
     onClose();
   };
 

@@ -55,7 +55,7 @@ export default function JoinTeamPage() {
               />,
             ]}
             showsCloseButton={false}
-            dismissable={false}
+            allowsBackgroundDismiss={false}
           />
         );
       },

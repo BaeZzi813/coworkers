@@ -18,7 +18,7 @@ export default function Alert({
   isOpen,
   onClose,
   onExit,
-  dismissable,
+  allowsBackgroundDismiss,
   header,
   title,
   message,
@@ -33,7 +33,7 @@ export default function Alert({
       isOpen={isOpen}
       onClose={onClose}
       onExit={onExit}
-      dismissable={dismissable}
+      allowsBackgroundDismiss={allowsBackgroundDismiss}
     >
       <motion.div
         className={
