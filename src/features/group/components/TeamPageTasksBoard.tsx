@@ -1,7 +1,8 @@
 import { isTaskListDone } from "@/features/tasklist/utils";
 import { useResponsive } from "@/hooks/use-responsive";
 import { TaskList } from "@/types/task";
-import { useRouter } from "next/router";
+import Link from "next/link";
+import { PropsWithChildren } from "react";
 import TeamPageMembersList from "./TeamPageMembersList";
 import TeamPageTaskListCard from "./TeamPageTaskListCard";
 import { useTeamContext } from "./TeamProvider";
@@ -13,6 +14,48 @@ interface Props {
 export default function TeamPageTasksBoard({ taskLists }: Props) {
   const { group } = useTeamContext();
   const { isDesktop } = useResponsive();
+
+  return (
+    <div className="flex items-start gap-8">
+      {taskLists.length > 0 ? (
+        <TaskListsBoard groupId={group.id} taskLists={taskLists} />
+      ) : (
+        <EmptyTaskListsBoard isDesktop={isDesktop} />
+      )}
+      {isDesktop && <TeamPageMembersList members={group.members} />}
+    </div>
+  );
+}
+
+function EmptyTaskListsBoard({ isDesktop }: { isDesktop: boolean }) {
+  const EmptyMessage = (
+    <div className="flex h-[150px] w-full items-center justify-center text-md-r text-text-default desktop:h-[328px]">
+      아직 할 일 목록이 없어요.
+    </div>
+  );
+
+  return (
+    <div className="flex grow flex-col desktop:gap-5">
+      <BoardSection>
+        <div className="flex w-full flex-col gap-3">
+          <ColumnHeader title="할 일" />
+          {isDesktop || EmptyMessage}
+        </div>
+        <ColumnHeader title="진행중" />
+        <ColumnHeader title="완료" />
+      </BoardSection>
+      {isDesktop && EmptyMessage}
+    </div>
+  );
+}
+
+function TaskListsBoard({
+  groupId,
+  taskLists,
+}: {
+  groupId: number;
+  taskLists: TaskList[];
+}) {
   const doneLists = taskLists.filter(isTaskListDone);
   const doneIds = doneLists.map((taskList) => taskList.id);
 
@@ -39,13 +82,18 @@ export default function TeamPageTasksBoard({ taskLists }: Props) {
   );
 
   return (
-    <div className="flex items-start gap-8">
-      <div className="flex w-full grow flex-col gap-8 desktop:flex-row desktop:gap-4">
-        <Column groupId={group.id} taskLists={toDoLists} title="할 일" />
-        <Column groupId={group.id} taskLists={inProgressLists} title="진행중" />
-        <Column groupId={group.id} taskLists={doneLists} title="완료" done />
-      </div>
-      {isDesktop && <TeamPageMembersList members={group.members} />}
+    <BoardSection>
+      <Column groupId={groupId} title="할 일" taskLists={toDoLists} />
+      <Column groupId={groupId} title="진행중" taskLists={inProgressLists} />
+      <Column groupId={groupId} title="완료" taskLists={doneLists} done />
+    </BoardSection>
+  );
+}
+
+function BoardSection({ children }: PropsWithChildren) {
+  return (
+    <div className="flex w-full grow flex-col gap-8 desktop:flex-row desktop:gap-4">
+      {children}
     </div>
   );
 }
@@ -61,28 +109,38 @@ function Column({
   title: string;
   done?: boolean;
 }) {
-  const router = useRouter();
-
-  const handleTaskListClick = (id: number) => {
-    router.push(`/${groupId}/tasklist?id=${id}`);
-  };
-
   return (
     <div className="flex w-full grow flex-col gap-3 desktop:gap-5">
-      <div className="flex h-[38px] items-center justify-between rounded-xl bg-state-200 pr-2 pl-5">
-        <span className="text-md-m text-text-primary">{title}</span>
-      </div>
-      <div className="flex flex-col gap-2">
-        {taskLists.map((taskList) => (
-          <div
-            key={taskList.id}
-            className="cursor-pointer text-left"
-            onClick={() => handleTaskListClick(taskList.id)}
-          >
-            <TeamPageTaskListCard taskList={taskList} done={done} />
-          </div>
-        ))}
-      </div>
+      <ColumnHeader title={title} />
+      <ColumnBody groupId={groupId} taskLists={taskLists} done={done} />
+    </div>
+  );
+}
+
+function ColumnHeader({ title }: { title: string }) {
+  return (
+    <div className="flex h-[38px] w-full items-center justify-between rounded-xl bg-state-200 pr-2 pl-5">
+      <span className="text-md-m text-text-primary">{title}</span>
+    </div>
+  );
+}
+
+function ColumnBody({
+  groupId,
+  taskLists,
+  done,
+}: {
+  groupId: number;
+  taskLists: TaskList[];
+  done: boolean;
+}) {
+  return (
+    <div className="flex flex-col gap-2">
+      {taskLists.map((taskList) => (
+        <Link href={`/${groupId}/tasklist?id=${taskList.id}`} key={taskList.id}>
+          <TeamPageTaskListCard taskList={taskList} done={done} />
+        </Link>
+      ))}
     </div>
   );
 }
