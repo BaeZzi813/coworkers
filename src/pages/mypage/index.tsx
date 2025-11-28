@@ -1,8 +1,8 @@
 import { Button } from "@/components/button";
 import Icon from "@/components/icon";
+import { AvatarInput } from "@/components/input";
 import { Alert } from "@/components/modal";
 import InputLabel from "@/features/login/components/InputLabel";
-import TeamEditImageInput from "@/features/team/components/TeamEditImageInput";
 import { overlay } from "overlay-kit";
 import { useState } from "react";
 
@@ -109,7 +109,7 @@ export default function MyPage() {
         <h1 className="mb-10 text-2xl-b text-text-primary">계정 설정</h1>
 
         <div className="mb-9 flex justify-center">
-          <TeamEditImageInput
+          <AvatarInput
             onChange={(file) => {
               console.log(file);
             }}

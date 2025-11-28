@@ -30,7 +30,8 @@ export default function ArticlePage() {
   const { data: article, isLoading } = useQuery({
     queryKey: ["article", articleId],
     queryFn: () => getArticleById(articleId),
-    enabled: !!articleId,
+    enabled: !!user,
+    refetchOnMount: "always",
   });
 
   const { data: comments } = useQuery({
@@ -100,7 +101,7 @@ export default function ArticlePage() {
       isLiked,
     }: {
       articleId: number;
-      isLiked: boolean;
+      isLiked: boolean | null;
     }) => (isLiked ? deleteLikeById(articleId) : postLikeById(articleId)),
     onMutate: async ({ isLiked }) => {
       await queryClient.cancelQueries({ queryKey: ["article", articleId] });
@@ -119,22 +120,25 @@ export default function ArticlePage() {
       }
       return { prevArticle };
     },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["articles"] });
+    },
     onError: (_error, _variables, context) => {
       if (context?.prevArticle) {
-        queryClient.setQueryData(["article", id], context.prevArticle);
+        queryClient.setQueryData(["article", articleId], context.prevArticle);
       }
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["article", articleId] });
-      queryClient.invalidateQueries({ queryKey: ["articles"] });
     },
   });
 
   const handleToggleLike = () => {
     if (!article) return;
+    if (article.isLiked === null) {
+      router.push("/login");
+      return;
+    }
     likeMutation.mutate({
-      articleId: article.id,
-      isLiked: article.isLiked || false,
+      articleId,
+      isLiked: article.isLiked ?? false,
     });
   };
 
@@ -166,7 +170,7 @@ export default function ArticlePage() {
           <ArticleContent article={article} />
           <ArticleLikeButton
             likeCount={article?.likeCount}
-            isLiked={article?.isLiked || false}
+            isLiked={article?.isLiked ?? false}
             onToggle={handleToggleLike}
           />
           <ArticleComment

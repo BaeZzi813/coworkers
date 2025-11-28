@@ -1,18 +1,17 @@
 import { isTaskListDone } from "@/features/tasklist/utils";
 import { useResponsive } from "@/hooks/use-responsive";
 import { TaskList } from "@/types/task";
-import Link from "next/link";
-import { useContext } from "react";
+import { useRouter } from "next/router";
 import TeamPageMembersList from "./TeamPageMembersList";
 import TeamPageTaskListCard from "./TeamPageTaskListCard";
-import { TeamContext } from "./TeamProvider";
+import { useTeamContext } from "./TeamProvider";
 
 interface Props {
   taskLists: TaskList[];
 }
 
 export default function TeamPageTasksBoard({ taskLists }: Props) {
-  const group = useContext(TeamContext)!.group;
+  const { group } = useTeamContext();
   const { isDesktop } = useResponsive();
   const doneLists = taskLists.filter(isTaskListDone);
   const doneIds = doneLists.map((taskList) => taskList.id);
@@ -42,9 +41,9 @@ export default function TeamPageTasksBoard({ taskLists }: Props) {
   return (
     <div className="flex items-start gap-8">
       <div className="flex w-full grow flex-col gap-8 desktop:flex-row desktop:gap-4">
-        <Column title="할 일" taskLists={toDoLists} />
-        <Column title="진행중" taskLists={inProgressLists} />
-        <Column title="완료" taskLists={doneLists} done />
+        <Column groupId={group.id} taskLists={toDoLists} title="할 일" />
+        <Column groupId={group.id} taskLists={inProgressLists} title="진행중" />
+        <Column groupId={group.id} taskLists={doneLists} title="완료" done />
       </div>
       {isDesktop && <TeamPageMembersList members={group.members} />}
     </div>
@@ -52,15 +51,22 @@ export default function TeamPageTasksBoard({ taskLists }: Props) {
 }
 
 function Column({
-  title,
+  groupId,
   taskLists,
+  title,
   done = false,
 }: {
-  title: string;
+  groupId: number;
   taskLists: TaskList[];
+  title: string;
   done?: boolean;
 }) {
-  const group = useContext(TeamContext)!.group;
+  const router = useRouter();
+
+  const handleTaskListClick = (id: number) => {
+    router.push(`/${groupId}/tasklist?id=${id}`);
+  };
+
   return (
     <div className="flex w-full grow flex-col gap-3 desktop:gap-5">
       <div className="flex h-[38px] items-center justify-between rounded-xl bg-state-200 pr-2 pl-5">
@@ -68,12 +74,13 @@ function Column({
       </div>
       <div className="flex flex-col gap-2">
         {taskLists.map((taskList) => (
-          <Link
-            href={`/${group.id}/tasklist?id=${taskList.id}`}
+          <div
             key={taskList.id}
+            className="cursor-pointer text-left"
+            onClick={() => handleTaskListClick(taskList.id)}
           >
             <TeamPageTaskListCard taskList={taskList} done={done} />
-          </Link>
+          </div>
         ))}
       </div>
     </div>

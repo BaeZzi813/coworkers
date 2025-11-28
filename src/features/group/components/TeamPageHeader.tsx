@@ -106,8 +106,7 @@ function SettingsButton({ group }: { group: Group }) {
             isOpen={isOpen}
             onClose={close}
             onExit={unmount}
-            title={`‘${group.name}' 팀을 정말 삭제하시겠어요?`}
-            message="삭제 후에는 되돌릴 수 없습니다."
+            title={`‘${group.name}' 팀을\n정말 삭제하시겠어요?`}
             onDelete={handleDelete}
           />
         );
