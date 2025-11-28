@@ -37,7 +37,7 @@ export async function getGroup(
   }, options);
 }
 
-interface PostGroupParams {
+export interface PostGroupParams {
   imageFile?: File;
   name: string;
 }
@@ -57,7 +57,7 @@ export async function postGroup({ imageFile, name }: PostGroupParams) {
   return response.data;
 }
 
-interface PatchGroupsParams {
+export interface PatchGroupsParams {
   groupId: number;
   imageFile?: File;
   name?: string;

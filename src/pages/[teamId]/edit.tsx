@@ -1,10 +1,5 @@
-import { Button } from "@/components/button";
-import { AvatarInput, TextField } from "@/components/input";
-import { ErrorAlert } from "@/components/modal";
-import { getGroup } from "@/features/group/apis";
-import { useGroupMutation } from "@/features/group/query/use-group-mutation";
-import TeamEditContainer from "@/features/team/components/TeamEditContainer";
-import { useResponsive } from "@/hooks/use-responsive";
+import TeamEditPageBase from "@/features/group/components/TeamEditPageBase";
+import { prefetchGroup, useGroupQuery } from "@/features/group/query";
 import {
   GSSP_NOT_FOUND_RETURN,
   gsspPropsWithTokenReturn,
@@ -13,100 +8,29 @@ import {
   gsspWithAuth,
   serverSideComponentWithAuth,
 } from "@/libs/ssr/with-auth";
-import { Group } from "@/types/group";
-import { useRouter } from "next/router";
-import { overlay } from "overlay-kit";
-import { ChangeEvent, useId, useState } from "react";
+import { dehydrate, QueryClient } from "@tanstack/react-query";
 
 interface PageProps {
-  group: Group;
+  groupId: number;
 }
 
 export const getServerSideProps = gsspWithAuth(async (context, accessToken) => {
   const params = context.params;
-  const teamId = Number(params?.teamId);
-  if (isNaN(teamId)) {
+  const groupId = Number(params?.teamId);
+  if (isNaN(groupId)) {
     return GSSP_NOT_FOUND_RETURN;
   }
 
-  const group = await getGroup({ groupId: teamId }, { accessToken });
-  return gsspPropsWithTokenReturn({ props: { group }, accessToken });
+  const queryClient = new QueryClient();
+  await prefetchGroup(queryClient, { groupId, accessToken });
+  return gsspPropsWithTokenReturn({
+    props: { groupId },
+    accessToken,
+    dehydratedState: dehydrate(queryClient),
+  });
 });
 
-export default serverSideComponentWithAuth<PageProps>(({ group }) => {
-  const { isMobile } = useResponsive();
-  const [teamName, setTeamName] = useState(group.name);
-  const textFieldId = useId();
-  const router = useRouter();
-  const { patchMutation } = useGroupMutation();
-
-  const handleFileChange = (file: File) => {
-    // TODO: File upload
-    console.log(file);
-  };
-
-  const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setTeamName(event.target.value);
-  };
-
-  const handleEditSuccess = () => {
-    router.push(`/${group.id}`);
-  };
-
-  const handleEditError = (error: Error) => {
-    overlay.open(
-      ({ isOpen, close, unmount }) => (
-        <ErrorAlert
-          isOpen={isOpen}
-          onClose={close}
-          onExit={unmount}
-          title="팀 수정 실패"
-          error={error}
-        />
-      ),
-      { overlayId: "group-edit-error-alert" }
-    );
-  };
-
-  const handleSubmit = () => {
-    patchMutation.mutate(
-      { groupId: group.id, name: teamName },
-      {
-        onSuccess: handleEditSuccess,
-        onError: handleEditError,
-      }
-    );
-  };
-
-  return (
-    <div className="flex h-full items-center bg-background-secondary px-4">
-      <TeamEditContainer
-        className="m-auto"
-        header="팀 수정하기"
-        footer="팀 이름은 회사명이나 모임 이름 등으로 설정하면 좋아요."
-      >
-        <div className="flex flex-col items-center">
-          <AvatarInput source={group.image} onChange={handleFileChange} />
-          <div className="mt-6 flex w-full flex-col gap-3">
-            <label htmlFor={textFieldId} className="text-md-m tablet:text-lg-m">
-              팀 이름
-            </label>
-            <TextField
-              id={textFieldId}
-              value={teamName}
-              placeholder="팀 이름을 입력해주세요."
-              size={isMobile ? "small" : "large"}
-              onChange={handleNameChange}
-            />
-          </div>
-          <Button
-            className="mt-10"
-            title="수정하기"
-            disabled={!teamName.trim()}
-            onClick={handleSubmit}
-          />
-        </div>
-      </TeamEditContainer>
-    </div>
-  );
+export default serverSideComponentWithAuth<PageProps>(({ groupId }) => {
+  const { group } = useGroupQuery({ groupId });
+  return <TeamEditPageBase group={group} />;
 });
