@@ -29,7 +29,7 @@ interface PostCommentBody {
 }
 
 export interface PostArticleBody {
-  image?: string;
+  image?: string | null;
   content: string;
   title: string;
 }
@@ -69,14 +69,14 @@ export async function postCommentById(id: number, body: PostCommentBody) {
 
 export async function patchCommentById(id: number, body: PostCommentBody) {
   const res = await clientApiInstance.patch<ArticleComment>(
-    `comments/${id}`,
+    `/comments/${id}`,
     body
   );
   return res.data;
 }
 
 export async function deleteCommentById(id: number) {
-  const res = await clientApiInstance.delete<ArticleComment>(`comments/${id}`);
+  const res = await clientApiInstance.delete<ArticleComment>(`/comments/${id}`);
   return res.data;
 }
 

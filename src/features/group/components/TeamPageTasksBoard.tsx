@@ -2,17 +2,17 @@ import { isTaskListDone } from "@/features/tasklist/utils";
 import { useResponsive } from "@/hooks/use-responsive";
 import { TaskList } from "@/types/task";
 import Link from "next/link";
-import { PropsWithChildren, useContext } from "react";
+import { PropsWithChildren } from "react";
 import TeamPageMembersList from "./TeamPageMembersList";
 import TeamPageTaskListCard from "./TeamPageTaskListCard";
-import { TeamContext } from "./TeamProvider";
+import { useTeamContext } from "./TeamProvider";
 
 interface Props {
   taskLists: TaskList[];
 }
 
 export default function TeamPageTasksBoard({ taskLists }: Props) {
-  const group = useContext(TeamContext)!.group;
+  const { group } = useTeamContext();
   const { isDesktop } = useResponsive();
 
   return (
@@ -100,13 +100,13 @@ function BoardSection({ children }: PropsWithChildren) {
 
 function Column({
   groupId,
-  title,
   taskLists,
+  title,
   done = false,
 }: {
   groupId: number;
-  title: string;
   taskLists: TaskList[];
+  title: string;
   done?: boolean;
 }) {
   return (
