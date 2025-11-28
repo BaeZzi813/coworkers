@@ -12,7 +12,7 @@ export default function ResetPasswordAlert({
   onExit,
 }: OverlayProps) {
   const [resetEmail, setResetEmail] = useState("");
-  const { postResetPasswordMutation } = useResetPasswordMutation();
+  const { postMutation } = useResetPasswordMutation();
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setResetEmail(event.target.value);
@@ -46,7 +46,7 @@ export default function ResetPasswordAlert({
   };
 
   const handleSendLinkClick = () => {
-    postResetPasswordMutation.mutate(
+    postMutation.mutate(
       { email: resetEmail },
       {
         onSuccess: handleSuccess,

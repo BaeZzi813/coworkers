@@ -1,10 +1,14 @@
 import { Button } from "@/components/button";
 import PasswordInputLabel from "@/components/input/PasswordInputLabel";
+import { Alert, ErrorAlert } from "@/components/modal";
+import { useResetPasswordMutation } from "@/features/user/query";
 import PageLayout from "@/layouts/PageLayout";
 import {
   validatePassword,
   validatePasswordConfirm,
 } from "@/utils/login-validator";
+import { useRouter } from "next/router";
+import { overlay } from "overlay-kit";
 import { MouseEvent, useState } from "react";
 
 interface StateValue {
@@ -21,6 +25,9 @@ export default function ResetPasswordPage() {
   const [value, setValue] = useState(INITIAL_STATE_VALUE);
   const [errorMessage, setErrorMessage] = useState(INITIAL_STATE_VALUE);
   const [visible, setVisible] = useState(false);
+  const router = useRouter();
+  const { token } = router.query;
+  const { patchMutation } = useResetPasswordMutation();
 
   const canSubmit =
     value.password !== "" &&
@@ -55,9 +62,54 @@ export default function ResetPasswordPage() {
     }));
   };
 
+  const handleSuccess = () => {
+    overlay.open(({ isOpen, close, unmount }) => {
+      const handleClick = () => {
+        router.push("/login");
+        close();
+      };
+
+      return (
+        <Alert
+          isOpen={isOpen}
+          onClose={close}
+          onExit={unmount}
+          title="비밀번호 재설정 성공"
+          message="비밀번호가 성공적으로 재설정되었습니다."
+          actions={[
+            <Button key="confirm" title="로그인 하기" onClick={handleClick} />,
+          ]}
+          showsCloseButton={false}
+        />
+      );
+    });
+  };
+
+  const handleError = (error: Error) => {
+    overlay.open(({ isOpen, close, unmount }) => (
+      <ErrorAlert
+        isOpen={isOpen}
+        onClose={close}
+        onExit={unmount}
+        title="비밀번호 재설정 실패"
+        error={error}
+      />
+    ));
+  };
+
   const handleSubmit = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    console.log("Resetting password with values:", value);
+    patchMutation.mutate(
+      {
+        password: value.password,
+        confirmedPassword: value.confirmedPassword,
+        token: token as string,
+      },
+      {
+        onSuccess: handleSuccess,
+        onError: handleError,
+      }
+    );
   };
 
   return (
