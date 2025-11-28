@@ -1,6 +1,7 @@
 import { apiRequest, APIRequestOptions } from "@/services/api-request";
 import { clientApiInstance } from "@/services/instance/client";
 import { UserGroup } from "@/types/group";
+import { TaskHistory } from "@/types/task";
 import { User } from "@/types/user";
 import { isAxiosError } from "axios";
 
@@ -14,6 +15,15 @@ export async function getUser(options?: APIRequestOptions) {
 export async function getUserGroups() {
   const response = await clientApiInstance.get<UserGroup[]>("/user/groups");
   return response.data;
+}
+
+export async function getUserHistory(options?: APIRequestOptions) {
+  return apiRequest<TaskHistory[]>(async (instance) => {
+    const response = await instance.get<{ tasksDone: TaskHistory[] }>(
+      "/user/history"
+    );
+    return response.data.tasksDone;
+  }, options);
 }
 
 interface PostResetPasswordParams {

@@ -30,7 +30,7 @@ export default function ProfileMenu({
     {
       label: "마이 히스토리",
       value: "myhistory",
-      action: () => console.log("Go to my history"),
+      action: () => router.push("/myhistory"),
     },
     {
       label: "계정 설정",
