@@ -29,7 +29,7 @@ export default function PostCard({ isPopular, article }: PostCardProps) {
       )}
     >
       {isPopular && (
-        <div className="flex h-7 w-16 items-center justify-center rounded-full bg-background-secondary px-1 py-1.5 text-brand-primary">
+        <div className="flex h-[30px] w-[72px] items-center justify-center rounded-full bg-background-secondary px-1 py-1.5 text-md-b text-brand-primary">
           <Icon name="best" />
           인기
         </div>
