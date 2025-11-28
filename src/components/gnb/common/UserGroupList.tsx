@@ -1,9 +1,10 @@
 import Icon from "@/components/icon";
 import { useResponsive } from "@/hooks/use-responsive";
+import { useSidebarStore } from "@/stores/sidebar-store";
 import { UserGroup } from "@/types/group";
 import clsx from "clsx";
 import Link from "next/link";
-import { useState } from "react";
+import { useShallow } from "zustand/shallow";
 import SidebarMenu from "./SidebarMenu";
 
 interface Props {
@@ -18,18 +19,20 @@ export default function UserGroupList({
   activeGroupId,
 }: Props) {
   const { isMobile } = useResponsive();
-  const [openDropdown, setOpenDropdown] = useState(false);
+  const [isDropdownOpen, toggleDropdownOpen] = useSidebarStore(
+    useShallow((state) => [state.isDropdownOpen, state.toggleDropdownOpen])
+  );
 
   const handleDropdownClick = () => {
-    setOpenDropdown(!openDropdown);
+    toggleDropdownOpen();
   };
 
   return (
     <div className="flex flex-col gap-2">
       {isMobile || compact || (
-        <Dropdown isOpen={openDropdown} onClick={handleDropdownClick} />
+        <Dropdown isOpen={isDropdownOpen} onClick={handleDropdownClick} />
       )}
-      {(isMobile || openDropdown) && (
+      {(isMobile || isDropdownOpen) && (
         <ul className="flex max-h-[220px] flex-col overflow-y-scroll tablet:max-h-[292px] tablet:gap-2">
           {groups.map((group) => (
             <li key={group.id}>

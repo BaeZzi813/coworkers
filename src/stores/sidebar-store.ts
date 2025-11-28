@@ -5,6 +5,8 @@ interface SidebarStore {
   isFold: boolean;
   setFold: (isFold: boolean) => void;
   toggle: () => void;
+  isDropdownOpen: boolean;
+  toggleDropdownOpen: () => void;
 }
 
 export const useSidebarStore = create<SidebarStore>()(
@@ -13,6 +15,9 @@ export const useSidebarStore = create<SidebarStore>()(
       isFold: false,
       setFold: (isFold: boolean) => set(() => ({ isFold: isFold })),
       toggle: () => set((state) => ({ isFold: !state.isFold })),
+      isDropdownOpen: true,
+      toggleDropdownOpen: () =>
+        set((state) => ({ isDropdownOpen: !state.isDropdownOpen })),
     }),
     {
       name: "sidebar-fold-storage",
