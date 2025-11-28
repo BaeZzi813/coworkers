@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { getUser, getUserGroups } from "../apis";
-import { userGroupsQueryKey } from "./query-key";
+import { getUser, getUserGroups, getUserHistory } from "../apis";
+import { USER_HISTORY_QUERY_KEY, userGroupsQueryKey } from "./query-key";
 
 export function useUserQuery() {
   const { data } = useQuery({
@@ -18,4 +18,14 @@ export function useUserGroupsQuery() {
   });
 
   return { userGroups: data, isPending, isFetching };
+}
+
+export function useUserHistoryQuery() {
+  const { data } = useQuery({
+    queryKey: USER_HISTORY_QUERY_KEY,
+    queryFn: () => getUserHistory(),
+    refetchOnMount: "always",
+  });
+
+  return { history: data };
 }

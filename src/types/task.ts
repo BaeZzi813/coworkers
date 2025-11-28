@@ -47,3 +47,18 @@ export interface TaskComment {
   content: string;
   id: number;
 }
+
+export interface TaskHistory {
+  displayIndex: number;
+  writerId: number;
+  userId: number;
+  deletedAt: string;
+  frequency: TaskFrequency;
+  description: string;
+  name: string;
+  recurringId: number;
+  doneAt: string;
+  date: string;
+  updatedAt: string;
+  id: number;
+}
