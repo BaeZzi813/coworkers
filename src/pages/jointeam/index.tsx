@@ -54,6 +54,8 @@ export default function JoinTeamPage() {
                 onClick={handleTeamPageClick}
               />,
             ]}
+            showsCloseButton={false}
+            dismissable={false}
           />
         );
       },
