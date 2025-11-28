@@ -1,6 +1,6 @@
 import Avatar from "@/components/avatar";
 import { Button } from "@/components/button";
-import Dropdown from "@/components/dropdown";
+import EditDropdown from "@/components/dropdown/EditDropdown";
 import Icon from "@/components/icon";
 import { Alert } from "@/components/modal";
 import { Article } from "@/types/article";
@@ -24,19 +24,6 @@ export default function ArticleHeader({
   const { id } = router.query;
   const { deleteArticleMutation } = useDeleteArticleMutation(Number(id));
 
-  const articleDropdownOptions = [
-    {
-      label: "수정하기",
-      value: "edit",
-      action: () => router.push(`/boards/edit/${id}`),
-    },
-    {
-      label: "삭제하기",
-      value: "delete",
-      action: () => alertDeleteArticle(),
-    },
-  ];
-
   const alertDeleteArticle = () => {
     overlay.open(
       ({ isOpen, close, unmount }) => (
@@ -45,6 +32,7 @@ export default function ArticleHeader({
           onClose={close}
           onExit={unmount}
           title="게시글을 삭제하시겠어요?"
+          allowsBackgroundDismiss={false}
           message={`삭제된 게시글은 다시 복구할 수 없습니다.`}
           actions={[
             <Button
@@ -81,9 +69,10 @@ export default function ArticleHeader({
         </div>
         {article?.writer.id === currentUserId && (
           <button className="cursor-pointer">
-            <Dropdown
+            <EditDropdown
               anchor={<Icon name="dots" />}
-              options={articleDropdownOptions}
+              onEdit={() => router.push(`/boards/edit/${id}`)}
+              onDelete={alertDeleteArticle}
               direction="bottom"
               alignment="right"
             />
