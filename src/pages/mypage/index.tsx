@@ -1,64 +1,35 @@
 import { Button } from "@/components/button";
 import Icon from "@/components/icon";
 import { AvatarInput } from "@/components/input";
-import { Alert } from "@/components/modal";
+import { Alert, ErrorAlert } from "@/components/modal";
 import InputLabel from "@/features/login/components/InputLabel";
+import PasswordVisible from "@/features/login/components/PasswordVisible";
+import { patchChangePassword } from "@/features/mypage/api";
+import { useAuthStore } from "@/stores/auth-store";
+import {
+  validatePassword,
+  validatePasswordConfirm,
+} from "@/utils/login-validator";
+import { isAxiosError } from "axios";
 import { overlay } from "overlay-kit";
 import { useState } from "react";
 
 export default function MyPage() {
-  const [name, setName] = useState("찬민테스트");
-  const [email] = useState("chanmin@text.com");
+  const user = useAuthStore((state) => state.user);
+  const [name, setName] = useState(user?.nickname || "");
+  const email = user?.email || "";
 
   const handleChangePasswordClick = () => {
+    if (!user?.teamId) {
+      return;
+    }
     overlay.open(
       ({ isOpen, close, unmount }) => (
-        <Alert
+        <ChangePasswordModal
           isOpen={isOpen}
           onClose={close}
           onExit={unmount}
-          title="비밀번호 변경하기"
-          content={
-            <div className="flex flex-col gap-10">
-              <div className="h-16">
-                <InputLabel
-                  label="새 비밀번호"
-                  id="newPassword"
-                  type="password"
-                  placeholder="새 비밀번호를 입력해주세요."
-                  size="large"
-                />
-              </div>
-
-              <div className="h-20">
-                <InputLabel
-                  label="새 비밀번호 확인"
-                  id="confirmNewPassword"
-                  type="password"
-                  placeholder="다시 한 번 입력해주세요."
-                  size="large"
-                />
-              </div>
-            </div>
-          }
-          actions={[
-            <Button
-              key="close"
-              title="닫기"
-              variant="outlinedPrimary"
-              size="large"
-              isFullWidth={true}
-              onClick={close}
-            />,
-            <Button
-              key="change"
-              title="변경하기"
-              variant="primary"
-              size="large"
-              isFullWidth={true}
-              onClick={close}
-            />,
-          ]}
+          teamId={user.teamId}
         />
       ),
       { overlayId: "change-password-alert" }
@@ -131,7 +102,6 @@ export default function MyPage() {
             label="이메일"
             id="email"
             type="email"
-            placeholder="이메일을 입력해주세요."
             size="large"
             value={email}
             disabled
@@ -167,5 +137,236 @@ export default function MyPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+interface ChangePasswordModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onExit: () => void;
+  teamId: string;
+}
+
+function ChangePasswordModal({
+  isOpen,
+  onClose,
+  onExit,
+  teamId,
+}: ChangePasswordModalProps) {
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [newPasswordError, setNewPasswordError] = useState<
+    string | undefined
+  >();
+  const [confirmPasswordError, setConfirmPasswordError] = useState<
+    string | undefined
+  >();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const validateForm = () => {
+    const passwordResult = validatePassword(newPassword);
+    const confirmResult = validatePasswordConfirm(newPassword, confirmPassword);
+
+    setNewPasswordError(
+      passwordResult.valid ? undefined : passwordResult.reason
+    );
+    setConfirmPasswordError(
+      confirmResult.valid ? undefined : confirmResult.reason
+    );
+
+    return passwordResult.valid && confirmResult.valid;
+  };
+
+  const handleNewPasswordBlur = () => {
+    const result = validatePassword(newPassword);
+    setNewPasswordError(result.valid ? undefined : result.reason);
+  };
+
+  const handleConfirmPasswordBlur = () => {
+    const result = validatePasswordConfirm(newPassword, confirmPassword);
+    setConfirmPasswordError(result.valid ? undefined : result.reason);
+  };
+
+  const handleChangeClick = async () => {
+    if (!validateForm()) {
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      await patchChangePassword({
+        teamId,
+        password: newPassword,
+        passwordConfirmation: confirmPassword,
+      });
+
+      overlay.close("change-password-alert");
+      overlay.unmount("change-password-alert");
+      onClose();
+
+      overlay.open(
+        ({ isOpen, close, unmount }) => (
+          <Alert
+            isOpen={isOpen}
+            onClose={close}
+            onExit={unmount}
+            title="비밀번호가 변경되었습니다"
+            actions={[
+              <Button
+                key="confirm"
+                title="확인"
+                variant="primary"
+                size="large"
+                isFullWidth={true}
+                onClick={close}
+              />,
+            ]}
+          />
+        ),
+        { overlayId: "password-change-success-alert" }
+      );
+    } catch (error) {
+      overlay.close("change-password-alert");
+      overlay.unmount("change-password-alert");
+
+      if (isAxiosError(error) && error.response?.status === 400) {
+        const errorData = error.response.data;
+        const errorMessage =
+          typeof errorData?.message === "string"
+            ? errorData.message
+            : errorData?.message?.message || "";
+
+        const isSamePasswordError =
+          /이미 사용중인 비밀번호|동일한 비밀번호/i.test(errorMessage);
+
+        if (isSamePasswordError) {
+          overlay.open(
+            ({ isOpen, close, unmount }) => (
+              <ErrorAlert
+                isOpen={isOpen}
+                onClose={close}
+                onExit={unmount}
+                title="비밀번호 변경이 실패하였습니다."
+                error={new Error("이미 사용중인 비밀번호입니다.")}
+              />
+            ),
+            { overlayId: "password-change-error-alert" }
+          );
+        } else {
+          overlay.open(
+            ({ isOpen, close, unmount }) => (
+              <ErrorAlert
+                isOpen={isOpen}
+                onClose={close}
+                onExit={unmount}
+                title="비밀번호 변경이 실패하였습니다."
+                error={new Error("다시 시도해주세요.")}
+              />
+            ),
+            { overlayId: "password-change-error-alert" }
+          );
+        }
+      } else {
+        overlay.open(
+          ({ isOpen, close, unmount }) => (
+            <ErrorAlert
+              isOpen={isOpen}
+              onClose={close}
+              onExit={unmount}
+              title="비밀번호 변경이 실패하였습니다."
+              error={new Error("다시 시도해주세요.")}
+            />
+          ),
+          { overlayId: "password-change-error-alert" }
+        );
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const isFormValid = () => {
+    const passwordResult = validatePassword(newPassword);
+    const confirmResult = validatePasswordConfirm(newPassword, confirmPassword);
+    return passwordResult.valid && confirmResult.valid;
+  };
+
+  return (
+    <Alert
+      isOpen={isOpen}
+      onClose={onClose}
+      onExit={onExit}
+      title="비밀번호 변경하기"
+      content={
+        <div className="flex flex-col gap-20">
+          <div className={newPasswordError ? "h-10" : "h-6"}>
+            <InputLabel
+              label="새 비밀번호"
+              id="newPassword"
+              type={isPasswordVisible ? "text" : "password"}
+              placeholder="새 비밀번호를 입력해주세요."
+              size="large"
+              value={newPassword}
+              onChange={(event) => {
+                setNewPassword(event.target.value);
+                setNewPasswordError(undefined);
+              }}
+              onBlur={handleNewPasswordBlur}
+              errorMessage={newPasswordError}
+              trailing={
+                <PasswordVisible
+                  isVisible={isPasswordVisible}
+                  onToggle={() => setIsPasswordVisible(!isPasswordVisible)}
+                />
+              }
+            />
+          </div>
+
+          <div className={confirmPasswordError ? "mb-16 h-10" : "mb-16 h-6"}>
+            <InputLabel
+              label="새 비밀번호 확인"
+              id="confirmNewPassword"
+              type={isPasswordVisible ? "text" : "password"}
+              placeholder="다시 한 번 입력해주세요."
+              size="large"
+              value={confirmPassword}
+              onChange={(event) => {
+                setConfirmPassword(event.target.value);
+                setConfirmPasswordError(undefined);
+              }}
+              onBlur={handleConfirmPasswordBlur}
+              errorMessage={confirmPasswordError}
+              trailing={
+                <PasswordVisible
+                  isVisible={isPasswordVisible}
+                  onToggle={() => setIsPasswordVisible(!isPasswordVisible)}
+                />
+              }
+            />
+          </div>
+        </div>
+      }
+      actions={[
+        <Button
+          key="close"
+          title="닫기"
+          variant="outlinedPrimary"
+          size="large"
+          isFullWidth={true}
+          onClick={onClose}
+          disabled={isLoading}
+        />,
+        <Button
+          key="change"
+          title="변경하기"
+          variant="primary"
+          size="large"
+          isFullWidth={true}
+          onClick={handleChangeClick}
+          disabled={!isFormValid() || isLoading}
+        />,
+      ]}
+    />
   );
 }
