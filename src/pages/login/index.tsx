@@ -1,5 +1,6 @@
 import KakaotalkIcon from "@/assets/icons/ic-kakaotalk.svg";
 import { Button } from "@/components/button";
+import { ErrorAlert } from "@/components/modal";
 import { postSignIn } from "@/features/auth/apis";
 import ResetPasswordAlert from "@/features/auth/components/ResetPasswordAlert";
 import InputLabel from "@/features/login/components/InputLabel";
@@ -18,6 +19,9 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState<string | undefined>();
   const [passwordError, setPasswordError] = useState<string | undefined>();
+  const [isEmailErrorModalOpen, setIsEmailErrorModalOpen] = useState(false);
+  const [isPasswordErrorModalOpen, setIsPasswordErrorModalOpen] =
+    useState(false);
 
   const login = useAuthStore((state) => state.logIn);
   const router = useRouter();
@@ -64,6 +68,58 @@ export default function LoginPage() {
 
   const isFormValid = validateTotalForm().isValid;
 
+  const openEmailErrorAlert = () => {
+    if (isEmailErrorModalOpen || isPasswordErrorModalOpen) {
+      return;
+    }
+
+    overlay.close("login-password-error-alert");
+    overlay.unmount("login-password-error-alert");
+
+    setIsEmailErrorModalOpen(true);
+    overlay.open(
+      ({ isOpen, close, unmount }) => (
+        <ErrorAlert
+          isOpen={isOpen}
+          onClose={close}
+          onExit={() => {
+            setIsEmailErrorModalOpen(false);
+            unmount();
+          }}
+          title="존재하지 않는 이메일입니다."
+          error={new Error("다시 입력해주세요.")}
+        />
+      ),
+      { overlayId: "login-email-error-alert" }
+    );
+  };
+
+  const openPasswordErrorAlert = () => {
+    if (isEmailErrorModalOpen || isPasswordErrorModalOpen) {
+      return;
+    }
+
+    overlay.close("login-email-error-alert");
+    overlay.unmount("login-email-error-alert");
+
+    setIsPasswordErrorModalOpen(true);
+    overlay.open(
+      ({ isOpen, close, unmount }) => (
+        <ErrorAlert
+          isOpen={isOpen}
+          onClose={close}
+          onExit={() => {
+            setIsPasswordErrorModalOpen(false);
+            unmount();
+          }}
+          title="비밀번호가 일치하지 않습니다."
+          error={new Error("다시 입력해주세요.")}
+        />
+      ),
+      { overlayId: "login-password-error-alert" }
+    );
+  };
+
   const handleLoginButtonClick = async () => {
     const validation = validateTotalForm();
 
@@ -74,9 +130,36 @@ export default function LoginPage() {
       return;
     }
 
-    const response = await postSignIn({ email, password });
-    login({ accessToken: response.accessToken, user: response.user });
-    router.push("/dashboard");
+    try {
+      const response = await postSignIn({ email, password });
+      login({ accessToken: response.accessToken, user: response.user });
+      router.push("/dashboard");
+    } catch (error) {
+      const axiosError = error as {
+        response?: {
+          status?: number;
+          data?: {
+            message?: string;
+            details?: {
+              email?: { message?: string };
+              password?: { message?: string };
+            };
+          };
+        };
+      };
+
+      const errorData = axiosError?.response?.data;
+      const hasEmailError = !!errorData?.details?.email;
+      const hasPasswordError = !!errorData?.details?.password;
+
+      if (hasEmailError) {
+        openEmailErrorAlert();
+      } else if (hasPasswordError) {
+        openPasswordErrorAlert();
+      } else {
+        openPasswordErrorAlert();
+      }
+    }
   };
 
   const handleForgotPasswordClick = () => {
