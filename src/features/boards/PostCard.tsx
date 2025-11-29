@@ -22,10 +22,10 @@ export default function PostCard({ isPopular, article }: PostCardProps) {
     <div
       onClick={handleClick}
       className={clsx(
-        "flex w-[340px] cursor-pointer flex-col gap-1.5 rounded-[20px] border border-border-primary bg-background-primary p-3 tablet:h-44 tablet:p-4",
+        "flex w-[340px] cursor-pointer flex-col gap-3 rounded-[20px] border border-border-primary bg-background-primary tablet:h-44",
         isPopular
-          ? "h-[177px] justify-between tablet:w-[304px] desktop:h-[206px] desktop:w-full desktop:max-w-[350px]"
-          : "h-[140px] justify-around tablet:h-[156px] tablet:w-[620px] desktop:w-full desktop:max-w-[529px]"
+          ? "h-[177px] justify-between p-5 tablet:w-[304px] desktop:h-[206px] desktop:w-full desktop:max-w-[350px] desktop:px-5 desktop:py-6"
+          : "h-[140px] justify-around p-4 tablet:h-[156px] tablet:w-[620px] tablet:px-6 tablet:py-5 desktop:w-full desktop:max-w-[529px]"
       )}
     >
       {isPopular && (
@@ -40,11 +40,13 @@ export default function PostCard({ isPopular, article }: PostCardProps) {
             "flex h-20 w-[308px] justify-between tablet:h-[88px]",
             isPopular
               ? "tablet:w-[264px] desktop:w-full desktop:max-w-[310px]"
-              : "tablet:w-[572px] desktop:w-full desktop:max-w-[504px]"
+              : "tablet:w-[572px] desktop:w-full desktop:max-w-[481px]"
           )}
         >
           <div className="flex flex-col gap-2">
-            <h3 className="text-lg-b tablet:text-2lg-b">{title}</h3>
+            <h3 className="line-clamp-1 text-lg-b tablet:text-2lg-b">
+              {title}
+            </h3>
           </div>
           {image && (
             <div className="relative h-20 w-20 tablet:w-[88px] desktop:h-[88px]">
@@ -58,7 +60,7 @@ export default function PostCard({ isPopular, article }: PostCardProps) {
           "flex h-4 w-[308px] items-center justify-between",
           isPopular
             ? "tablet:w-[264px] desktop:w-full desktop:max-w-[310px]"
-            : "tablet:w-[572px] desktop:w-full desktop:max-w-[504px]"
+            : "tablet:w-[572px] desktop:w-full desktop:max-w-[481px]"
         )}
       >
         <div>

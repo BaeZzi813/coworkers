@@ -62,11 +62,9 @@ export default function ArticleHeader({
   };
 
   return (
-    <div className="flex h-[68px] flex-col gap-2 border-b border-b-border-primary tablet:h-[76px]">
+    <div className="flex flex-col gap-2 border-b border-b-border-primary">
       <div className="flex justify-between">
-        <div className="line-clamp-1 text-2lg-b tablet:text-xl-b">
-          {article?.title}
-        </div>
+        <div className="text-2lg-b tablet:text-xl-b">{article?.title}</div>
         {article?.writer.id === currentUserId && (
           <button className="cursor-pointer">
             <EditDropdown
