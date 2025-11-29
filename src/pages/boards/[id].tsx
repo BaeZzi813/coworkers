@@ -8,10 +8,10 @@ import {
   postLikeById,
 } from "@/features/boards/api";
 import { GetCommentResponse } from "@/features/boards/api/index";
-import ArticleComment from "@/features/boards/article/ArticleComment";
 import ArticleContent from "@/features/boards/article/ArticleContent";
 import ArticleHeader from "@/features/boards/article/ArticleHeader";
 import ArticleLikeButton from "@/features/boards/article/ArticleLikeButton";
+import { CommentSection } from "@/features/comment/components";
 import { useAuthStore } from "@/stores/auth-store";
 import { Article } from "@/types/article";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -158,6 +158,17 @@ export default function ArticlePage() {
     );
   }
 
+  const convertedComments =
+    comments?.list.map((comment) => ({
+      commentId: comment.id,
+      userId: comment.writer.id,
+      name: comment.writer.nickname,
+      profileImageUrl: comment.writer.image,
+      content: comment.content,
+      createdAt: comment.createdAt,
+      updatedAt: comment.updatedAt,
+    })) ?? [];
+
   return (
     <section className="min-h-screen w-full bg-background-secondary py-5 tablet:py-[68px]">
       <div className="relative mx-auto w-[343px] rounded-[20px] bg-background-primary tablet:w-[620px] desktop:mr-20 desktop:ml-[184px] desktop:w-auto desktop:max-w-[900px]">
@@ -173,15 +184,15 @@ export default function ArticlePage() {
             isLiked={article?.isLiked ?? false}
             onToggle={handleToggleLike}
           />
-          <ArticleComment
-            id={articleId}
-            commentCount={article?.commentCount}
-            currentUserId={userId}
-            comment={comments?.list ?? []}
-            userImage={userImage}
-            postCommentMutation={postCommentMutation}
-            patchCommentMutation={patchCommentMutation}
-            deleteCommentMutation={deleteCommentMutation}
+          <CommentSection
+            comments={convertedComments}
+            onSubmit={(content) =>
+              postCommentMutation.mutate({ id: articleId, content })
+            }
+            onEdit={(commentId, newContent) =>
+              patchCommentMutation.mutate({ commentId, content: newContent })
+            }
+            onDelete={(commentId) => deleteCommentMutation.mutate(commentId)}
           />
         </div>
       </div>
