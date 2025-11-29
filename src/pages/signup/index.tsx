@@ -5,6 +5,7 @@ import { postSignUp } from "@/features/auth/apis";
 import InputLabel from "@/features/login/components/InputLabel";
 import PasswordVisible from "@/features/login/components/PasswordVisible";
 import { useAuthStore } from "@/stores/auth-store";
+import { SignUpErrorResponse } from "@/types/signup";
 import {
   validateEmail,
   validateName,
@@ -16,7 +17,7 @@ import { overlay } from "overlay-kit";
 import { FormEvent, useState } from "react";
 
 export default function SignUpPage() {
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isPasswordVisible, setPasswordVisible] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -27,8 +28,9 @@ export default function SignUpPage() {
   const [confirmedPasswordError, setConfirmedPasswordError] = useState<
     string | undefined
   >();
-  const [isEmailErrorModalOpen, setIsEmailErrorModalOpen] = useState(false);
-  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [isEmailErrorModalOpen, setEmailErrorModalOpen] = useState(false);
+  const [isGeneralErrorModalOpen, setGeneralErrorModalOpen] = useState(false);
+  const [isSuccessModalOpen, setSuccessModalOpen] = useState(false);
 
   const validateTotalForm = () => {
     const nameResult = validateName(name);
@@ -102,6 +104,38 @@ export default function SignUpPage() {
 
   const isFormValid = validateTotalForm().isValid;
 
+  const openGeneralErrorAlert = () => {
+    if (
+      isSuccessModalOpen ||
+      isGeneralErrorModalOpen ||
+      isEmailErrorModalOpen
+    ) {
+      return;
+    }
+
+    overlay.close("signup-success-alert");
+    overlay.unmount("signup-success-alert");
+    overlay.close("email-duplicate-error-alert");
+    overlay.unmount("email-duplicate-error-alert");
+
+    setGeneralErrorModalOpen(true);
+    overlay.open(
+      ({ isOpen, close, unmount }) => (
+        <ErrorAlert
+          isOpen={isOpen}
+          onClose={close}
+          onExit={() => {
+            setGeneralErrorModalOpen(false);
+            unmount();
+          }}
+          title="회원가입에 실패했습니다."
+          error={new Error("다시 시도해주세요.")}
+        />
+      ),
+      { overlayId: "signup-general-error-alert" }
+    );
+  };
+
   const handleSignUpButtonClick = async () => {
     const validation = validateTotalForm();
 
@@ -124,15 +158,15 @@ export default function SignUpPage() {
 
       overlay.close("email-duplicate-error-alert");
       overlay.unmount("email-duplicate-error-alert");
-      setIsEmailErrorModalOpen(false);
-      setIsSuccessModalOpen(true);
+      setEmailErrorModalOpen(false);
+      setSuccessModalOpen(true);
       overlay.open(
         ({ isOpen, close, unmount }) => (
           <Alert
             isOpen={isOpen}
             onClose={() => {}}
             onExit={() => {
-              setIsSuccessModalOpen(false);
+              setSuccessModalOpen(false);
               unmount();
             }}
             allowsBackgroundDismiss={false}
@@ -160,40 +194,39 @@ export default function SignUpPage() {
         { overlayId: "signup-success-alert" }
       );
     } catch (error) {
-      const axiosError = error as {
-        response?: {
-          status?: number;
-          data?: {
-            message?: string;
-            details?: {
-              email?: { message?: string };
-            };
-            email?: string | { message?: string };
-          };
-        };
-      };
+      const axiosError = error as SignUpErrorResponse;
 
       if (axiosError?.response?.status === 400) {
         const errorData = axiosError.response.data;
-        const hasEmailError =
-          errorData?.details?.email ||
-          errorData?.email ||
-          /이메일|email/i.test(errorData?.message || "");
+        const detailsEntries = Object.entries(errorData?.details ?? {});
+        const emailDetailEntry = detailsEntries.find(([key]) =>
+          key.toLowerCase().includes("email")
+        );
+        const emailDetail = emailDetailEntry?.[1] as
+          | { message?: string }
+          | undefined;
+        const emailErrorMessage =
+          (typeof errorData?.email === "string"
+            ? errorData.email
+            : errorData?.email?.message) || emailDetail?.message;
 
-        if (hasEmailError && !isSuccessModalOpen && !isEmailErrorModalOpen) {
-          overlay.close("signup-success-alert");
-          overlay.unmount("signup-success-alert");
-          overlay.close("email-duplicate-error-alert");
-          overlay.unmount("email-duplicate-error-alert");
+        const isDuplicateEmailError = /중복|이미 사용중인 이메일/i.test(
+          emailErrorMessage || ""
+        );
 
-          setIsEmailErrorModalOpen(true);
+        if (
+          isDuplicateEmailError &&
+          !isSuccessModalOpen &&
+          !isEmailErrorModalOpen
+        ) {
+          setEmailErrorModalOpen(true);
           overlay.open(
             ({ isOpen, close, unmount }) => (
               <ErrorAlert
                 isOpen={isOpen}
                 onClose={close}
                 onExit={() => {
-                  setIsEmailErrorModalOpen(false);
+                  setEmailErrorModalOpen(false);
                   unmount();
                 }}
                 title="이미 사용중인 이메일입니다."
@@ -203,13 +236,10 @@ export default function SignUpPage() {
             { overlayId: "email-duplicate-error-alert" }
           );
         } else {
-          console.error(
-            "회원가입 에러:",
-            errorData?.message || "회원가입에 실패했습니다."
-          );
+          openGeneralErrorAlert();
         }
       } else {
-        console.error("회원가입 에러:", error);
+        openGeneralErrorAlert();
       }
     }
   };
@@ -273,7 +303,7 @@ export default function SignUpPage() {
                   trailing={
                     <PasswordVisible
                       isVisible={isPasswordVisible}
-                      onToggle={() => setIsPasswordVisible(!isPasswordVisible)}
+                      onToggle={() => setPasswordVisible(!isPasswordVisible)}
                     />
                   }
                 />
@@ -295,7 +325,7 @@ export default function SignUpPage() {
                   trailing={
                     <PasswordVisible
                       isVisible={isPasswordVisible}
-                      onToggle={() => setIsPasswordVisible(!isPasswordVisible)}
+                      onToggle={() => setPasswordVisible(!isPasswordVisible)}
                     />
                   }
                 />
