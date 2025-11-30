@@ -73,9 +73,6 @@ export default function LoginPage() {
       return;
     }
 
-    overlay.close("login-password-error-alert");
-    overlay.unmount("login-password-error-alert");
-
     setIsEmailErrorModalOpen(true);
     overlay.open(
       ({ isOpen, close, unmount }) => (
@@ -98,9 +95,6 @@ export default function LoginPage() {
     if (isEmailErrorModalOpen || isPasswordErrorModalOpen) {
       return;
     }
-
-    overlay.close("login-email-error-alert");
-    overlay.unmount("login-email-error-alert");
 
     setIsPasswordErrorModalOpen(true);
     overlay.open(
@@ -241,7 +235,6 @@ export default function LoginPage() {
               size="large"
               isFullWidth={true}
               disabled={!isFormValid}
-              onClick={handleLoginButtonClick}
             />
           </div>
           <div className="mx-auto mt-6 flex h-5 w-[268px] items-center justify-center gap-3">
