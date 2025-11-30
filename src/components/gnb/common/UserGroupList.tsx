@@ -33,7 +33,7 @@ export default function UserGroupList({
         <Dropdown isOpen={isDropdownOpen} onClick={handleDropdownClick} />
       )}
       {(isMobile || isDropdownOpen) && (
-        <ul className="flex max-h-[220px] flex-col overflow-y-scroll tablet:max-h-[292px] tablet:gap-2">
+        <ul className="flex custom-scroll-bar max-h-[220px] flex-col overflow-y-auto tablet:max-h-[292px] tablet:gap-2">
           {groups.map((group) => (
             <li key={group.id}>
               <Link href={`/${group.id}`}>
