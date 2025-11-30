@@ -10,7 +10,6 @@ import {
   validatePassword,
   validatePasswordConfirm,
 } from "@/utils/login-validator";
-import { isAxiosError } from "axios";
 import { overlay } from "overlay-kit";
 import { useState } from "react";
 
@@ -200,11 +199,6 @@ function ChangePasswordModal({
         password: newPassword,
         passwordConfirmation: confirmPassword,
       });
-
-      overlay.close("change-password-alert");
-      overlay.unmount("change-password-alert");
-      onClose();
-
       overlay.open(
         ({ isOpen, close, unmount }) => (
           <Alert
@@ -226,63 +220,22 @@ function ChangePasswordModal({
         ),
         { overlayId: "password-change-success-alert" }
       );
-    } catch (error) {
-      overlay.close("change-password-alert");
-      overlay.unmount("change-password-alert");
-
-      if (isAxiosError(error) && error.response?.status === 400) {
-        const errorData = error.response.data;
-        const errorMessage =
-          typeof errorData?.message === "string"
-            ? errorData.message
-            : errorData?.message?.message || "";
-
-        const isSamePasswordError =
-          /이미 사용중인 비밀번호|동일한 비밀번호/i.test(errorMessage);
-
-        if (isSamePasswordError) {
-          overlay.open(
-            ({ isOpen, close, unmount }) => (
-              <ErrorAlert
-                isOpen={isOpen}
-                onClose={close}
-                onExit={unmount}
-                title="비밀번호 변경이 실패하였습니다."
-                error={new Error("이미 사용중인 비밀번호입니다.")}
-              />
-            ),
-            { overlayId: "password-change-error-alert" }
-          );
-        } else {
-          overlay.open(
-            ({ isOpen, close, unmount }) => (
-              <ErrorAlert
-                isOpen={isOpen}
-                onClose={close}
-                onExit={unmount}
-                title="비밀번호 변경이 실패하였습니다."
-                error={new Error("다시 시도해주세요.")}
-              />
-            ),
-            { overlayId: "password-change-error-alert" }
-          );
-        }
-      } else {
-        overlay.open(
-          ({ isOpen, close, unmount }) => (
-            <ErrorAlert
-              isOpen={isOpen}
-              onClose={close}
-              onExit={unmount}
-              title="비밀번호 변경이 실패하였습니다."
-              error={new Error("다시 시도해주세요.")}
-            />
-          ),
-          { overlayId: "password-change-error-alert" }
-        );
-      }
+    } catch {
+      overlay.open(
+        ({ isOpen, close, unmount }) => (
+          <ErrorAlert
+            isOpen={isOpen}
+            onClose={close}
+            onExit={unmount}
+            title="비밀번호 변경이 실패하였습니다."
+            error={new Error("다시 시도해주세요.")}
+          />
+        ),
+        { overlayId: "password-change-error-alert" }
+      );
     } finally {
       setIsLoading(false);
+      onClose();
     }
   };
 
