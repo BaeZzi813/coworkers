@@ -1,4 +1,4 @@
-export interface Comment {
+export interface TaskComment {
   user: {
     image: string;
     nickname: string;

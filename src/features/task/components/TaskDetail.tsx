@@ -2,25 +2,23 @@ import Avatar from "@/components/avatar";
 import { Button } from "@/components/button";
 import Dropdown from "@/components/dropdown";
 import Icon from "@/components/icon";
-import { getTasksComments } from "@/features/comment/apis/mock";
 import { CommentSection } from "@/features/comment/components";
+import { useTaskCommentsQuery } from "@/features/comment/query/use-comment-query";
 import { useEditDeleteMenu } from "@/hooks/use-edit-delete-menu";
 import { useResponsive } from "@/hooks/use-responsive";
-import { Comment } from "@/types/comment";
-import { Task } from "@/types/task";
-import { useQuery } from "@tanstack/react-query";
 import clsx from "clsx";
-import { getTodo } from "../apis/mock";
-import { FREQUENCY_LABEL } from "../constants/task-frequency";
-import { useToggleTodo } from "../hooks/useToggleTodo";
+import { FREQUENCY_LABEL } from "../../tasklist/constants/task-frequency";
+import { useToggleTodo } from "../../tasklist/hooks/useToggleTodo";
+import { useTaskQuery } from "../query";
 
-interface TodoDetailProps {
+interface Props {
+  groupId: number;
   taskId: number;
   todoId: number;
   close: () => void;
 }
 
-export function TodoDetail({ taskId, todoId, close }: TodoDetailProps) {
+export function TaskDetail({ groupId, taskId, todoId, close }: Props) {
   const { isTablet, isDesktop } = useResponsive();
   const toggleTodo = useToggleTodo();
 
@@ -29,25 +27,22 @@ export function TodoDetail({ taskId, todoId, close }: TodoDetailProps) {
     onDelete: () => {},
   });
 
-  const { data: todo, isPending } = useQuery<Task | null>({
-    queryKey: ["todo-detail", taskId, todoId],
-    queryFn: () => getTodo(taskId, todoId),
+  const { task, isFetching } = useTaskQuery({
+    groupId,
+    taskListId: taskId,
+    taskId: todoId,
     enabled: !!taskId && !!todoId,
   });
-  const { data: commentsData = [] } = useQuery<Comment[]>({
-    queryKey: ["comments", todoId],
-    queryFn: () => getTasksComments(todoId),
-    enabled: !!todoId,
-    initialData: [],
-  });
 
-  if (!todo || isPending) return null;
+  const { taskComments } = useTaskCommentsQuery({ taskId, enabled: !!todoId });
+
+  if (!task || isFetching) return null;
 
   const handleToggleDone = () => {
-    toggleTodo.mutate({ taskId, todoId, done: !todo.doneAt });
+    toggleTodo.mutate({ taskId, todoId, done: !task.doneAt });
   };
 
-  const comments = commentsData.map((comment) => ({
+  const comments = taskComments.map((comment) => ({
     commentId: comment.id,
     userId: comment.userId,
     name: comment.user.nickname,
@@ -74,12 +69,12 @@ export function TodoDetail({ taskId, todoId, close }: TodoDetailProps) {
                 <h2
                   className={clsx(
                     "text-xl-b tablet:text-2xl-b",
-                    todo.doneAt && "text-text-default line-through"
+                    task.doneAt && "text-text-default line-through"
                   )}
                 >
-                  {todo.name}
+                  {task.name}
                 </h2>
-                {todo.doneAt && (
+                {task.doneAt && (
                   <span className="rounded-lg bg-brand-secondary px-2.5 py-1.5 text-md-b text-brand-primary">
                     완료
                   </span>
@@ -90,8 +85,8 @@ export function TodoDetail({ taskId, todoId, close }: TodoDetailProps) {
             </header>
 
             <div className="flex items-center gap-3">
-              <Avatar size="medium" source={todo.writer.image ?? ""} />
-              <p className="text-md-m">{todo.writer.nickname}</p>
+              <Avatar size="medium" source={task.writer.image ?? ""} />
+              <p className="text-md-m">{task.writer.nickname}</p>
             </div>
 
             <div className="flex w-full items-center justify-between">
@@ -100,14 +95,14 @@ export function TodoDetail({ taskId, todoId, close }: TodoDetailProps) {
                   <Icon name="calendar" />
                   <span className="text-xs-r text-text-default">시작 날짜</span>
                   <span className="ml-6 text-xs-r">
-                    {new Date(todo.date).toLocaleDateString("ko-KR")}
+                    {new Date(task.date).toLocaleDateString("ko-KR")}
                   </span>
                 </p>
                 <p className="flex gap-1.5">
                   <Icon name="repeat" color="transparent" />
                   <span className="text-xs-r text-text-default">반복 설정</span>
                   <span className="ml-6 text-xs-r">
-                    {FREQUENCY_LABEL[todo.frequency]}
+                    {FREQUENCY_LABEL[task.frequency]}
                   </span>
                 </p>
               </div>
@@ -115,8 +110,8 @@ export function TodoDetail({ taskId, todoId, close }: TodoDetailProps) {
               <Button
                 iconName="checkCompact"
                 iconCustomColor="transparent"
-                variant={todo.doneAt ? "outlinedPrimary" : "primary"}
-                title={todo.doneAt ? "완료 취소하기" : "완료하기"}
+                variant={task.doneAt ? "outlinedPrimary" : "primary"}
+                title={task.doneAt ? "완료 취소하기" : "완료하기"}
                 size="medium"
                 isFullWidth={false}
                 rounded
@@ -129,9 +124,9 @@ export function TodoDetail({ taskId, todoId, close }: TodoDetailProps) {
           <div className="h-px bg-border-primary" />
 
           <article
-            className={clsx("w-full", !todo.description && "text-text-default")}
+            className={clsx("w-full", !task.description && "text-text-default")}
           >
-            {todo.description || "등록된 설명이 없습니다."}
+            {task.description || "등록된 설명이 없습니다."}
           </article>
         </section>
       </div>

@@ -4,22 +4,22 @@ import { useResponsive } from "@/hooks/use-responsive";
 import { TaskList } from "@/types/task";
 import { overlay } from "overlay-kit";
 import DeleteModal from "./DeleteModal";
-import TaskItem from "./TaskItem";
+import TaskListGroupItem from "./TaskListGroupItem";
 import TaskModal from "./TaskModal";
 
 interface Props {
-  taskList: TaskList[];
-  selectedTaskId: number | null;
-  onSelectTask: (id: number) => void;
+  taskLists: TaskList[];
+  selectedTaskListId: number | null;
+  onSelect: (taskListId: number) => void;
 }
 
-export default function TaskGroupList({
-  taskList,
-  selectedTaskId,
-  onSelectTask,
+export default function TaskListGroup({
+  taskLists,
+  selectedTaskListId,
+  onSelect,
 }: Props) {
   const { isDesktop } = useResponsive();
-  const hasTask = taskList.length > 0;
+  const hasTask = taskLists.length > 0;
 
   const handlePostTask = async (name: string) => {
     console.log(`Add TaskItem ${name}`);
@@ -81,9 +81,9 @@ export default function TaskGroupList({
     );
   };
 
-  const mobileTaskOptions: SelectOption[] = taskList.map((task) => ({
+  const mobileTaskOptions: SelectOption[] = taskLists.map((task) => ({
     label: (
-      <TaskItem
+      <TaskListGroupItem
         key={task.id}
         title={task.name}
         tasks={task.tasks}
@@ -103,19 +103,19 @@ export default function TaskGroupList({
   }));
 
   const selectedOption = mobileTaskOptions.find(
-    (opt) => opt.value === String(selectedTaskId)
+    (opt) => opt.value === String(selectedTaskListId)
   );
 
   const mobileTaskSelect = hasTask ? (
     <Select
       options={mobileTaskOptions}
       value={selectedOption}
-      onChange={(opt) => onSelectTask(Number(opt.value))}
+      onChange={(option) => onSelect(Number(option.value))}
       className="h-11 w-[180px] tablet:w-60"
     />
   ) : (
     <div className="tablet:[240p]x flex h-11 w-[180px] cursor-pointer items-center rounded-lg border border-border-primary bg-background-primary p-2 tablet:w-60 tablet:rounded-xl tablet:px-3.5 tablet:py-2.5">
-      <TaskItem
+      <TaskListGroupItem
         title="제목 없음"
         tasks={[]}
         onClick={() => openTaskModal({ mode: "create" })}
@@ -125,26 +125,29 @@ export default function TaskGroupList({
   const desktopTaskList = (
     <div className="flex w-full min-w-60 flex-col gap-1">
       {hasTask ? (
-        taskList.map((task) => (
-          <TaskItem
-            key={task.id}
-            title={task.name}
-            tasks={task.tasks}
-            onClick={() => onSelectTask(task.id)}
+        taskLists.map((taskList) => (
+          <TaskListGroupItem
+            key={taskList.id}
+            title={taskList.name}
+            tasks={taskList.tasks}
+            onClick={() => onSelect(taskList.id)}
             onEdit={() =>
               openTaskModal({
                 mode: "edit",
-                taskId: task.id,
-                defaultValue: task.name,
+                taskId: taskList.id,
+                defaultValue: taskList.name,
               })
             }
             onDelete={() =>
-              openDeleteModal({ taskId: task.id, targetName: task.name })
+              openDeleteModal({
+                taskId: taskList.id,
+                targetName: taskList.name,
+              })
             }
           />
         ))
       ) : (
-        <TaskItem
+        <TaskListGroupItem
           title="제목 없음"
           tasks={[]}
           onClick={() => openTaskModal({ mode: "create" })}

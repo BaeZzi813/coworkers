@@ -3,7 +3,7 @@ import Icon from "@/components/icon";
 import { TaskFrequency } from "@/types/task";
 import clsx from "clsx";
 import { MouseEvent } from "react";
-import { FREQUENCY_LABEL } from "../constants/task-frequency";
+import { FREQUENCY_LABEL } from "../../tasklist/constants/task-frequency";
 
 const spanStyle = "text-xs leading-4 text-text-default no-underline";
 const itemStyle = {
@@ -21,7 +21,7 @@ const itemStyle = {
   },
 };
 
-interface TodoItemProps {
+interface Props {
   title: string;
   commentCount: number;
   createdAt: string;
@@ -29,11 +29,11 @@ interface TodoItemProps {
   isSelected?: boolean;
   isDone?: boolean;
   isEmpty?: boolean;
-  onToggleDone?: () => void;
-  onItemClick?: () => void;
+  onCheckboxClick?: () => void;
+  onClick?: () => void;
 }
 
-export default function TodoItem({
+export default function TasksListItem({
   title,
   commentCount,
   createdAt,
@@ -41,9 +41,9 @@ export default function TodoItem({
   isSelected = false,
   isDone = false,
   isEmpty,
-  onToggleDone,
-  onItemClick,
-}: TodoItemProps) {
+  onCheckboxClick,
+  onClick,
+}: Props) {
   const options: DropdownOption[] = [
     { label: "수정하기", value: "edit", action: () => {} },
     { label: "삭제하기", value: "delete", action: () => {} },
@@ -51,12 +51,12 @@ export default function TodoItem({
 
   const handleCheckboxClick = (e: MouseEvent) => {
     e.stopPropagation();
-    onToggleDone?.();
+    onCheckboxClick?.();
   };
 
   return (
     <div
-      onClick={onItemClick}
+      onClick={onClick}
       className={clsx(
         "flex w-full cursor-pointer flex-col gap-2.5 rounded-lg px-3.5 py-3",
         !isSelected && !isDone && itemStyle.container.base,

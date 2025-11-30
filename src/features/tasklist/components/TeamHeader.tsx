@@ -1,33 +1,25 @@
 import BgTeamPattern from "@/assets/images/bg-team-pattern.png";
-import Dropdown, { DropdownOption } from "@/components/dropdown";
 import Icon from "@/components/icon";
+import GroupEditDropdown from "@/features/group/components/GroupEditDropdown";
 import { useResponsive } from "@/hooks/use-responsive";
+import { Group } from "@/types/group";
 import Image from "next/image";
 
 interface TeamHeaderProps {
-  teamName: string;
+  group: Group;
   isAdmin?: boolean;
-  onEdit?: () => void;
-  onDelete?: () => void;
 }
 
 export default function TeamHeader({
-  teamName,
+  group,
   isAdmin = false,
-  onEdit,
-  onDelete,
 }: TeamHeaderProps) {
   const { isMobile } = useResponsive();
-
-  const options: DropdownOption[] = [
-    { label: "수정하기", value: "edit", action: onEdit },
-    { label: "삭제하기", value: "delete", action: onDelete },
-  ];
 
   return (
     <header className="flex h-7 w-full max-w-[1120px] items-center justify-start rounded-xl bg-none shadow-card outline-border-primary desktop:h-16 desktop:justify-between desktop:bg-background-primary desktop:px-7 desktop:py-4 desktop:outline">
       <h1 className="text-lg-b text-text-primary tablet:text-2xl-b">
-        {teamName}
+        {group.name}
       </h1>
 
       <Image
@@ -40,7 +32,8 @@ export default function TeamHeader({
       />
 
       {isAdmin && (
-        <Dropdown
+        <GroupEditDropdown
+          group={group}
           anchor={
             <button
               aria-label="팀 설정 열기"
@@ -49,8 +42,6 @@ export default function TeamHeader({
               <Icon name="gear" size={isMobile ? "small" : "large"} />
             </button>
           }
-          options={options}
-          alignment="left"
         />
       )}
     </header>

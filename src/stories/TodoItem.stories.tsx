@@ -1,4 +1,4 @@
-import TodoItemComponent from "@/features/tasklist/components/TodoItem";
+import TodoItemComponent from "@/features/task/components/TasksListItem";
 import type { Meta, StoryObj } from "@storybook/react";
 
 const meta: Meta<typeof TodoItemComponent> = {

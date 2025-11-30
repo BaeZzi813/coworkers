@@ -1,4 +1,29 @@
+import { apiRequest, APIRequestOptions } from "@/services/api-request";
 import { clientApiInstance } from "@/services/instance/client";
+import { TaskList } from "@/types/task";
+import { AxiosResponse } from "axios";
+
+interface GetTaskListParams {
+  date?: string;
+}
+
+interface GetTaskListProps extends GetTaskListParams {
+  groupId: number;
+  taskListId: number;
+}
+
+export async function getTaskList(
+  { groupId, taskListId, date }: GetTaskListProps,
+  options?: APIRequestOptions
+) {
+  return apiRequest(async (instance) => {
+    const response = await instance.get<TaskList, AxiosResponse<TaskList>>(
+      `/groups/${groupId}/task-lists/${taskListId}`,
+      { params: date ? { date } : null }
+    );
+    return response.data;
+  }, options);
+}
 
 interface PostTaskListParams {
   groupId: number;
