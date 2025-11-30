@@ -9,7 +9,7 @@ import { useResponsive } from "@/hooks/use-responsive";
 import { Task, TaskList } from "@/types/task";
 import { isEmpty } from "@/utils/array-sugar";
 import { overlay } from "overlay-kit";
-import { Attributes } from "react";
+import { Attributes, MouseEvent } from "react";
 import { groupsQueryKey } from "../query/query-key";
 import { useTeamContext } from "./TeamProvider";
 
@@ -147,7 +147,8 @@ function TaskCheckbox({ key, groupId, taskList, task }: TaskCheckboxProps) {
     taskListId: taskList.id,
   });
 
-  const handleToggle = () => {
+  const handleToggle = (event: MouseEvent) => {
+    event.stopPropagation();
     patchMutation.mutate(
       { taskId: task.id, done: !isTaskDone(task) },
       {
