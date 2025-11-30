@@ -113,11 +113,6 @@ export default function SignUpPage() {
       return;
     }
 
-    overlay.close("signup-success-alert");
-    overlay.unmount("signup-success-alert");
-    overlay.close("email-duplicate-error-alert");
-    overlay.unmount("email-duplicate-error-alert");
-
     setGeneralErrorModalOpen(true);
     overlay.open(
       ({ isOpen, close, unmount }) => (
@@ -156,8 +151,6 @@ export default function SignUpPage() {
         passwordConfirmation: confirmedPassword,
       });
 
-      overlay.close("email-duplicate-error-alert");
-      overlay.unmount("email-duplicate-error-alert");
       setEmailErrorModalOpen(false);
       setSuccessModalOpen(true);
       overlay.open(
@@ -340,7 +333,6 @@ export default function SignUpPage() {
               size="large"
               isFullWidth={true}
               disabled={!isFormValid}
-              onClick={handleSignUpButtonClick}
             />
           </div>
         </form>
