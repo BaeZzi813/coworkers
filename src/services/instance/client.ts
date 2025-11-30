@@ -18,3 +18,9 @@ clientApiInstance.interceptors.response.use(
   clientResponseInterceptor,
   clientResponseErrorInterceptor
 );
+
+clientProxyInstance.interceptors.request.use(clientRequestInterceptor);
+clientProxyInstance.interceptors.response.use(
+  clientResponseInterceptor,
+  clientResponseErrorInterceptor
+);
