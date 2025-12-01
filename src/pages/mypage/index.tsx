@@ -2,34 +2,32 @@ import { Button } from "@/components/button";
 import Icon from "@/components/icon";
 import { AvatarInput } from "@/components/input";
 import { Alert, ErrorAlert } from "@/components/modal";
+import { openErrorAlert } from "@/components/modal/ErrorAlert";
+import { postSignOut } from "@/features/auth/apis";
 import InputLabel from "@/features/login/components/InputLabel";
 import PasswordVisible from "@/features/login/components/PasswordVisible";
-import { patchChangePassword } from "@/features/mypage/api";
+import { deleteUser } from "@/features/user/apis";
+import { useChangePasswordMutation } from "@/features/user/query";
 import { useAuthStore } from "@/stores/auth-store";
 import {
   validatePassword,
   validatePasswordConfirm,
 } from "@/utils/login-validator";
+import { useRouter } from "next/router";
 import { overlay } from "overlay-kit";
 import { useState } from "react";
 
 export default function MyPage() {
   const user = useAuthStore((state) => state.user);
+  const logOut = useAuthStore((state) => state.logOut);
+  const router = useRouter();
   const [name, setName] = useState(user?.nickname || "");
   const email = user?.email || "";
 
   const handleChangePasswordClick = () => {
-    if (!user?.teamId) {
-      return;
-    }
     overlay.open(
       ({ isOpen, close, unmount }) => (
-        <ChangePasswordModal
-          isOpen={isOpen}
-          onClose={close}
-          onExit={unmount}
-          teamId={user.teamId}
-        />
+        <ChangePasswordModal isOpen={isOpen} onClose={close} onExit={unmount} />
       ),
       { overlayId: "change-password-alert" }
     );
@@ -38,35 +36,16 @@ export default function MyPage() {
   const handleMembershipWithdrawalClick = () => {
     overlay.open(
       ({ isOpen, close, unmount }) => (
-        <Alert
+        <SecessionAlert
           isOpen={isOpen}
           onClose={close}
           onExit={unmount}
-          header={
-            <div className="flex h-6 w-6 items-center justify-center rounded-full bg-status-danger">
-              <Icon name="alert" size="large" color="white" />
-            </div>
-          }
-          title="회원 탈퇴를 진행하시겠어요?"
-          message="그룹장으로 있는 그룹은 자동으로 삭제되고, 모든 그룹에서 나가집니다."
-          actions={[
-            <Button
-              key="close"
-              title="닫기"
-              variant="outlinedPrimary"
-              size="large"
-              isFullWidth={true}
-              onClick={close}
-            />,
-            <Button
-              key="secession"
-              title="회원 탈퇴"
-              variant="danger"
-              size="large"
-              isFullWidth={true}
-              onClick={close}
-            />,
-          ]}
+          teamId={user?.teamId || ""}
+          onSuccess={async () => {
+            await postSignOut();
+            logOut();
+            router.replace("/login");
+          }}
         />
       ),
       { overlayId: "secession-alert" }
@@ -143,14 +122,12 @@ interface ChangePasswordModalProps {
   isOpen: boolean;
   onClose: () => void;
   onExit: () => void;
-  teamId: string;
 }
 
 function ChangePasswordModal({
   isOpen,
   onClose,
   onExit,
-  teamId,
 }: ChangePasswordModalProps) {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -162,6 +139,7 @@ function ChangePasswordModal({
     string | undefined
   >();
   const [isLoading, setIsLoading] = useState(false);
+  const { mutation } = useChangePasswordMutation();
 
   const validateForm = () => {
     const passwordResult = validatePassword(newPassword);
@@ -193,50 +171,48 @@ function ChangePasswordModal({
     }
 
     setIsLoading(true);
-    try {
-      await patchChangePassword({
-        teamId,
+
+    mutation.mutate(
+      {
         password: newPassword,
         passwordConfirmation: confirmPassword,
-      });
-      overlay.open(
-        ({ isOpen, close, unmount }) => (
-          <Alert
-            isOpen={isOpen}
-            onClose={close}
-            onExit={unmount}
-            title="비밀번호가 변경되었습니다"
-            actions={[
-              <Button
-                key="confirm"
-                title="확인"
-                variant="primary"
-                size="large"
-                isFullWidth={true}
-                onClick={close}
-              />,
-            ]}
-          />
-        ),
-        { overlayId: "password-change-success-alert" }
-      );
-    } catch {
-      overlay.open(
-        ({ isOpen, close, unmount }) => (
-          <ErrorAlert
-            isOpen={isOpen}
-            onClose={close}
-            onExit={unmount}
-            title="비밀번호 변경이 실패하였습니다."
-            error={new Error("다시 시도해주세요.")}
-          />
-        ),
-        { overlayId: "password-change-error-alert" }
-      );
-    } finally {
-      setIsLoading(false);
-      onClose();
-    }
+      },
+      {
+        onSuccess: () => {
+          overlay.open(
+            ({ isOpen, close, unmount }) => (
+              <Alert
+                isOpen={isOpen}
+                onClose={close}
+                onExit={unmount}
+                title="비밀번호가 변경되었습니다"
+                actions={[
+                  <Button
+                    key="confirm"
+                    title="확인"
+                    variant="primary"
+                    size="large"
+                    isFullWidth={true}
+                    onClick={close}
+                  />,
+                ]}
+              />
+            ),
+            { overlayId: "password-change-success-alert" }
+          );
+        },
+        onError: () => {
+          openErrorAlert({
+            title: "비밀번호 변경이 실패하였습니다.",
+            error: new Error("다시 시도해주세요."),
+          });
+        },
+        onSettled: () => {
+          setIsLoading(false);
+          onClose();
+        },
+      }
+    );
   };
 
   const isFormValid = () => {
@@ -318,6 +294,111 @@ function ChangePasswordModal({
           isFullWidth={true}
           onClick={handleChangeClick}
           disabled={!isFormValid() || isLoading}
+        />,
+      ]}
+    />
+  );
+}
+
+interface SecessionAlertProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onExit: () => void;
+  teamId: string;
+  onSuccess: () => void;
+}
+
+function SecessionAlert({
+  isOpen,
+  onClose,
+  onExit,
+  teamId,
+  onSuccess,
+}: SecessionAlertProps) {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSecessionClick = async () => {
+    if (!teamId) {
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      await deleteUser();
+      onClose();
+      overlay.open(
+        ({ isOpen, close, unmount }) => (
+          <Alert
+            isOpen={isOpen}
+            onClose={close}
+            onExit={unmount}
+            title="회원 탈퇴가 완료되었습니다"
+            actions={[
+              <Button
+                key="confirm"
+                title="확인"
+                variant="primary"
+                size="large"
+                isFullWidth={true}
+                onClick={() => {
+                  close();
+                  onSuccess();
+                }}
+              />,
+            ]}
+          />
+        ),
+        { overlayId: "secession-success-alert" }
+      );
+    } catch {
+      overlay.open(
+        ({ isOpen, close, unmount }) => (
+          <ErrorAlert
+            isOpen={isOpen}
+            onClose={close}
+            onExit={unmount}
+            title="회원 탈퇴가 실패하였습니다."
+            error={new Error("다시 시도해주세요.")}
+          />
+        ),
+        { overlayId: "secession-error-alert" }
+      );
+    } finally {
+      setIsLoading(false);
+    }
+    onClose();
+  };
+
+  return (
+    <Alert
+      isOpen={isOpen}
+      onClose={onClose}
+      onExit={onExit}
+      header={
+        <div className="flex h-6 w-6 items-center justify-center rounded-full bg-status-danger">
+          <Icon name="alert" size="large" color="white" />
+        </div>
+      }
+      title="회원 탈퇴를 진행하시겠어요?"
+      message="그룹장으로 있는 그룹은 자동으로 삭제되고, 모든 그룹에서 나가집니다."
+      actions={[
+        <Button
+          key="close"
+          title="닫기"
+          variant="outlinedPrimary"
+          size="large"
+          isFullWidth={true}
+          onClick={onClose}
+          disabled={isLoading}
+        />,
+        <Button
+          key="secession"
+          title="회원 탈퇴"
+          variant="danger"
+          size="large"
+          isFullWidth={true}
+          onClick={handleSecessionClick}
+          disabled={isLoading}
         />,
       ]}
     />

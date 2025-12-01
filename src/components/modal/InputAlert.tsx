@@ -1,10 +1,11 @@
 import { Button } from "@/components/button";
 import { Input } from "@/components/input";
 import { OverlayProps } from "@/components/overlay";
+import { overlay } from "overlay-kit";
 import { ChangeEvent, useState } from "react";
 import Alert from "./Alert";
 
-interface Props extends OverlayProps {
+interface Props {
   title: string;
   value?: string;
   placeholder: string;
@@ -19,7 +20,7 @@ export default function InputAlert({
   submitTitle,
   onSubmit,
   ...overlayProps
-}: Props) {
+}: Props & OverlayProps) {
   const [inputValue, setInputValue] = useState(value ?? "");
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -51,5 +52,29 @@ export default function InputAlert({
         />,
       ]}
     />
+  );
+}
+
+export function openInputAlert({
+  title,
+  value,
+  placeholder,
+  submitTitle,
+  onSubmit,
+}: Props) {
+  overlay.open(
+    ({ isOpen, close, unmount }) => (
+      <InputAlert
+        isOpen={isOpen}
+        onClose={close}
+        onExit={unmount}
+        title={title}
+        value={value}
+        placeholder={placeholder}
+        submitTitle={submitTitle}
+        onSubmit={onSubmit}
+      />
+    ),
+    { overlayId: "input-alert" }
   );
 }

@@ -1,15 +1,11 @@
 import DoneBadge from "@/components/badge/DoneBadge";
-import EditDropdown from "@/components/dropdown/EditDropdown";
 import Icon from "@/components/icon";
-import { DeleteAlert, InputAlert } from "@/components/modal";
 import { useTaskMutation } from "@/features/task/query";
 import { isTaskDone } from "@/features/task/utils";
-import { useTaskListMutation } from "@/features/tasklist/query";
-import { useResponsive } from "@/hooks/use-responsive";
+import TaskListEditDropdown from "@/features/tasklist/components/TaskListEditDropdown";
 import { Task, TaskList } from "@/types/task";
 import { isEmpty } from "@/utils/array-sugar";
 import { useRouter } from "next/router";
-import { overlay } from "overlay-kit";
 import { Attributes, MouseEvent } from "react";
 import { groupsQueryKey } from "../query/query-key";
 import { useTeamContext } from "./TeamProvider";
@@ -21,80 +17,12 @@ interface Props extends Attributes {
 
 export default function TeamPageTaskListCard({ key, taskList, done }: Props) {
   const { group } = useTeamContext();
-  const { isDesktop } = useResponsive();
   const tasks = taskList.tasks;
   const doneTasks = tasks.filter(isTaskDone);
-  const { deleteMutation, patchMutation } = useTaskListMutation();
   const router = useRouter();
 
   const handleCardClick = () => {
     router.push(`/${group.id}/tasklist?id=${taskList.id}`);
-  };
-
-  const handleEditClick = () => {
-    const handleSubmit = (newName: string) => {
-      patchMutation.mutate(
-        {
-          groupId: group.id,
-          taskListId: taskList.id,
-          name: newName,
-        },
-        {
-          onSuccess: (data, variables, onMutationResult, context) => {
-            context.client.invalidateQueries({
-              queryKey: groupsQueryKey({ groupId: group.id }),
-            });
-          },
-        }
-      );
-    };
-
-    return overlay.open(
-      ({ isOpen, close, unmount }) => (
-        <InputAlert
-          isOpen={isOpen}
-          onClose={close}
-          onExit={unmount}
-          title="할 일 목록 수정"
-          value={taskList.name}
-          placeholder="목록 명을 입력해주세요."
-          submitTitle="수정하기"
-          onSubmit={handleSubmit}
-        />
-      ),
-      { overlayId: "edit-tasklist-alert" }
-    );
-  };
-
-  const handleDeleteClick = () => {
-    overlay.open(
-      ({ isOpen, close, unmount }) => {
-        const title = `'${taskList.name}'\n할 일을 정말 삭제하시겠어요?`;
-        const handleDelete = () => {
-          deleteMutation.mutate(
-            { groupId: group.id, taskListId: taskList.id },
-            {
-              onSuccess: (data, variables, onMutationResult, context) => {
-                context.client.invalidateQueries({
-                  queryKey: groupsQueryKey({ groupId: group.id }),
-                });
-              },
-            }
-          );
-        };
-
-        return (
-          <DeleteAlert
-            isOpen={isOpen}
-            onClose={close}
-            onExit={unmount}
-            title={title}
-            onDelete={handleDelete}
-          />
-        );
-      },
-      { overlayId: "delete-tasklist-alert" }
-    );
   };
 
   return (
@@ -113,16 +41,11 @@ export default function TeamPageTaskListCard({ key, taskList, done }: Props) {
               size="small"
             />
           )}
-          <EditDropdown
+          <TaskListEditDropdown
+            taskList={taskList}
             anchor={
               <Icon name="dots" size="large" color="var(--color-state-300)" />
             }
-            gap={10}
-            direction={isDesktop ? undefined : "left"}
-            alignment={isDesktop ? "left" : "bottom"}
-            alignmentOffset={-6}
-            onEdit={handleEditClick}
-            onDelete={handleDeleteClick}
           />
         </div>
       </div>

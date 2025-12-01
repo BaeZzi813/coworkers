@@ -1,28 +1,46 @@
 import { Button } from "@/components/button";
+import { overlay } from "overlay-kit";
 import { OverlayProps } from "../overlay";
 import Alert from "./Alert";
 
-interface Props extends OverlayProps {
+interface Props {
   title: string;
   error: Error;
 }
 
 export default function ErrorAlert({
-  isOpen,
-  onClose,
-  onExit,
   title,
   error,
-}: Props) {
+  ...overlayProps
+}: Props & OverlayProps) {
   return (
     <Alert
+      {...overlayProps}
       title={title}
       message={error.message}
-      isOpen={isOpen}
-      onClose={onClose}
-      onExit={onExit}
-      actions={[<Button key="error-alert" title="확인" onClick={onClose} />]}
+      actions={[
+        <Button
+          key="error-alert"
+          title="확인"
+          onClick={overlayProps.onClose}
+        />,
+      ]}
       showsCloseButton={false}
     />
+  );
+}
+
+export function openErrorAlert({ title, error }: Props) {
+  overlay.open(
+    ({ isOpen, close, unmount }) => (
+      <ErrorAlert
+        isOpen={isOpen}
+        onClose={close}
+        onExit={unmount}
+        title={title}
+        error={error}
+      />
+    ),
+    { overlayId: "error-alert" }
   );
 }
