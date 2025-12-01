@@ -123,3 +123,17 @@ function endpoint(groupId: number, taskListId: number, taskId?: number) {
 
   return base;
 }
+
+interface DeleteTaskParams {
+  groupId: number;
+  taskListId: number;
+  taskId: number;
+}
+
+export async function deleteTask({
+  groupId,
+  taskListId,
+  taskId,
+}: DeleteTaskParams) {
+  await clientApiInstance.delete(endpoint(groupId, taskListId, taskId));
+}

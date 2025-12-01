@@ -4,6 +4,7 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import {
+  deleteTask,
   patchTask,
   PatchTaskParams,
   PatchTaskResult,
@@ -11,7 +12,7 @@ import {
   PostTaskBody,
   PostTaskResult,
 } from "../apis";
-import { tasksQueryKey } from "./query-key";
+import { taskQueryKey, tasksQueryKey } from "./query-key";
 
 interface TaskMutationProps
   extends Pick<
@@ -62,5 +63,17 @@ export function useTaskMutation({
     ...options,
   });
 
-  return { postMutation, patchMutation };
+  const deleteMutation = useMutation<void, Error, number, unknown>({
+    mutationFn: (taskId) => deleteTask({ groupId, taskListId, taskId }),
+    onSuccess: (_, taskId) => {
+      queryClient.invalidateQueries({
+        queryKey: taskQueryKey({ groupId, taskListId, taskId }),
+      });
+      queryClient.invalidateQueries({
+        queryKey: tasksQueryKey({ groupId, taskListId }),
+      });
+    },
+  });
+
+  return { postMutation, patchMutation, deleteMutation };
 }

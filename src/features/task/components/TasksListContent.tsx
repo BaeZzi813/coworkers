@@ -1,7 +1,8 @@
 import { FloatingButton } from "@/components/button";
 import Icon from "@/components/icon";
+import { openDeleteAlert } from "@/components/modal/DeleteAlert";
 import TasksListItem from "@/features/task/components/TasksListItem";
-import { useTasksQuery } from "@/features/task/query";
+import { useTaskMutation, useTasksQuery } from "@/features/task/query";
 import { Task, TaskList } from "@/types/task";
 import DateSelector from "../../tasklist/components/DateSelector";
 import { useToggleTodo } from "../../tasklist/hooks/useToggleTodo";
@@ -29,6 +30,7 @@ export default function TasksListContent({
 }: Props) {
   const toggleTodo = useToggleTodo();
 
+  const { deleteMutation } = useTaskMutation({ groupId, taskListId });
   const { tasks, isFetching } = useTasksQuery({
     groupId: groupId ?? 0,
     taskListId: taskListId ?? 0,
@@ -48,8 +50,8 @@ export default function TasksListContent({
   const handleEditTask = (task: Task) => {
     if (!groupId || !taskListId) return;
     openTaskEditSheet({
-      groupId: groupId,
-      taskListId: taskListId,
+      groupId,
+      taskListId,
       taskId: task.id,
       initialData: {
         name: task.name,
@@ -60,7 +62,11 @@ export default function TasksListContent({
   };
   const handleDeleteTask = (task: Task) => {
     if (!groupId || !taskListId) return;
-    console.log(`delete ${task.id}`);
+    openDeleteAlert({
+      title: `'${task.name}'\n할 일을 정말 삭제하시겠어요?`,
+      onDelete: () =>
+        deleteMutation.mutate(task.id, { onSuccess: () => close() }),
+    });
   };
 
   return (

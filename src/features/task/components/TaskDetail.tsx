@@ -2,13 +2,14 @@ import Avatar from "@/components/avatar";
 import { Button } from "@/components/button";
 import EditDropdown from "@/components/dropdown/EditDropdown";
 import Icon from "@/components/icon";
+import { openDeleteAlert } from "@/components/modal/DeleteAlert";
 import { CommentSection } from "@/features/comment/components";
 import { useTaskCommentsQuery } from "@/features/comment/query/use-comment-query";
 import { useResponsive } from "@/hooks/use-responsive";
 import clsx from "clsx";
 import { useToggleTodo } from "../../tasklist/hooks/useToggleTodo";
 import { FREQUENCY_LABEL } from "../constants/task-frequency";
-import { useTaskQuery } from "../query";
+import { useTaskMutation, useTaskQuery } from "../query";
 import { openTaskEditSheet } from "./TaskEditSheet";
 
 interface Props {
@@ -22,6 +23,7 @@ export function TaskDetail({ groupId, taskListId, taskId, close }: Props) {
   const { isTablet, isDesktop } = useResponsive();
   const toggleTodo = useToggleTodo();
 
+  const { deleteMutation } = useTaskMutation({ groupId, taskListId });
   const { task, isFetching } = useTaskQuery({
     groupId,
     taskListId,
@@ -42,10 +44,11 @@ export function TaskDetail({ groupId, taskListId, taskId, close }: Props) {
   };
 
   const handleEditTask = () => {
+    if (!groupId || !taskListId) return;
     openTaskEditSheet({
-      groupId: groupId,
-      taskListId: taskListId,
-      taskId: taskId,
+      groupId,
+      taskListId,
+      taskId,
       initialData: {
         name: task.name,
         description: task.description,
@@ -54,7 +57,12 @@ export function TaskDetail({ groupId, taskListId, taskId, close }: Props) {
     });
   };
   const handleDeleteTask = () => {
-    console.log("delete task");
+    if (!groupId || !taskListId) return;
+    openDeleteAlert({
+      title: `'${task.name}'\n할 일을 정말 삭제하시겠어요?`,
+      onDelete: () =>
+        deleteMutation.mutate(task.id, { onSuccess: () => close() }),
+    });
   };
 
   const comments = taskComments.map((comment) => ({
