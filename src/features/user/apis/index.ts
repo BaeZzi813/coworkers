@@ -74,3 +74,7 @@ export async function patchResetPassword({
     }
   }
 }
+
+export async function deleteUser() {
+  await clientApiInstance.delete("/user");
+}

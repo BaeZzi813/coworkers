@@ -22,20 +22,3 @@ export async function patchChangePassword(
   );
   return response.data;
 }
-
-interface DeleteUserParameters {
-  teamId: string;
-}
-
-interface DeleteUserResponse {
-  message: string;
-}
-
-export async function deleteUser(
-  params: DeleteUserParameters
-): Promise<DeleteUserResponse> {
-  const response = await clientProxyInstance.delete<DeleteUserResponse>(
-    `/${params.teamId}/user/membershipwithdrawal`
-  );
-  return response.data;
-}

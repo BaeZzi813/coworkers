@@ -2,10 +2,11 @@ import { Button } from "@/components/button";
 import Icon from "@/components/icon";
 import { AvatarInput } from "@/components/input";
 import { Alert, ErrorAlert } from "@/components/modal";
+import { postSignOut } from "@/features/auth/apis";
 import InputLabel from "@/features/login/components/InputLabel";
 import PasswordVisible from "@/features/login/components/PasswordVisible";
-import { deleteUser, patchChangePassword } from "@/features/mypage/api";
-import { clientProxyInstance } from "@/services/instance/client";
+import { patchChangePassword } from "@/features/mypage/api";
+import { deleteUser } from "@/features/user/apis";
 import { useAuthStore } from "@/stores/auth-store";
 import {
   validatePassword,
@@ -48,9 +49,7 @@ export default function MyPage() {
           onExit={unmount}
           teamId={user?.teamId || ""}
           onSuccess={async () => {
-            try {
-              await clientProxyInstance.post("/auth/signOut");
-            } catch {}
+            await postSignOut();
             logOut();
             router.replace("/login");
           }}
@@ -335,7 +334,7 @@ function SecessionAlert({
 
     setIsLoading(true);
     try {
-      await deleteUser({ teamId });
+      await deleteUser();
       onClose();
       overlay.open(
         ({ isOpen, close, unmount }) => (
