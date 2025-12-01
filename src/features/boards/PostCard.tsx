@@ -49,7 +49,14 @@ export default function PostCard({ isPopular, article }: PostCardProps) {
             </h3>
           </div>
           {image && (
-            <div className="relative h-20 w-20 tablet:w-[88px] desktop:h-[88px]">
+            <div
+              className={clsx(
+                "relative",
+                isPopular
+                  ? "h-12 w-12 desktop:h-[60px] desktop:w-[60px]"
+                  : "h-20 w-20 tablet:w-[88px] desktop:h-[88px]"
+              )}
+            >
               <Image src={image} alt="썸네일" fill className="rounded-lg" />
             </div>
           )}

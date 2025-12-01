@@ -5,7 +5,6 @@ import { getArticle } from "@/features/boards/api";
 import BestPost from "@/features/boards/BestPost";
 import PostCard from "@/features/boards/PostCard";
 import SearchBar from "@/features/boards/SearchBar";
-import { useSidebarStore } from "@/stores/sidebar-store";
 import { Article } from "@/types/article";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useDebounce, useIntersectionObserver } from "@uidotdev/usehooks";
@@ -23,7 +22,6 @@ const options: SelectOption[] = [
 
 export default function BoardsPage() {
   const router = useRouter();
-  const isSidebarFolded = useSidebarStore((state) => state.isFold);
   const [query, setQuery] = useState("");
   const debounceQuery = useDebounce(query, 300);
   const [selectedOption, setSelectedOption] = useState<SelectOption>(
