@@ -1,10 +1,9 @@
 import Avatar from "@/components/avatar";
 import { Button } from "@/components/button";
-import Dropdown from "@/components/dropdown";
+import EditDropdown from "@/components/dropdown/EditDropdown";
 import Icon from "@/components/icon";
 import { CommentSection } from "@/features/comment/components";
 import { useTaskCommentsQuery } from "@/features/comment/query/use-comment-query";
-import { useEditDeleteMenu } from "@/hooks/use-edit-delete-menu";
 import { useResponsive } from "@/hooks/use-responsive";
 import clsx from "clsx";
 import { FREQUENCY_LABEL } from "../../tasklist/constants/task-frequency";
@@ -22,11 +21,6 @@ export function TaskDetail({ groupId, taskId, todoId, close }: Props) {
   const { isTablet, isDesktop } = useResponsive();
   const toggleTodo = useToggleTodo();
 
-  const { anchor, options } = useEditDeleteMenu({
-    onEdit: () => {},
-    onDelete: () => {},
-  });
-
   const { task, isFetching } = useTaskQuery({
     groupId,
     taskListId: taskId,
@@ -40,6 +34,13 @@ export function TaskDetail({ groupId, taskId, todoId, close }: Props) {
 
   const handleToggleDone = () => {
     toggleTodo.mutate({ taskId, todoId, done: !task.doneAt });
+  };
+
+  const handleEditTask = () => {
+    console.log("edit task");
+  };
+  const handleDeleteTask = () => {
+    console.log("delete task");
   };
 
   const comments = taskComments.map((comment) => ({
@@ -81,7 +82,20 @@ export function TaskDetail({ groupId, taskId, todoId, close }: Props) {
                 )}
               </div>
 
-              <Dropdown anchor={anchor} options={options} alignment="right" />
+              <EditDropdown
+                anchor={
+                  <div
+                    role="button"
+                    aria-label="할일 설정 열기"
+                    className="cursor-pointer"
+                  >
+                    <Icon name="dots" size="small" />
+                  </div>
+                }
+                alignment="right"
+                onEdit={handleEditTask}
+                onDelete={handleDeleteTask}
+              />
             </header>
 
             <div className="flex items-center gap-3">

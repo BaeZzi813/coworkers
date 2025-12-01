@@ -1,6 +1,6 @@
 import { prefetchGroup, useGroupQuery } from "@/features/group/query";
 import { TaskDetail } from "@/features/task/components/TaskDetail";
-import TaskListContent from "@/features/tasklist/components/TaskListContent";
+import TasksListContent from "@/features/task/components/TasksListContent";
 import TaskListGroup from "@/features/tasklist/components/TaskListGroup";
 import TeamHeader from "@/features/tasklist/components/TeamHeader";
 import { useTaskListQuery } from "@/features/tasklist/query/use-task-list-query";
@@ -123,7 +123,7 @@ export default serverSideComponentWithAuth<PageProps>(
               selectedTaskListId={selectedTaskListId}
               onSelect={handleTaskListSelect}
             />
-            <TaskListContent
+            <TasksListContent
               selectedDate={selectedDate}
               selectedTaskList={selectedTaskList}
               selectedTaskId={selectedTaskId}

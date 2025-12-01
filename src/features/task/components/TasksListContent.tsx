@@ -3,8 +3,8 @@ import Icon from "@/components/icon";
 import TasksListItem from "@/features/task/components/TasksListItem";
 import { useTasksQuery } from "@/features/task/query";
 import { Task, TaskList } from "@/types/task";
-import { useToggleTodo } from "../hooks/useToggleTodo";
-import DateSelector from "./DateSelector";
+import DateSelector from "../../tasklist/components/DateSelector";
+import { useToggleTodo } from "../../tasklist/hooks/useToggleTodo";
 
 interface Props {
   selectedDate: Date;
@@ -14,7 +14,7 @@ interface Props {
   onSelect: (task: Task) => void;
 }
 
-export default function TaskListContent({
+export default function TasksListContent({
   selectedDate,
   selectedTaskList,
   selectedTaskId,
@@ -82,6 +82,13 @@ function TasksList({
   onSelect: (task: Task) => void;
   onCheckboxClick: (task: Task) => void;
 }) {
+  const handleEditTask = () => {
+    console.log("edit task");
+  };
+  const handleDeleteTask = () => {
+    console.log("delete task");
+  };
+
   return (
     <div className="mt-6 flex flex-col gap-3">
       {tasks.length > 0 ? (
@@ -96,6 +103,8 @@ function TasksList({
             isDone={!!task.doneAt}
             onClick={() => onSelect(task)}
             onCheckboxClick={() => onCheckboxClick(task)}
+            onEdit={handleEditTask}
+            onDelete={handleDeleteTask}
           />
         ))
       ) : (
