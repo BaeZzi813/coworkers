@@ -2,159 +2,31 @@ import { Button } from "@/components/button";
 import Select, { SelectOption } from "@/components/select";
 import { useResponsive } from "@/hooks/use-responsive";
 import { TaskList } from "@/types/task";
-import { overlay } from "overlay-kit";
-import DeleteModal from "./DeleteModal";
+import { openTaskListCreateAlert } from "./TaskListCreateAlert";
 import TaskListGroupItem from "./TaskListGroupItem";
-import TaskModal from "./TaskModal";
 
 interface Props {
+  groupId: number;
   taskLists: TaskList[];
-  selectedTaskListId: number | null;
+  selectedTaskListId: number;
   onSelect: (taskListId: number) => void;
 }
 
 export default function TaskListGroup({
+  groupId,
   taskLists,
   selectedTaskListId,
   onSelect,
 }: Props) {
-  const { isDesktop } = useResponsive();
   const hasTask = taskLists.length > 0;
 
-  const handlePostTask = async (name: string) => {
-    console.log(`Add TaskItem ${name}`);
+  const handleClick = (taskListId?: number) => {
+    if (taskListId) {
+      onSelect(taskListId);
+    } else {
+      openTaskListCreateAlert({ groupId });
+    }
   };
-  const handlePatchTask = async (id: number, name: string) => {
-    console.log(`Edit TaskItem ${id}: ${name}`);
-  };
-  const handleDeleteTaskList = async (id: number) => {
-    console.log("DELETE TASK LIST:", id);
-  };
-
-  const openTaskModal = ({
-    mode,
-    taskId,
-    defaultValue,
-  }: {
-    mode: "create" | "edit";
-    taskId?: number;
-    defaultValue?: string;
-  }) => {
-    overlay.open(
-      ({ isOpen, close, unmount }) => (
-        <TaskModal
-          isOpen={isOpen}
-          onClose={close}
-          onExit={unmount}
-          title={mode === "create" ? "할 일 목록 생성" : "할 일 목록 수정"}
-          defaultValue={defaultValue}
-          confirmLabel={mode === "create" ? "만들기" : "수정하기"}
-          onSubmit={(name) =>
-            mode === "create"
-              ? handlePostTask(name)
-              : handlePatchTask(taskId!, name)
-          }
-        />
-      ),
-      { overlayId: `todo-list-${mode}` }
-    );
-  };
-  const openDeleteModal = ({
-    taskId,
-    targetName,
-  }: {
-    taskId: number;
-    targetName: string;
-  }) => {
-    overlay.open(
-      ({ isOpen, close, unmount }) => (
-        <DeleteModal
-          isOpen={isOpen}
-          onClose={close}
-          onExit={unmount}
-          type="taskList"
-          targetName={targetName}
-          onDelete={() => handleDeleteTaskList(taskId)}
-        />
-      ),
-      { overlayId: "taskList-delete" }
-    );
-  };
-
-  const mobileTaskOptions: SelectOption[] = taskLists.map((task) => ({
-    label: (
-      <TaskListGroupItem
-        key={task.id}
-        title={task.name}
-        tasks={task.tasks}
-        onEdit={() =>
-          openTaskModal({
-            mode: "edit",
-            taskId: task.id,
-            defaultValue: task.name,
-          })
-        }
-        onDelete={() =>
-          openDeleteModal({ taskId: task.id, targetName: task.name })
-        }
-      />
-    ),
-    value: String(task.id),
-  }));
-
-  const selectedOption = mobileTaskOptions.find(
-    (opt) => opt.value === String(selectedTaskListId)
-  );
-
-  const mobileTaskSelect = hasTask ? (
-    <Select
-      options={mobileTaskOptions}
-      value={selectedOption}
-      onChange={(option) => onSelect(Number(option.value))}
-      className="h-11 w-[180px] tablet:w-60"
-    />
-  ) : (
-    <div className="tablet:[240p]x flex h-11 w-[180px] cursor-pointer items-center rounded-lg border border-border-primary bg-background-primary p-2 tablet:w-60 tablet:rounded-xl tablet:px-3.5 tablet:py-2.5">
-      <TaskListGroupItem
-        title="제목 없음"
-        tasks={[]}
-        onClick={() => openTaskModal({ mode: "create" })}
-      />
-    </div>
-  );
-  const desktopTaskList = (
-    <div className="flex w-full min-w-60 flex-col gap-1">
-      {hasTask ? (
-        taskLists.map((taskList) => (
-          <TaskListGroupItem
-            key={taskList.id}
-            title={taskList.name}
-            tasks={taskList.tasks}
-            onClick={() => onSelect(taskList.id)}
-            onEdit={() =>
-              openTaskModal({
-                mode: "edit",
-                taskId: taskList.id,
-                defaultValue: taskList.name,
-              })
-            }
-            onDelete={() =>
-              openDeleteModal({
-                taskId: taskList.id,
-                targetName: taskList.name,
-              })
-            }
-          />
-        ))
-      ) : (
-        <TaskListGroupItem
-          title="제목 없음"
-          tasks={[]}
-          onClick={() => openTaskModal({ mode: "create" })}
-        />
-      )}
-    </div>
-  );
 
   return (
     <section className="flex w-full flex-col gap-2 tablet:gap-3 desktop:max-w-[270px] desktop:gap-6 desktop:py-3">
@@ -163,7 +35,12 @@ export default function TaskListGroup({
       </h2>
 
       <div className="flex items-center justify-between gap-[38px] desktop:flex-col">
-        {isDesktop ? desktopTaskList : mobileTaskSelect}
+        <GroupItem
+          hasTask={hasTask}
+          taskLists={taskLists}
+          selectedTaskListId={selectedTaskListId}
+          onClick={handleClick}
+        />
 
         <div className="rounded-full bg-background-primary">
           <Button
@@ -172,10 +49,64 @@ export default function TaskListGroup({
             variant="outlinedPrimary"
             isFullWidth={false}
             rounded
-            onClick={() => openTaskModal({ mode: "create" })}
+            onClick={() => handleClick()}
           />
         </div>
       </div>
     </section>
+  );
+}
+
+function GroupItem({
+  hasTask,
+  taskLists,
+  selectedTaskListId,
+  onClick,
+}: {
+  hasTask: boolean;
+  taskLists: TaskList[];
+  selectedTaskListId?: number;
+  onClick: (taskListId?: number) => void;
+}) {
+  const { isDesktop } = useResponsive();
+
+  if (isDesktop) {
+    return (
+      <div className="flex w-full min-w-60 flex-col gap-1">
+        {hasTask ? (
+          taskLists.map((taskList) => (
+            <TaskListGroupItem
+              key={taskList.id}
+              taskList={taskList}
+              onClick={() => onClick(taskList.id)}
+            />
+          ))
+        ) : (
+          <TaskListGroupItem onClick={onClick} />
+        )}
+      </div>
+    );
+  }
+
+  const mobileTaskOptions: SelectOption[] = taskLists.map((taskList) => ({
+    label: <TaskListGroupItem key={taskList.id} taskList={taskList} />,
+    value: String(taskList.id),
+  }));
+
+  const selectedOption = mobileTaskOptions.find(
+    (opt) => opt.value === String(selectedTaskListId)
+  );
+
+  return hasTask ? (
+    <Select
+      options={mobileTaskOptions}
+      value={selectedOption}
+      onChange={(option) => onClick(Number(option.value))}
+      className="h-11 w-[180px] tablet:w-60"
+    />
+  ) : (
+    <div className="tablet:[240p]x flex h-11 w-[180px] cursor-pointer items-center rounded-lg border border-border-primary bg-background-primary p-2 tablet:w-60 tablet:rounded-xl tablet:px-3.5 tablet:py-2.5">
+      <TaskListGroupItem onClick={onClick} />
+    </div>
   );
 }
