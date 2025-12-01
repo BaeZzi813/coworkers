@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { patchResetPassword, postResetPassword } from "../apis";
+import { patchPassword, patchResetPassword, postResetPassword } from "../apis";
 
 export function useResetPasswordMutation() {
   const postMutation = useMutation({
@@ -11,4 +11,12 @@ export function useResetPasswordMutation() {
   });
 
   return { postMutation, patchMutation };
+}
+
+export function useChangePasswordMutation() {
+  const mutation = useMutation({
+    mutationFn: patchPassword,
+  });
+
+  return { mutation };
 }

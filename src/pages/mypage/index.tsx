@@ -2,10 +2,12 @@ import { Button } from "@/components/button";
 import Icon from "@/components/icon";
 import { AvatarInput } from "@/components/input";
 import { Alert, ErrorAlert } from "@/components/modal";
+import { openErrorAlert } from "@/components/modal/ErrorAlert";
+import { postSignOut } from "@/features/auth/apis";
 import InputLabel from "@/features/login/components/InputLabel";
 import PasswordVisible from "@/features/login/components/PasswordVisible";
-import { deleteUser, patchChangePassword } from "@/features/mypage/api";
-import { clientProxyInstance } from "@/services/instance/client";
+import { deleteUser } from "@/features/user/apis";
+import { useChangePasswordMutation } from "@/features/user/query";
 import { useAuthStore } from "@/stores/auth-store";
 import {
   validatePassword,
@@ -23,17 +25,9 @@ export default function MyPage() {
   const email = user?.email || "";
 
   const handleChangePasswordClick = () => {
-    if (!user?.teamId) {
-      return;
-    }
     overlay.open(
       ({ isOpen, close, unmount }) => (
-        <ChangePasswordModal
-          isOpen={isOpen}
-          onClose={close}
-          onExit={unmount}
-          teamId={user.teamId}
-        />
+        <ChangePasswordModal isOpen={isOpen} onClose={close} onExit={unmount} />
       ),
       { overlayId: "change-password-alert" }
     );
@@ -48,9 +42,7 @@ export default function MyPage() {
           onExit={unmount}
           teamId={user?.teamId || ""}
           onSuccess={async () => {
-            try {
-              await clientProxyInstance.post("/auth/signOut");
-            } catch {}
+            await postSignOut();
             logOut();
             router.replace("/login");
           }}
@@ -130,14 +122,12 @@ interface ChangePasswordModalProps {
   isOpen: boolean;
   onClose: () => void;
   onExit: () => void;
-  teamId: string;
 }
 
 function ChangePasswordModal({
   isOpen,
   onClose,
   onExit,
-  teamId,
 }: ChangePasswordModalProps) {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -149,6 +139,7 @@ function ChangePasswordModal({
     string | undefined
   >();
   const [isLoading, setIsLoading] = useState(false);
+  const { mutation } = useChangePasswordMutation();
 
   const validateForm = () => {
     const passwordResult = validatePassword(newPassword);
@@ -180,50 +171,48 @@ function ChangePasswordModal({
     }
 
     setIsLoading(true);
-    try {
-      await patchChangePassword({
-        teamId,
+
+    mutation.mutate(
+      {
         password: newPassword,
         passwordConfirmation: confirmPassword,
-      });
-      overlay.open(
-        ({ isOpen, close, unmount }) => (
-          <Alert
-            isOpen={isOpen}
-            onClose={close}
-            onExit={unmount}
-            title="비밀번호가 변경되었습니다"
-            actions={[
-              <Button
-                key="confirm"
-                title="확인"
-                variant="primary"
-                size="large"
-                isFullWidth={true}
-                onClick={close}
-              />,
-            ]}
-          />
-        ),
-        { overlayId: "password-change-success-alert" }
-      );
-    } catch {
-      overlay.open(
-        ({ isOpen, close, unmount }) => (
-          <ErrorAlert
-            isOpen={isOpen}
-            onClose={close}
-            onExit={unmount}
-            title="비밀번호 변경이 실패하였습니다."
-            error={new Error("다시 시도해주세요.")}
-          />
-        ),
-        { overlayId: "password-change-error-alert" }
-      );
-    } finally {
-      setIsLoading(false);
-      onClose();
-    }
+      },
+      {
+        onSuccess: () => {
+          overlay.open(
+            ({ isOpen, close, unmount }) => (
+              <Alert
+                isOpen={isOpen}
+                onClose={close}
+                onExit={unmount}
+                title="비밀번호가 변경되었습니다"
+                actions={[
+                  <Button
+                    key="confirm"
+                    title="확인"
+                    variant="primary"
+                    size="large"
+                    isFullWidth={true}
+                    onClick={close}
+                  />,
+                ]}
+              />
+            ),
+            { overlayId: "password-change-success-alert" }
+          );
+        },
+        onError: () => {
+          openErrorAlert({
+            title: "비밀번호 변경이 실패하였습니다.",
+            error: new Error("다시 시도해주세요."),
+          });
+        },
+        onSettled: () => {
+          setIsLoading(false);
+          onClose();
+        },
+      }
+    );
   };
 
   const isFormValid = () => {
@@ -335,7 +324,7 @@ function SecessionAlert({
 
     setIsLoading(true);
     try {
-      await deleteUser({ teamId });
+      await deleteUser();
       onClose();
       overlay.open(
         ({ isOpen, close, unmount }) => (
