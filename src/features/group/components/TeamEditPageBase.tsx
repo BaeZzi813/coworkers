@@ -1,12 +1,11 @@
 import { Button } from "@/components/button";
 import { AvatarInput, TextField } from "@/components/input";
-import { ErrorAlert } from "@/components/modal";
+import { openErrorAlert } from "@/components/modal/ErrorAlert";
 import { useGroupMutation } from "@/features/group/query/use-group-mutation";
 import TeamEditContainer from "@/features/team/components/TeamEditContainer";
 import { useResponsive } from "@/hooks/use-responsive";
 import { Group } from "@/types/group";
 import { useRouter } from "next/router";
-import { overlay } from "overlay-kit";
 import { ChangeEvent, useId, useState } from "react";
 
 interface Props {
@@ -30,22 +29,17 @@ export default function TeamEditPageBase({ group }: Props) {
   };
 
   const handleSuccess = (group: Group) => {
+    const returnTo = router.query.returnTo;
+    if (typeof returnTo === "string") {
+      router.push(returnTo);
+      return;
+    }
+
     router.push(`/${group.id}`);
   };
 
   const handleError = (title: string, error: Error) => {
-    overlay.open(
-      ({ isOpen, close, unmount }) => (
-        <ErrorAlert
-          isOpen={isOpen}
-          onClose={close}
-          onExit={unmount}
-          title={title}
-          error={error}
-        />
-      ),
-      { overlayId: "group-edit-error-alert" }
-    );
+    openErrorAlert({ title, error });
   };
 
   const handleSubmit = async () => {

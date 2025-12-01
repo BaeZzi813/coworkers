@@ -118,6 +118,7 @@ export default serverSideComponentWithAuth<PageProps>(
           <TeamHeader group={group} isAdmin />
           <div className="flex flex-1 flex-col gap-[22px] tablet:gap-7 desktop:flex-row desktop:gap-6">
             <TaskListGroup
+              groupId={group.id}
               taskLists={group.taskLists}
               selectedTaskListId={selectedTaskListId}
               onSelect={handleTaskListSelect}

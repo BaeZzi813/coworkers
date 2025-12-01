@@ -2,7 +2,7 @@ import KakaotalkIcon from "@/assets/icons/ic-kakaotalk.svg";
 import { Button } from "@/components/button";
 import { ErrorAlert } from "@/components/modal";
 import { postSignIn } from "@/features/auth/apis";
-import ResetPasswordAlert from "@/features/auth/components/ResetPasswordAlert";
+import { openResetPasswordAlert } from "@/features/auth/components/ResetPasswordAlert";
 import InputLabel from "@/features/login/components/InputLabel";
 import PasswordVisible from "@/features/login/components/PasswordVisible";
 import { useAuthStore } from "@/stores/auth-store";
@@ -157,12 +157,7 @@ export default function LoginPage() {
   };
 
   const handleForgotPasswordClick = () => {
-    overlay.open(
-      ({ isOpen, close, unmount }) => (
-        <ResetPasswordAlert isOpen={isOpen} onClose={close} onExit={unmount} />
-      ),
-      { overlayId: "password-reset-alert" }
-    );
+    openResetPasswordAlert();
   };
 
   return (

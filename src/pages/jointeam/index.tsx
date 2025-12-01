@@ -1,6 +1,7 @@
 import { Button } from "@/components/button";
 import { TextField } from "@/components/input";
-import { Alert, ErrorAlert } from "@/components/modal";
+import { Alert } from "@/components/modal";
+import { openErrorAlert } from "@/components/modal/ErrorAlert";
 import { useGroupMutation } from "@/features/group/query/use-group-mutation";
 import TeamEditContainer from "@/features/team/components/TeamEditContainer";
 import { useResponsive } from "@/hooks/use-responsive";
@@ -64,18 +65,7 @@ export default function JoinTeamPage() {
   };
 
   const handleJoinError = (error: Error) => {
-    overlay.open(
-      ({ isOpen, close, unmount }) => (
-        <ErrorAlert
-          isOpen={isOpen}
-          onClose={close}
-          onExit={unmount}
-          title="팀 참여 실패"
-          error={error}
-        />
-      ),
-      { overlayId: "join-team-error-alert" }
-    );
+    openErrorAlert({ title: "팀 참여 실패", error });
   };
 
   const handleJoinClick = () => {

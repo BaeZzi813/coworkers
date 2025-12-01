@@ -1,11 +1,9 @@
 import Icon from "@/components/icon";
-import { InputAlert } from "@/components/modal";
 import TeamPageHeader from "@/features/group/components/TeamPageHeader";
 import TeamPageTasksBoard from "@/features/group/components/TeamPageTasksBoard";
 import TeamProvider from "@/features/group/components/TeamProvider";
 import { prefetchGroup, useGroupQuery } from "@/features/group/query";
-import { groupsQueryKey } from "@/features/group/query/query-key";
-import { useTaskListMutation } from "@/features/tasklist/query";
+import { openTaskListCreateAlert } from "@/features/tasklist/components/TaskListCreateAlert";
 import { prefetchUser, useUserQuery } from "@/features/user/query";
 import { useResponsive } from "@/hooks/use-responsive";
 import DimmedLayout from "@/layouts/DimmedLayout";
@@ -19,7 +17,6 @@ import {
 } from "@/libs/ssr/with-auth";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
 import clsx from "clsx";
-import { overlay } from "overlay-kit";
 
 export const getServerSideProps = gsspWithAuth(async (context, accessToken) => {
   const params = context.params;
@@ -47,7 +44,6 @@ export default serverSideComponentWithAuth<PageProps>(({ groupId }) => {
   const { group, isFetching } = useGroupQuery({ groupId });
   const { user } = useUserQuery();
   const adminMember = group?.members.find((member) => member.role === "ADMIN");
-  const { postMutation } = useTaskListMutation();
 
   if (!group || !user || !adminMember) {
     return <div>Loading</div>;
@@ -57,35 +53,7 @@ export default serverSideComponentWithAuth<PageProps>(({ groupId }) => {
   const tasks = group.taskLists.flatMap((taskList) => taskList.tasks);
 
   const handleAddClick = () => {
-    overlay.open(
-      ({ isOpen, close, unmount }) => {
-        const handleSubmit = (inputValue: string) => {
-          postMutation.mutate(
-            { groupId, name: inputValue },
-            {
-              onSuccess: (data, variables, onMutationResult, context) => {
-                context.client.invalidateQueries({
-                  queryKey: groupsQueryKey({ groupId }),
-                });
-              },
-            }
-          );
-        };
-
-        return (
-          <InputAlert
-            isOpen={isOpen}
-            onClose={close}
-            onExit={unmount}
-            title="할 일 목록"
-            placeholder="목록 명을 입력해주세요."
-            submitTitle="만들기"
-            onSubmit={handleSubmit}
-          />
-        );
-      },
-      { overlayId: "add-tasklist-alert" }
-    );
+    openTaskListCreateAlert({ groupId });
   };
 
   return (

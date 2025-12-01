@@ -1,35 +1,19 @@
 import DoneBadge from "@/components/badge/DoneBadge";
-import Dropdown, { DropdownOption } from "@/components/dropdown";
 import Icon from "@/components/icon";
 import { useResponsive } from "@/hooks/use-responsive";
-import { Task } from "@/types/task";
+import { TaskList } from "@/types/task";
 import clsx from "clsx";
+import TaskListEditDropdown from "./TaskListEditDropdown";
 
 interface Props {
-  title: string;
-  tasks: Task[];
+  taskList?: TaskList;
   onClick?: () => void;
-  onEdit?: () => void;
-  onDelete?: () => void;
 }
 
-export default function TaskListGroupItem({
-  title,
-  tasks,
-  onClick,
-  onEdit,
-  onDelete,
-}: Props) {
+export default function TaskListGroupItem({ taskList, onClick }: Props) {
   const { isDesktop } = useResponsive();
-
-  const hasTask = tasks.length > 0;
-  const totalCount = tasks.length;
-  const doneCount = tasks.filter((task) => task.doneAt).length;
-
-  const options: DropdownOption[] = [
-    { label: "수정하기", value: "edit", action: onEdit },
-    { label: "삭제하기", value: "delete", action: onDelete },
-  ];
+  const totalCount = taskList?.tasks.length ?? 0;
+  const doneCount = taskList?.tasks.filter((task) => task.doneAt).length ?? 0;
 
   return (
     <div
@@ -40,12 +24,15 @@ export default function TaskListGroupItem({
       )}
       onClick={onClick}
     >
-      <span className="text-sm-s desktop:text-md-s">{title}</span>
+      <span className="text-sm-s desktop:text-md-s">
+        {taskList?.name ?? "제목 없음"}
+      </span>
       <div className="desktop:ml-auto">
         <DoneBadge current={doneCount} total={totalCount} size="small" />
       </div>
-      {isDesktop && hasTask && (
-        <Dropdown
+      {isDesktop && taskList && (
+        <TaskListEditDropdown
+          taskList={taskList}
           anchor={
             <div
               role="button"
@@ -55,8 +42,6 @@ export default function TaskListGroupItem({
               <Icon name="dots" size="large" />
             </div>
           }
-          options={options}
-          alignment="right"
         />
       )}
     </div>

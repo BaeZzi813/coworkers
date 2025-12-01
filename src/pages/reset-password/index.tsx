@@ -1,6 +1,7 @@
 import { Button } from "@/components/button";
 import PasswordInputLabel from "@/components/input/PasswordInputLabel";
-import { Alert, ErrorAlert } from "@/components/modal";
+import { Alert } from "@/components/modal";
+import { openErrorAlert } from "@/components/modal/ErrorAlert";
 import { useResetPasswordMutation } from "@/features/user/query";
 import PageLayout from "@/layouts/PageLayout";
 import {
@@ -86,15 +87,7 @@ export default function ResetPasswordPage() {
   };
 
   const handleError = (error: Error) => {
-    overlay.open(({ isOpen, close, unmount }) => (
-      <ErrorAlert
-        isOpen={isOpen}
-        onClose={close}
-        onExit={unmount}
-        title="비밀번호 재설정 실패"
-        error={error}
-      />
-    ));
+    openErrorAlert({ title: "비밀번호 재설정 실패", error });
   };
 
   const handleSubmit = (event: MouseEvent<HTMLButtonElement>) => {
