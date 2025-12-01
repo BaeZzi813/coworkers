@@ -1,10 +1,11 @@
 import EditDropdown from "@/components/dropdown/EditDropdown";
-import { DeleteAlert, ErrorAlert, InputAlert } from "@/components/modal";
+import { openDeleteAlert } from "@/components/modal/DeleteAlert";
+import { openErrorAlert } from "@/components/modal/ErrorAlert";
+import { openInputAlert } from "@/components/modal/InputAlert";
 import { groupsQueryKey } from "@/features/group/query/query-key";
 import { useResponsive } from "@/hooks/use-responsive";
 import { TaskList } from "@/types/task";
 import { useQueryClient } from "@tanstack/react-query";
-import { overlay } from "overlay-kit";
 import { ReactNode } from "react";
 import { useTaskListMutation } from "../query";
 
@@ -25,18 +26,7 @@ export default function TaskListEditDropdown({ taskList, anchor }: Props) {
   };
 
   const handleError = (error: Error) => {
-    overlay.open(
-      ({ isOpen, close, unmount }) => (
-        <ErrorAlert
-          isOpen={isOpen}
-          onClose={close}
-          onExit={unmount}
-          title="삭제 실패"
-          error={error}
-        />
-      ),
-      { overlayId: "delete-error-alert" }
-    );
+    openErrorAlert({ title: "할 일 목록 삭제 실패", error });
   };
 
   const handleEdit = () => {
@@ -54,24 +44,16 @@ export default function TaskListEditDropdown({ taskList, anchor }: Props) {
       );
     };
 
-    overlay.open(
-      ({ isOpen, close, unmount }) => (
-        <InputAlert
-          isOpen={isOpen}
-          onClose={close}
-          onExit={unmount}
-          title="할 일 목록 수정"
-          value={taskList.name}
-          placeholder="목록 명을 입력해주세요."
-          submitTitle="수정하기"
-          onSubmit={handleSubmit}
-        />
-      ),
-      { overlayId: "edit-tasklist-alert" }
-    );
+    openInputAlert({
+      title: "할 일 목록 수정",
+      value: taskList.name,
+      placeholder: "목록 명을 입력해주세요.",
+      submitTitle: "수정하기",
+      onSubmit: handleSubmit,
+    });
   };
 
-  const handleDelete = () => {
+  const handleTaskListDelete = () => {
     const handleDelete = () => {
       deleteMutation.mutate(
         { groupId: taskList.groupId, taskListId: taskList.id },
@@ -82,18 +64,10 @@ export default function TaskListEditDropdown({ taskList, anchor }: Props) {
       );
     };
 
-    overlay.open(
-      ({ isOpen, close, unmount }) => (
-        <DeleteAlert
-          isOpen={isOpen}
-          onClose={close}
-          onExit={unmount}
-          title={`'${taskList.name}'\n할 일을 정말 삭제하시겠어요?`}
-          onDelete={handleDelete}
-        />
-      ),
-      { overlayId: "delete-tasklist-alert" }
-    );
+    openDeleteAlert({
+      title: `'${taskList.name}'\n할 일을 정말 삭제하시겠어요?`,
+      onDelete: handleDelete,
+    });
   };
 
   return (
@@ -104,7 +78,7 @@ export default function TaskListEditDropdown({ taskList, anchor }: Props) {
       alignment={isDesktop ? "left" : "bottom"}
       alignmentOffset={-6}
       onEdit={handleEdit}
-      onDelete={handleDelete}
+      onDelete={handleTaskListDelete}
     />
   );
 }

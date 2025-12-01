@@ -2,7 +2,8 @@ import Avatar from "@/components/avatar";
 import { Button } from "@/components/button";
 import EditDropdown from "@/components/dropdown/EditDropdown";
 import Icon from "@/components/icon";
-import { Alert, DeleteAlert } from "@/components/modal";
+import { Alert } from "@/components/modal";
+import { openDeleteAlert } from "@/components/modal/DeleteAlert";
 import { useMemberMutation } from "@/features/member/query/use-member-mutation";
 import { Member } from "@/types/member";
 import { useCopyToClipboard } from "@uidotdev/usehooks";
@@ -110,29 +111,22 @@ function MemberListItem({ member }: { member: Member }) {
   };
 
   const handleMemberDelete = () => {
-    overlay.open(({ isOpen, close, unmount }) => {
-      const handleDelete = () => {
-        deleteMutation.mutate(
-          { groupId: group.id, memberUserId: member.userId },
-          {
-            onSuccess: (data, variables, onbMutateResult, context) =>
-              context.client.invalidateQueries({
-                queryKey: groupsQueryKey({ groupId: group.id }),
-              }),
-          }
-        );
-        close();
-      };
-
-      return (
-        <DeleteAlert
-          isOpen={isOpen}
-          onClose={close}
-          onExit={unmount}
-          title={`'${member.userName}'님을\n팀에서 정말 삭제하시겠어요?`}
-          onDelete={handleDelete}
-        />
+    const handleDelete = () => {
+      deleteMutation.mutate(
+        { groupId: group.id, memberUserId: member.userId },
+        {
+          onSuccess: (data, variables, onbMutateResult, context) =>
+            context.client.invalidateQueries({
+              queryKey: groupsQueryKey({ groupId: group.id }),
+            }),
+        }
       );
+      close();
+    };
+
+    openDeleteAlert({
+      title: `'${member.userName}'님을\n팀에서 정말 삭제하시겠어요?`,
+      onDelete: handleDelete,
     });
   };
 

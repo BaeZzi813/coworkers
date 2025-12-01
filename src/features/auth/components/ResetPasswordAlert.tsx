@@ -110,3 +110,12 @@ function NestedAlert({
     />
   );
 }
+
+export function openResetPasswordAlert() {
+  overlay.open(
+    ({ isOpen, close, unmount }) => (
+      <ResetPasswordAlert isOpen={isOpen} onClose={close} onExit={unmount} />
+    ),
+    { overlayId: "reset-password-alert" }
+  );
+}
