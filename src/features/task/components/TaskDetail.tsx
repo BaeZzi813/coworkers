@@ -6,38 +6,52 @@ import { CommentSection } from "@/features/comment/components";
 import { useTaskCommentsQuery } from "@/features/comment/query/use-comment-query";
 import { useResponsive } from "@/hooks/use-responsive";
 import clsx from "clsx";
-import { FREQUENCY_LABEL } from "../../tasklist/constants/task-frequency";
 import { useToggleTodo } from "../../tasklist/hooks/useToggleTodo";
+import { FREQUENCY_LABEL } from "../constants/task-frequency";
 import { useTaskQuery } from "../query";
+import { openTaskEditSheet } from "./TaskEditSheet";
 
 interface Props {
   groupId: number;
+  taskListId: number;
   taskId: number;
-  todoId: number;
   close: () => void;
 }
 
-export function TaskDetail({ groupId, taskId, todoId, close }: Props) {
+export function TaskDetail({ groupId, taskListId, taskId, close }: Props) {
   const { isTablet, isDesktop } = useResponsive();
   const toggleTodo = useToggleTodo();
 
   const { task, isFetching } = useTaskQuery({
     groupId,
-    taskListId: taskId,
-    taskId: todoId,
-    enabled: !!taskId && !!todoId,
+    taskListId,
+    taskId,
+    enabled: !!taskListId && !!taskId,
   });
 
-  const { taskComments } = useTaskCommentsQuery({ taskId, enabled: !!todoId });
+  const { taskComments } = useTaskCommentsQuery({ taskId, enabled: !!taskId });
 
   if (!task || isFetching) return null;
 
   const handleToggleDone = () => {
-    toggleTodo.mutate({ taskId, todoId, done: !task.doneAt });
+    toggleTodo.mutate({
+      taskId: taskListId,
+      todoId: taskId,
+      done: !task.doneAt,
+    });
   };
 
   const handleEditTask = () => {
-    console.log("edit task");
+    openTaskEditSheet({
+      groupId: groupId,
+      taskListId: taskListId,
+      taskId: taskId,
+      initialData: {
+        name: task.name,
+        description: task.description,
+        done: !!task.doneAt,
+      },
+    });
   };
   const handleDeleteTask = () => {
     console.log("delete task");

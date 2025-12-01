@@ -28,9 +28,17 @@ export function useTaskMutation({
   ...options
 }: TaskMutationProps) {
   const queryClient = useQueryClient();
+
   const postMutation = useMutation<PostTaskResult, Error, PostTaskBody>({
-    mutationFn: (body) => postTask({ groupId, taskListId, body }),
-    onSuccess: () => {
+    mutationFn: (params) => postTask({ groupId, taskListId, params }),
+    onSuccess: (newTask) => {
+      queryClient.invalidateQueries({
+        queryKey: tasksQueryKey({
+          groupId,
+          taskListId,
+          date: newTask.startDate,
+        }),
+      });
       queryClient.invalidateQueries({
         queryKey: tasksQueryKey({ groupId, taskListId }),
       });
@@ -39,6 +47,18 @@ export function useTaskMutation({
 
   const patchMutation = useMutation<PatchTaskResult, Error, PatchTaskParams>({
     mutationFn: (params) => patchTask({ groupId, taskListId, params }),
+    onSuccess: (updatedTask) => {
+      queryClient.invalidateQueries({
+        queryKey: tasksQueryKey({
+          groupId,
+          taskListId,
+          date: updatedTask.date,
+        }),
+      });
+      queryClient.invalidateQueries({
+        queryKey: tasksQueryKey({ groupId, taskListId }),
+      });
+    },
     ...options,
   });
 

@@ -6,6 +6,7 @@ import { Task, TaskList } from "@/types/task";
 import DateSelector from "../../tasklist/components/DateSelector";
 import { useToggleTodo } from "../../tasklist/hooks/useToggleTodo";
 import { openTaskCreateSheet } from "./TaskCreateSheet";
+import { openTaskEditSheet } from "./TaskEditSheet";
 
 interface Props {
   groupId: number;
@@ -44,6 +45,24 @@ export default function TasksListContent({
     });
   };
 
+  const handleEditTask = (task: Task) => {
+    if (!groupId || !taskListId) return;
+    openTaskEditSheet({
+      groupId: groupId,
+      taskListId: taskListId,
+      taskId: task.id,
+      initialData: {
+        name: task.name,
+        description: task.description,
+        done: !!task.doneAt,
+      },
+    });
+  };
+  const handleDeleteTask = (task: Task) => {
+    if (!groupId || !taskListId) return;
+    console.log(`delete ${task.id}`);
+  };
+
   return (
     <section className="relative min-h-full flex-1 rounded-3xl bg-background-primary p-6">
       <div className="relative">
@@ -64,6 +83,8 @@ export default function TasksListContent({
           selectedTaskId={selectedTaskId}
           onSelect={onSelect}
           onCheckboxClick={handleTaskCheckboxClick}
+          onEdit={handleEditTask}
+          onDelete={handleDeleteTask}
         />
       )}
 
@@ -82,19 +103,16 @@ function TasksList({
   selectedTaskId,
   onSelect,
   onCheckboxClick,
+  onEdit,
+  onDelete,
 }: {
   tasks: Task[];
   selectedTaskId?: number;
   onSelect: (task: Task) => void;
   onCheckboxClick: (task: Task) => void;
+  onEdit: (task: Task) => void;
+  onDelete: (task: Task) => void;
 }) {
-  const handleEditTask = () => {
-    console.log("edit task");
-  };
-  const handleDeleteTask = () => {
-    console.log("delete task");
-  };
-
   return (
     <div className="mt-6 flex flex-col gap-3">
       {tasks.length > 0 ? (
@@ -109,8 +127,8 @@ function TasksList({
             isDone={!!task.doneAt}
             onClick={() => onSelect(task)}
             onCheckboxClick={() => onCheckboxClick(task)}
-            onEdit={handleEditTask}
-            onDelete={handleDeleteTask}
+            onEdit={() => onEdit(task)}
+            onDelete={() => onDelete(task)}
           />
         ))
       ) : (

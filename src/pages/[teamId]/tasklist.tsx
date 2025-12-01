@@ -161,8 +161,8 @@ export default serverSideComponentWithAuth<PageProps>(
 
               <TaskDetail
                 groupId={group.id}
-                taskId={selectedTaskList.id}
-                todoId={selectedTaskId}
+                taskListId={selectedTaskList.id}
+                taskId={selectedTaskId}
                 close={handleCloseDetailPanel}
               />
             </motion.div>

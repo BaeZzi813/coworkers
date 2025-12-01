@@ -55,13 +55,17 @@ export interface PostTaskBody {
 export interface PostTaskParams {
   groupId: number;
   taskListId: number;
-  body: PostTaskBody;
+  params: PostTaskBody;
 }
 
-export async function postTask({ groupId, taskListId, body }: PostTaskParams) {
+export async function postTask({
+  groupId,
+  taskListId,
+  params,
+}: PostTaskParams) {
   const response = await clientApiInstance.post(
     `/groups/${groupId}/task-lists/${taskListId}/recurring`,
-    body
+    params
   );
   return response.data;
 }
