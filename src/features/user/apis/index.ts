@@ -26,12 +26,12 @@ export async function getUserHistory(options?: APIRequestOptions) {
   }, options);
 }
 
-interface PostResetPasswordParams {
-  email: string;
+interface PasswordResponse {
+  message: string;
 }
 
-interface PostResetPasswordResponse {
-  message: string;
+interface PostResetPasswordParams {
+  email: string;
 }
 
 export async function postResetPassword({ email }: PostResetPasswordParams) {
@@ -41,7 +41,7 @@ export async function postResetPassword({ email }: PostResetPasswordParams) {
       : "http://localhost:3000";
 
   try {
-    const response = await clientApiInstance.post<PostResetPasswordResponse>(
+    const response = await clientApiInstance.post<PasswordResponse>(
       "/user/send-reset-password-email",
       { email, redirectUrl }
     );
@@ -63,7 +63,7 @@ export async function patchResetPassword({
   token,
 }: PatchResetPasswordParams) {
   try {
-    const response = await clientApiInstance.patch<PostResetPasswordResponse>(
+    const response = await clientApiInstance.patch<PasswordResponse>(
       "/user/reset-password",
       { password, passwordConfirmation: confirmedPassword, token }
     );
@@ -73,6 +73,25 @@ export async function patchResetPassword({
       throw Error(error.response?.data.message);
     }
   }
+}
+
+interface ChangePasswordParams {
+  password: string;
+  passwordConfirmation: string;
+}
+
+export async function patchPassword({
+  password,
+  passwordConfirmation,
+}: ChangePasswordParams) {
+  const response = await clientApiInstance.patch<PasswordResponse>(
+    `/user/password`,
+    {
+      password,
+      passwordConfirmation,
+    }
+  );
+  return response.data.message;
 }
 
 export async function deleteUser() {
