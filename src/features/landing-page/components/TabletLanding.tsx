@@ -3,7 +3,15 @@ import landing2medium from "@/assets/images/landing-2-medium.png";
 import landing3medium from "@/assets/images/landing-3-medium.png";
 import landing4medium from "@/assets/images/landing-4-medium.png";
 import Icon from "@/components/icon";
+import { motion } from "framer-motion";
 import Image from "next/image";
+import {
+  defaultMotion,
+  fadeInLeft,
+  fadeInRight,
+  fadeInScale,
+  fadeInUp,
+} from "./landing-motion";
 import StartButton from "./StartButton";
 
 export default function TabletLanding() {
@@ -11,7 +19,7 @@ export default function TabletLanding() {
     <>
       <section>
         <div className="relative min-h-[960px] bg-background-secondary">
-          <div className="min-h-[211px]">
+          <motion.div variants={fadeInLeft} {...defaultMotion}>
             <div className="absolute top-24 left-[37px]">
               <Icon name="union" size="small" />
             </div>
@@ -23,8 +31,12 @@ export default function TabletLanding() {
                 Coworkers
               </p>
             </div>
-          </div>
-          <div className="flex h-[749px] w-full justify-end">
+          </motion.div>
+          <motion.div
+            variants={fadeInScale}
+            {...defaultMotion}
+            className="flex h-[749px] w-full justify-end"
+          >
             <div className="relative h-full w-[649px]">
               <Image
                 src={landing1medium}
@@ -33,15 +45,23 @@ export default function TabletLanding() {
                 className="object-cover"
               />
             </div>
-          </div>
-          <div className="absolute right-10 bottom-13 w-40">
+          </motion.div>
+          <motion.div
+            variants={fadeInScale}
+            {...defaultMotion}
+            className="absolute right-10 bottom-13 w-40"
+          >
             <StartButton />
-          </div>
+          </motion.div>
         </div>
       </section>
       <section>
         <div className="min-h-[790px] bg-state-50 pl-[31px]">
-          <div className="min-h-[249px]">
+          <motion.div
+            variants={fadeInUp}
+            {...defaultMotion}
+            className="min-h-[249px]"
+          >
             <div className="flex flex-col gap-3 pt-[73px] pb-[19px] pl-[31px]">
               <Icon name="folder" size="medium" />
               <p className="text-2xl-b text-brand-primary">
@@ -53,8 +73,12 @@ export default function TabletLanding() {
                 <br /> 지금 무엇을 해야 하는지 한눈에 볼 수 있어요
               </p>
             </div>
-          </div>
-          <div className="flex h-[460px] w-full justify-end">
+          </motion.div>
+          <motion.div
+            variants={fadeInRight}
+            {...defaultMotion}
+            className="flex h-[460px] w-full justify-end"
+          >
             <div className="relative h-full w-[641px] pb-11">
               <Image
                 src={landing2medium}
@@ -63,12 +87,16 @@ export default function TabletLanding() {
                 className="object-cover"
               />
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
       <section>
         <div className="min-h-[680px] overflow-hidden bg-brand-primary pl-[45px]">
-          <div className="min-h-[248px]">
+          <motion.div
+            variants={fadeInLeft}
+            {...defaultMotion}
+            className="min-h-[248px]"
+          >
             <div className="flex flex-col gap-3 pt-[49px] pb-[41px] pl-[26px]">
               <Icon name="doneShadow" size="medium" />
               <p className="text-2xl-b text-text-inverse">
@@ -80,8 +108,12 @@ export default function TabletLanding() {
                 <br /> 하나씩 빠르게 완료해보세요
               </p>
             </div>
-          </div>
-          <div className="flex h-[432px] w-full items-end justify-end">
+          </motion.div>
+          <motion.div
+            variants={fadeInScale}
+            {...defaultMotion}
+            className="flex h-[432px] w-full items-end justify-end"
+          >
             <div className="relative h-full w-[627px]">
               <Image
                 src={landing3medium}
@@ -90,12 +122,16 @@ export default function TabletLanding() {
                 className="object-cover"
               />
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
       <section>
         <div className="h-[790px] overflow-hidden bg-state-50 pl-[66px]">
-          <div className="h-[333px]">
+          <motion.div
+            variants={fadeInUp}
+            {...defaultMotion}
+            className="h-[333px]"
+          >
             <div className="flex flex-col gap-3 pt-24 pb-[79px] pl-[5px]">
               <Icon name="commentShadow" size="medium" />
               <p className="text-2xl-b text-brand-primary">
@@ -107,15 +143,19 @@ export default function TabletLanding() {
                 <br /> 함께 결정을 내릴 수 있어요
               </p>
             </div>
-          </div>
-          <div className="relative mx-auto h-[457px] w-[540px]">
+          </motion.div>
+          <motion.div
+            variants={fadeInRight}
+            {...defaultMotion}
+            className="relative mx-auto h-[457px] w-[540px]"
+          >
             <Image
               src={landing4medium}
               alt="랜딩이미지4 태블릿"
               fill
               className="object-contain"
             />
-          </div>
+          </motion.div>
         </div>
       </section>
       <div className="flex h-[328px] flex-col items-center">

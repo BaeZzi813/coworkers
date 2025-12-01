@@ -3,15 +3,27 @@ import landing2large from "@/assets/images/landing-2-large.png";
 import landing3large from "@/assets/images/landing-3-large.png";
 import landing4large from "@/assets/images/landing-4-large.png";
 import Icon from "@/components/icon";
+import { motion } from "framer-motion";
 import Image from "next/image";
 import StartButton from "./StartButton";
+import {
+  defaultMotion,
+  fadeInLeft,
+  fadeInRight,
+  fadeInScale,
+  fadeInUp,
+} from "./landing-motion";
 
 export default function DesktopLanding() {
   return (
     <>
       <section className="w-full bg-background-secondary">
         <div className="mx-auto flex min-h-[1080px] max-w-[1848px]">
-          <div className="relative w-auto min-w-[518px]">
+          <motion.div
+            variants={fadeInLeft}
+            {...defaultMotion}
+            className="relative w-auto min-w-[518px]"
+          >
             <div className="absolute top-52 left-[76px]">
               <Icon name="union" size="large" />
             </div>
@@ -26,20 +38,28 @@ export default function DesktopLanding() {
             <div className="absolute bottom-[228px] left-[106px] w-40">
               <StartButton />
             </div>
-          </div>
-          <div className="relative w-[1330px]">
+          </motion.div>
+          <motion.div
+            variants={fadeInScale}
+            {...defaultMotion}
+            className="relative w-[1330px]"
+          >
             <Image
               src={landing1large}
               alt="랜딩이미지1 데스크탑"
               fill
               className="object-cover object-left"
             />
-          </div>
+          </motion.div>
         </div>
       </section>
       <section className="w-full bg-state-50">
         <div className="mx-auto flex min-h-[800px] max-w-[1848px]">
-          <div className="h-[202px] w-auto min-w-[563px] pt-48 pl-[180px]">
+          <motion.div
+            variants={fadeInUp}
+            {...defaultMotion}
+            className="h-[202px] w-auto min-w-[563px] pt-48 pl-[180px]"
+          >
             <div className="flex flex-col gap-3">
               <Icon name="folder" size="large" />
               <p className="text-3xl-b text-brand-primary">
@@ -51,20 +71,28 @@ export default function DesktopLanding() {
                 <br /> 지금 무엇을 해야 하는지 한눈에 볼 수 있어요
               </p>
             </div>
-          </div>
-          <div className="relative mt-[114px] h-[600px] w-5xl">
+          </motion.div>
+          <motion.div
+            variants={fadeInRight}
+            {...defaultMotion}
+            className="relative mt-[114px] h-[600px] w-5xl"
+          >
             <Image
               src={landing2large}
               alt="랜딩이미지2 데스크탑"
               fill
               className="object-cover object-left"
             />
-          </div>
+          </motion.div>
         </div>
       </section>
       <section className="w-full bg-brand-primary">
         <div className="mx-auto flex min-h-[750px] max-w-[1848px] flex-row-reverse overflow-hidden">
-          <div className="h-[202px] w-auto min-w-[702px] pt-[266px] pl-[117px]">
+          <motion.div
+            variants={fadeInLeft}
+            {...defaultMotion}
+            className="h-[202px] w-auto min-w-[702px] pt-[266px] pl-[117px]"
+          >
             <div className="flex flex-col gap-3 pt-[49px] pb-[41px] pl-[26px]">
               <Icon name="doneShadow" size="large" />
               <p className="text-3xl-b text-text-inverse">
@@ -76,20 +104,28 @@ export default function DesktopLanding() {
                 <br /> 하나씩 빠르게 완료해보세요
               </p>
             </div>
-          </div>
-          <div className="relative mt-[83px] w-[982px]">
+          </motion.div>
+          <motion.div
+            variants={fadeInScale}
+            {...defaultMotion}
+            className="relative mt-[83px] w-[982px]"
+          >
             <Image
               src={landing3large}
               alt="랜딩이미지3 데스크탑"
               fill
               className="object-cover object-right"
             />
-          </div>
+          </motion.div>
         </div>
       </section>
       <section className="w-full bg-state-50">
         <div className="mx-auto flex min-h-[800px] max-w-[1848px] overflow-hidden">
-          <div className="h-[800px] w-auto min-w-[705px]">
+          <motion.div
+            variants={fadeInUp}
+            {...defaultMotion}
+            className="h-[800px] w-auto min-w-[705px]"
+          >
             <div className="mt-48 ml-[180px] flex h-[202px] flex-col gap-3">
               <Icon name="commentShadow" size="large" />
               <p className="text-3xl-b text-brand-primary">
@@ -101,15 +137,19 @@ export default function DesktopLanding() {
                 <br /> 함께 결정을 내릴 수 있어요
               </p>
             </div>
-          </div>
-          <div className="relative h-[800px] w-[940px]">
+          </motion.div>
+          <motion.div
+            variants={fadeInRight}
+            {...defaultMotion}
+            className="relative h-[800px] w-[940px]"
+          >
             <Image
               src={landing4large}
               alt="랜딩이미지4 데스크탑"
               fill
               className="object-cover object-left"
             />
-          </div>
+          </motion.div>
         </div>
       </section>
       <div className="flex h-[328px] flex-col items-center">
