@@ -63,7 +63,7 @@ export async function postTask({
   taskListId,
   params,
 }: PostTaskParams) {
-  const response = await clientApiInstance.post(
+  const response = await clientApiInstance.post<PostTaskResult>(
     `/groups/${groupId}/task-lists/${taskListId}/recurring`,
     params
   );

@@ -1,18 +1,29 @@
 import Avatar from "@/components/avatar";
 import Icon from "@/components/icon";
+import { UseMutateFunction } from "@tanstack/react-query";
 import clsx from "clsx";
 import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
+import { PostTaskCommentParams, TaskCommentResult } from "../apis";
 
 interface CommentPostProps {
+  taskId: number;
+  onSubmit: UseMutateFunction<
+    TaskCommentResult,
+    Error,
+    PostTaskCommentParams,
+    unknown
+  >;
+  isPending: boolean;
   profileImage?: string;
-  onSubmit?: (content: string) => void;
   className?: string;
   horizontalPadding?: number;
 }
 
 export default function CommentPost({
-  profileImage,
+  taskId,
   onSubmit,
+  isPending,
+  profileImage,
   className,
   horizontalPadding,
 }: CommentPostProps) {
@@ -42,10 +53,19 @@ export default function CommentPost({
   };
 
   const handleSubmit = () => {
-    if (!content.trim()) return;
-    onSubmit?.(content);
-    setContent("");
-    resizeTextarea(textareaRef.current, { resize: false });
+    if (!content.trim() || isPending) {
+      return;
+    }
+
+    onSubmit(
+      { taskId, content: content.trim() },
+      {
+        onSuccess: () => {
+          setContent("");
+          resizeTextarea(textareaRef.current, { resize: false });
+        },
+      }
+    );
   };
 
   useEffect(() => {
