@@ -1,3 +1,4 @@
+import { uploadImage } from "@/features/image/apis";
 import { apiRequest, APIRequestOptions } from "@/services/api-request";
 import { clientApiInstance } from "@/services/instance/client";
 import { UserGroup } from "@/types/group";
@@ -96,4 +97,31 @@ export async function patchPassword({
 
 export async function deleteUser() {
   await clientApiInstance.delete("/user");
+}
+
+interface PatchProfileParams {
+  nickname?: string;
+  imageFile?: File;
+}
+
+export async function patchProfile({
+  nickname,
+  imageFile,
+}: PatchProfileParams) {
+  const params: {
+    nickname?: string;
+    image?: string;
+  } = {};
+
+  if (nickname !== undefined && nickname.trim() !== "") {
+    params.nickname = nickname.trim();
+  }
+
+  if (imageFile) {
+    const { url } = await uploadImage({ imageFile });
+    params.image = url;
+  }
+
+  const response = await clientApiInstance.patch<User>("/user", params);
+  return response.data;
 }
