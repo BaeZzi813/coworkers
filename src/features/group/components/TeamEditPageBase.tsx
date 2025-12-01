@@ -30,6 +30,12 @@ export default function TeamEditPageBase({ group }: Props) {
   };
 
   const handleSuccess = (group: Group) => {
+    const returnTo = router.query.returnTo;
+    if (typeof returnTo === "string") {
+      router.push(returnTo);
+      return;
+    }
+
     router.push(`/${group.id}`);
   };
 

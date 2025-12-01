@@ -18,7 +18,9 @@ export default function GroupEditDropdown({ group, anchor }: Props) {
   const router = useRouter();
 
   const handleEdit = () => {
-    router.push(`/${group.id}/edit`);
+    const { teamId, id } = router.query;
+    const returnTo = `/${teamId}` + (id ? `/tasklist?id=${id}` : "");
+    router.push(`/${group.id}/edit?returnTo=${encodeURIComponent(returnTo)}`);
   };
 
   const handleDeleteSuccess = () => router.replace("/dashboard");
