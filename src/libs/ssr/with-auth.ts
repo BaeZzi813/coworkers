@@ -1,6 +1,8 @@
 import { postRefreshToken } from "@/features/auth/apis";
+import { createExpiredCookie } from "@/features/auth/utils/cookie";
 import { GSSP_LOGIN_REDIRECT_RETURN } from "@/libs/ssr/gssp-return";
 import { DehydratedState } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
 import { JSX } from "react";
 import { useUpdateAccessToken } from "./use-update-access-token";
@@ -22,8 +24,18 @@ export function gsspWithAuth<Data>(
       return GSSP_LOGIN_REDIRECT_RETURN;
     }
 
-    const accessToken = await postRefreshToken(refreshToken, { ssr: true });
-    return getServerSidePropsFunc(context, accessToken);
+    try {
+      const accessToken = await postRefreshToken(refreshToken, { ssr: true });
+      return getServerSidePropsFunc(context, accessToken);
+    } catch (error) {
+      if (error instanceof AxiosError && error.response?.status === 400) {
+        const expiredCookie = createExpiredCookie({ name: "refreshToken" });
+        context.res.setHeader("Set-Cookie", expiredCookie);
+        return GSSP_LOGIN_REDIRECT_RETURN;
+      }
+
+      throw error;
+    }
   };
 }
 
