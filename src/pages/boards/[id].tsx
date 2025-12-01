@@ -11,17 +11,61 @@ import { GetCommentResponse } from "@/features/boards/api/index";
 import ArticleContent from "@/features/boards/article/ArticleContent";
 import ArticleHeader from "@/features/boards/article/ArticleHeader";
 import ArticleLikeButton from "@/features/boards/article/ArticleLikeButton";
+import {
+  prefetchArticle,
+  prefetchComment,
+} from "@/features/boards/query/prefetch-article";
 import { CommentSection } from "@/features/comment/components";
+import { prefetchUser } from "@/features/user/query";
+import {
+  GSSP_NOT_FOUND_RETURN,
+  gsspPropsWithTokenReturn,
+} from "@/libs/ssr/gssp-return";
+import {
+  gsspWithAuth,
+  serverSideComponentWithAuth,
+} from "@/libs/ssr/with-auth";
 import { useAuthStore } from "@/stores/auth-store";
 import { Article } from "@/types/article";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  dehydrate,
+  QueryClient,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { useRouter } from "next/router";
 
-export default function ArticlePage() {
+export const getServerSideProps = gsspWithAuth(async (context, accessToken) => {
+  const params = context.params;
+  const articleId = Number(params?.id);
+  if (isNaN(articleId)) {
+    return GSSP_NOT_FOUND_RETURN;
+  }
+  const queryClient = new QueryClient();
+  try {
+    await Promise.all([
+      prefetchUser(queryClient, { accessToken }),
+      prefetchArticle(queryClient, { articleId }),
+      prefetchComment(queryClient, { articleId }),
+    ]);
+    return gsspPropsWithTokenReturn({
+      props: { articleId },
+      dehydratedState: dehydrate(queryClient),
+      accessToken,
+    });
+  } catch (error) {
+    return GSSP_NOT_FOUND_RETURN;
+  }
+});
+
+interface PageProps {
+  articleId: number;
+}
+
+export default serverSideComponentWithAuth<PageProps>(({ articleId }) => {
   const router = useRouter();
-  const { id } = router.query;
   const queryClient = useQueryClient();
-  const articleId = Number(id);
 
   const user = useAuthStore((state) => state.user);
   const userImage = user?.image;
@@ -66,7 +110,7 @@ export default function ArticlePage() {
         articleId,
       ]);
       if (prevComment) {
-        queryClient.setQueryData<GetCommentResponse>(["comment", id], {
+        queryClient.setQueryData<GetCommentResponse>(["comment", articleId], {
           ...prevComment,
           list: prevComment.list.map((comment) =>
             comment.id === commentId ? { ...comment, content } : comment
@@ -198,4 +242,4 @@ export default function ArticlePage() {
       </div>
     </section>
   );
-}
+});

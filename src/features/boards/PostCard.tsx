@@ -37,7 +37,7 @@ export default function PostCard({ isPopular, article }: PostCardProps) {
       <div className="flex flex-col gap-2">
         <div
           className={clsx(
-            "flex h-[67px] w-[308px] justify-between tablet:h-[67px]",
+            "flex h-[67px] w-[308px] justify-between tablet:h-[88px]",
             isPopular
               ? "tablet:w-[264px] desktop:w-full desktop:max-w-[310px]"
               : "tablet:w-[572px] desktop:w-full desktop:max-w-[481px]"
