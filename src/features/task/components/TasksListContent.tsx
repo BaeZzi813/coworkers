@@ -5,8 +5,11 @@ import { useTasksQuery } from "@/features/task/query";
 import { Task, TaskList } from "@/types/task";
 import DateSelector from "../../tasklist/components/DateSelector";
 import { useToggleTodo } from "../../tasklist/hooks/useToggleTodo";
+import { openTaskCreateSheet } from "./TaskCreateSheet";
 
 interface Props {
+  groupId: number;
+  taskListId: number;
   selectedDate: Date;
   selectedTaskList?: TaskList;
   selectedTaskId?: number;
@@ -15,6 +18,8 @@ interface Props {
 }
 
 export default function TasksListContent({
+  groupId,
+  taskListId,
   selectedDate,
   selectedTaskList,
   selectedTaskId,
@@ -22,8 +27,6 @@ export default function TasksListContent({
   onSelect,
 }: Props) {
   const toggleTodo = useToggleTodo();
-  const groupId = selectedTaskList?.groupId;
-  const taskListId = selectedTaskList?.id;
 
   const { tasks, isFetching } = useTasksQuery({
     groupId: groupId ?? 0,
@@ -65,7 +68,10 @@ export default function TasksListContent({
       )}
 
       <div className="fixed right-4 bottom-10 desktop:absolute desktop:top-[260px] desktop:-right-7">
-        <FloatingButton icon={<Icon name="plus" color="white" />} />
+        <FloatingButton
+          icon={<Icon name="plus" size="medium" color="white" />}
+          onClick={() => openTaskCreateSheet({ groupId, taskListId })}
+        />
       </div>
     </section>
   );

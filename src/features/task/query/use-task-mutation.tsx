@@ -1,5 +1,17 @@
-import { MutationOptions, useMutation } from "@tanstack/react-query";
-import { patchTask, PatchTaskParams, PatchTaskResult } from "../apis";
+import {
+  MutationOptions,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
+import {
+  patchTask,
+  PatchTaskParams,
+  PatchTaskResult,
+  postTask,
+  PostTaskBody,
+  PostTaskResult,
+} from "../apis";
+import { tasksQueryKey } from "./query-key";
 
 interface TaskMutationProps
   extends Pick<
@@ -15,10 +27,20 @@ export function useTaskMutation({
   taskListId,
   ...options
 }: TaskMutationProps) {
+  const queryClient = useQueryClient();
+  const postMutation = useMutation<PostTaskResult, Error, PostTaskBody>({
+    mutationFn: (body) => postTask({ groupId, taskListId, body }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: tasksQueryKey({ groupId, taskListId }),
+      });
+    },
+  });
+
   const patchMutation = useMutation<PatchTaskResult, Error, PatchTaskParams>({
     mutationFn: (params) => patchTask({ groupId, taskListId, params }),
     ...options,
   });
 
-  return { patchMutation };
+  return { postMutation, patchMutation };
 }

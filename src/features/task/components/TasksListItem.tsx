@@ -3,7 +3,7 @@ import Icon from "@/components/icon";
 import { TaskFrequency } from "@/types/task";
 import clsx from "clsx";
 import { MouseEvent } from "react";
-import { FREQUENCY_LABEL } from "../../tasklist/constants/task-frequency";
+import { FREQUENCY_LABEL } from "../constants/task-frequency";
 
 const spanStyle = "text-xs leading-4 text-text-default no-underline";
 const itemStyle = {

@@ -30,6 +30,42 @@ export async function getTask({ groupId, taskListId, taskId }: GetTaskParams) {
   return response.data;
 }
 
+export interface PostTaskResult {
+  id: number;
+  name: string;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
+  startDate: string;
+  frequencyType: TaskFrequency;
+  weekDays: number[];
+  monthDay: number;
+  taskListId: number;
+  groupId: number;
+  writerId: number;
+}
+export interface PostTaskBody {
+  name: string;
+  description?: string;
+  startDate: string;
+  frequencyType: TaskFrequency;
+  weekDays?: number[];
+  monthDay?: number;
+}
+export interface PostTaskParams {
+  groupId: number;
+  taskListId: number;
+  body: PostTaskBody;
+}
+
+export async function postTask({ groupId, taskListId, body }: PostTaskParams) {
+  const response = await clientApiInstance.post(
+    `/groups/${groupId}/task-lists/${taskListId}/recurring`,
+    body
+  );
+  return response.data;
+}
+
 export interface PatchTaskParams {
   taskId: number;
   name?: string;

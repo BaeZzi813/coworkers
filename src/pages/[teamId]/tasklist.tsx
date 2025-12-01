@@ -124,6 +124,8 @@ export default serverSideComponentWithAuth<PageProps>(
               onSelect={handleTaskListSelect}
             />
             <TasksListContent
+              groupId={groupId}
+              taskListId={taskListId}
               selectedDate={selectedDate}
               selectedTaskList={selectedTaskList}
               selectedTaskId={selectedTaskId}
