@@ -1,4 +1,4 @@
-import { createExpiredCookie } from "@/features/auth/utils/cookie";
+import signOutHandler from "@/pages/api/auth/signOut";
 import { serverApiInstance } from "@/services/instance/server";
 import { withAxiosErrorResponse } from "@/services/with-axios-error-response";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -30,9 +30,11 @@ export default async function handler(
     res,
     async () => {
       const response = await serverApiInstance.delete<Response>(`/user`);
-      // 회원 탈퇴 성공 시 refreshToken 쿠키 삭제
-      const cookie = createExpiredCookie({ name: "refreshToken" });
-      res.setHeader("Set-Cookie", cookie);
+      const signOutReq = {
+        ...req,
+        method: "POST",
+      } as NextApiRequest;
+      await signOutHandler(signOutReq, res);
       res.status(200).json(response.data);
     },
     () => {

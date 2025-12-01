@@ -49,10 +49,8 @@ export default function MyPage() {
           teamId={user?.teamId || ""}
           onSuccess={async () => {
             try {
-              await clientProxyInstance.post("/api/auth/signOut");
-            } catch (error) {
-              console.error("Sign out error:", error);
-            }
+              await clientProxyInstance.post("/auth/signOut");
+            } catch {}
             logOut();
             router.replace("/login");
           }}
@@ -339,7 +337,6 @@ function SecessionAlert({
     try {
       await deleteUser({ teamId });
       onClose();
-      // 회원 탈퇴 성공 모달 표시
       overlay.open(
         ({ isOpen, close, unmount }) => (
           <Alert
