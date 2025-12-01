@@ -1,5 +1,34 @@
 import { clientApiInstance } from "@/services/instance/client";
-import { TaskFrequency } from "@/types/task";
+import { Task, TaskFrequency } from "@/types/task";
+
+interface GetTasksParams {
+  groupId: number;
+  taskListId: number;
+  date?: string;
+}
+
+export async function getTasks({ groupId, taskListId, date }: GetTasksParams) {
+  const response = await clientApiInstance.get<Task[]>(
+    endpoint(groupId, taskListId),
+    {
+      params: date ? { date } : null,
+    }
+  );
+  return response.data;
+}
+
+interface GetTaskParams {
+  groupId: number;
+  taskListId: number;
+  taskId: number;
+}
+
+export async function getTask({ groupId, taskListId, taskId }: GetTaskParams) {
+  const response = await clientApiInstance.get<Task>(
+    endpoint(groupId, taskListId, taskId)
+  );
+  return response.data;
+}
 
 export interface PatchTaskParams {
   taskId: number;
@@ -45,6 +74,12 @@ export async function patchTask({
   return response.data;
 }
 
-function endpoint(groupId: number, taskListId: number, taskId: number) {
-  return `/groups/${groupId}/task-lists/${taskListId}/tasks/${taskId}`;
+function endpoint(groupId: number, taskListId: number, taskId?: number) {
+  const base = `/groups/${groupId}/task-lists/${taskListId}/tasks`;
+
+  if (taskId) {
+    return base + `/${taskId}`;
+  }
+
+  return base;
 }

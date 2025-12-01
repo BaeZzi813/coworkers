@@ -34,20 +34,6 @@ export interface TaskList {
 
 export type TaskFrequency = "ONCE" | "DAILY" | "WEEKLY" | "MONTHLY";
 
-export interface TaskComment {
-  user: {
-    image: string;
-    nickname: string;
-    id: number;
-  };
-  userId: number;
-  taskId: number;
-  updatedAt: string;
-  createdAt: string;
-  content: string;
-  id: number;
-}
-
 export interface TaskHistory {
   displayIndex: number;
   writerId: number;

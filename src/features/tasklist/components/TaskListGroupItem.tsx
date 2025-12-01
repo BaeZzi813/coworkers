@@ -5,7 +5,7 @@ import { useResponsive } from "@/hooks/use-responsive";
 import { Task } from "@/types/task";
 import clsx from "clsx";
 
-interface TaskItemProps {
+interface Props {
   title: string;
   tasks: Task[];
   onClick?: () => void;
@@ -13,13 +13,13 @@ interface TaskItemProps {
   onDelete?: () => void;
 }
 
-export default function TaskItem({
+export default function TaskListGroupItem({
   title,
   tasks,
   onClick,
   onEdit,
   onDelete,
-}: TaskItemProps) {
+}: Props) {
   const { isDesktop } = useResponsive();
 
   const hasTask = tasks.length > 0;

@@ -1,4 +1,4 @@
-import TaskItemComponent from "@/features/tasklist/components/TaskItem";
+import TaskItemComponent from "@/features/tasklist/components/TaskListGroupItem";
 import type { Task } from "@/types/task";
 import type { Meta, StoryObj } from "@storybook/react";
 
