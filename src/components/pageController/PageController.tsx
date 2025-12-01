@@ -18,6 +18,7 @@ export default function PageController({
   const hasNext = page < totalPages;
   return (
     <div className={clsx("flex items-center justify-between", className)}>
+      <div className="w-[52px]" />
       <div className="flex flex-1 justify-center gap-1.5">
         {Array.from({ length: totalPages }).map((_, index) => {
           const isActive = index + 1 === page;

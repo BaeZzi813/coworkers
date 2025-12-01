@@ -9,7 +9,6 @@ import { useSidebarStore } from "@/stores/sidebar-store";
 import { Article } from "@/types/article";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useDebounce, useIntersectionObserver } from "@uidotdev/usehooks";
-import clsx from "clsx";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -71,62 +70,55 @@ export default function BoardsPage() {
 
   return (
     <>
-      <section className="border-t border-border-primary tablet:border-t-0">
-        <div className="mx-auto mt-[25px] mb-5 w-[343px] tablet:mt-[77px] tablet:mb-[29px] tablet:w-[620px] desktop:mt-[87px] desktop:w-[1120px]">
-          <SearchBar value={query} onChange={setQuery} />
-        </div>
-      </section>
-      <BestPost />
-      <section className="min-h-screen">
-        <div className="relative mx-auto mt-7 flex w-[340px] flex-col gap-5 tablet:w-[620px] desktop:w-[1074px]">
-          <div className="flex items-center justify-between">
-            <h2 className="text-2lg-b tablet:text-xl-b">전체</h2>
-            <Select
-              size="large"
-              options={options}
-              onChange={handleChange}
-              value={selectedOption}
-              className="h-10 w-[94px] tablet:h-11 tablet:w-[120px]"
+      <div className="desktop:max-w-7xl desktop:pl-24">
+        <section className="border-t border-border-primary tablet:border-t-0">
+          <div className="mx-auto mt-[25px] mb-5 w-[343px] tablet:mt-[77px] tablet:mb-[29px] tablet:w-[620px] desktop:mt-[87px] desktop:w-full desktop:max-w-[1120px]">
+            <SearchBar value={query} onChange={setQuery} />
+          </div>
+        </section>
+        <BestPost />
+        <section className="min-h-screen">
+          <div className="relative mx-auto mt-7 flex w-[340px] flex-col gap-5 tablet:w-[620px] desktop:w-full desktop:max-w-[1074px]">
+            <div className="flex items-center justify-between">
+              <h2 className="text-2lg-b tablet:text-xl-b">전체</h2>
+              <Select
+                size="large"
+                options={options}
+                onChange={handleChange}
+                value={selectedOption}
+                className="h-10 w-[94px] tablet:h-11 tablet:w-[120px]"
+              />
+            </div>
+            {isEmpty ? (
+              <div className="flex flex-col items-center justify-center gap-2 pt-25 text-lg-r text-text-default">
+                <span>아직 게시글이 없습니다.</span>
+                <span>자유롭게 글을 남겨주세요.</span>
+              </div>
+            ) : (
+              <>
+                <div className="flex flex-col gap-4 desktop:grid desktop:grid-cols-2 desktop:gap-5">
+                  {articles.map((post: Article) => (
+                    <PostCard key={post.id} article={post} />
+                  ))}
+                </div>
+                {isFetchingNextPage && (
+                  <div className="mt-10 flex justify-center text-lg-r text-text-default">
+                    로딩 중...
+                  </div>
+                )}
+                <div ref={observerRef} className="h-20" />
+              </>
+            )}
+          </div>
+
+          <div className="sticky right-6 bottom-8 float-right -mr-5">
+            <FloatingButton
+              icon={<Icon name="pencil" />}
+              onClick={() => router.push("/boards/new")}
             />
           </div>
-          {isEmpty ? (
-            <div className="flex flex-col items-center justify-center gap-2 pt-25 text-lg-r text-text-default">
-              <span>아직 게시글이 없습니다.</span>
-              <span>자유롭게 글을 남겨주세요.</span>
-            </div>
-          ) : (
-            <>
-              <div className="flex flex-col gap-4 desktop:grid desktop:grid-cols-2 desktop:gap-5">
-                {articles.map((post: Article) => (
-                  <PostCard key={post.id} article={post} />
-                ))}
-              </div>
-              {isFetchingNextPage && (
-                <div className="mt-10 flex justify-center text-lg-r text-text-default">
-                  로딩 중...
-                </div>
-              )}
-              <div ref={observerRef} className="h-20" />
-            </>
-          )}
-        </div>
-
-        <div
-          className={clsx(
-            "fixed",
-            "right-6 bottom-6",
-            "desktop:top-[800px]",
-            isSidebarFolded
-              ? "desktop:right-[calc((100vw-1024px)/2-130px)]"
-              : "desktop:right-[calc((100vw-1024px)/2-130px-98px)]"
-          )}
-        >
-          <FloatingButton
-            icon={<Icon name="pencil" />}
-            onClick={() => router.push("/boards/new")}
-          />
-        </div>
-      </section>
+        </section>
+      </div>
     </>
   );
 }

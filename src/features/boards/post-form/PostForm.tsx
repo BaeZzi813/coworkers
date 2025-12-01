@@ -102,8 +102,8 @@ export default function PostForm({
 
   return (
     <section className="min-h-screen w-full bg-background-secondary py-5 tablet:py-[68px]">
-      <div className="relative mx-auto w-[343px] rounded-[20px] bg-background-primary tablet:w-[620px] desktop:w-[900px]">
-        <div className="mx-auto w-[300px] py-11 tablet:w-[540px] tablet:py-[72px] desktop:w-[760px]">
+      <div className="relative mx-auto w-[343px] rounded-[20px] bg-background-primary tablet:w-[620px] desktop:mr-6 desktop:ml-[194px] desktop:w-auto desktop:max-w-[900px]">
+        <div className="mx-auto w-[300px] py-11 tablet:w-[540px] tablet:py-[72px] desktop:mx-[70px] desktop:w-auto desktop:max-w-[760px]">
           <h1 className="mb-6 text-xl-b">
             {mode === "post" ? "게시글 쓰기" : "게시글 수정"}
           </h1>
