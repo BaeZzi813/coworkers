@@ -8,8 +8,9 @@ import { useTaskListMutation } from "@/features/tasklist/query";
 import { useResponsive } from "@/hooks/use-responsive";
 import { Task, TaskList } from "@/types/task";
 import { isEmpty } from "@/utils/array-sugar";
+import { useRouter } from "next/router";
 import { overlay } from "overlay-kit";
-import { Attributes } from "react";
+import { Attributes, MouseEvent } from "react";
 import { groupsQueryKey } from "../query/query-key";
 import { useTeamContext } from "./TeamProvider";
 
@@ -24,6 +25,11 @@ export default function TeamPageTaskListCard({ key, taskList, done }: Props) {
   const tasks = taskList.tasks;
   const doneTasks = tasks.filter(isTaskDone);
   const { deleteMutation, patchMutation } = useTaskListMutation();
+  const router = useRouter();
+
+  const handleCardClick = () => {
+    router.push(`/${group.id}/tasklist?id=${taskList.id}`);
+  };
 
   const handleEditClick = () => {
     const handleSubmit = (newName: string) => {
@@ -94,7 +100,8 @@ export default function TeamPageTaskListCard({ key, taskList, done }: Props) {
   return (
     <div
       key={key}
-      className="flex flex-col gap-4 rounded-xl border border-border-primary bg-background-primary py-4 pr-4 pl-5"
+      className="flex cursor-pointer flex-col gap-4 rounded-xl border border-border-primary bg-background-primary py-4 pr-4 pl-5"
+      onClick={handleCardClick}
     >
       <div className="flex items-center justify-between">
         <h3 className="text-lg-s text-text-primary">{taskList.name}</h3>
@@ -147,7 +154,8 @@ function TaskCheckbox({ key, groupId, taskList, task }: TaskCheckboxProps) {
     taskListId: taskList.id,
   });
 
-  const handleToggle = () => {
+  const handleToggle = (event: MouseEvent) => {
+    event.stopPropagation();
     patchMutation.mutate(
       { taskId: task.id, done: !isTaskDone(task) },
       {

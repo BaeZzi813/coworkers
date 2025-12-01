@@ -1,7 +1,6 @@
 import { isTaskListDone } from "@/features/tasklist/utils";
 import { useResponsive } from "@/hooks/use-responsive";
 import { TaskList } from "@/types/task";
-import Link from "next/link";
 import { PropsWithChildren } from "react";
 import TeamPageMembersList from "./TeamPageMembersList";
 import TeamPageTaskListCard from "./TeamPageTaskListCard";
@@ -18,7 +17,7 @@ export default function TeamPageTasksBoard({ taskLists }: Props) {
   return (
     <div className="flex items-start gap-8">
       {taskLists.length > 0 ? (
-        <TaskListsBoard groupId={group.id} taskLists={taskLists} />
+        <TaskListsBoard taskLists={taskLists} />
       ) : (
         <EmptyTaskListsBoard isDesktop={isDesktop} />
       )}
@@ -49,13 +48,7 @@ function EmptyTaskListsBoard({ isDesktop }: { isDesktop: boolean }) {
   );
 }
 
-function TaskListsBoard({
-  groupId,
-  taskLists,
-}: {
-  groupId: number;
-  taskLists: TaskList[];
-}) {
+function TaskListsBoard({ taskLists }: { taskLists: TaskList[] }) {
   const doneLists = taskLists.filter(isTaskListDone);
   const doneIds = doneLists.map((taskList) => taskList.id);
 
@@ -83,9 +76,9 @@ function TaskListsBoard({
 
   return (
     <BoardSection>
-      <Column groupId={groupId} title="할 일" taskLists={toDoLists} />
-      <Column groupId={groupId} title="진행중" taskLists={inProgressLists} />
-      <Column groupId={groupId} title="완료" taskLists={doneLists} done />
+      <Column title="할 일" taskLists={toDoLists} />
+      <Column title="진행중" taskLists={inProgressLists} />
+      <Column title="완료" taskLists={doneLists} done />
     </BoardSection>
   );
 }
@@ -99,12 +92,10 @@ function BoardSection({ children }: PropsWithChildren) {
 }
 
 function Column({
-  groupId,
   taskLists,
   title,
   done = false,
 }: {
-  groupId: number;
   taskLists: TaskList[];
   title: string;
   done?: boolean;
@@ -112,7 +103,7 @@ function Column({
   return (
     <div className="flex w-full grow flex-col gap-3 desktop:gap-5">
       <ColumnHeader title={title} />
-      <ColumnBody groupId={groupId} taskLists={taskLists} done={done} />
+      <ColumnBody taskLists={taskLists} done={done} />
     </div>
   );
 }
@@ -126,20 +117,20 @@ function ColumnHeader({ title }: { title: string }) {
 }
 
 function ColumnBody({
-  groupId,
   taskLists,
   done,
 }: {
-  groupId: number;
   taskLists: TaskList[];
   done: boolean;
 }) {
   return (
     <div className="flex flex-col gap-2">
       {taskLists.map((taskList) => (
-        <Link href={`/${groupId}/tasklist?id=${taskList.id}`} key={taskList.id}>
-          <TeamPageTaskListCard taskList={taskList} done={done} />
-        </Link>
+        <TeamPageTaskListCard
+          key={taskList.id}
+          taskList={taskList}
+          done={done}
+        />
       ))}
     </div>
   );
