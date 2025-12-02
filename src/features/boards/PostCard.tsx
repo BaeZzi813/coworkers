@@ -37,7 +37,7 @@ export default function PostCard({ isPopular, article }: PostCardProps) {
       <div className="flex flex-col gap-2">
         <div
           className={clsx(
-            "flex h-[67px] w-[308px] justify-between tablet:h-[67px]",
+            "flex h-[67px] w-[308px] justify-between tablet:h-[88px]",
             isPopular
               ? "tablet:w-[264px] desktop:w-full desktop:max-w-[310px]"
               : "tablet:w-[572px] desktop:w-full desktop:max-w-[481px]"
@@ -49,7 +49,14 @@ export default function PostCard({ isPopular, article }: PostCardProps) {
             </h3>
           </div>
           {image && (
-            <div className="relative h-20 w-20 tablet:w-[88px] desktop:h-[88px]">
+            <div
+              className={clsx(
+                "relative",
+                isPopular
+                  ? "h-12 w-12 desktop:h-[60px] desktop:w-[60px]"
+                  : "h-20 w-20 tablet:w-[88px] desktop:h-[88px]"
+              )}
+            >
               <Image src={image} alt="썸네일" fill className="rounded-lg" />
             </div>
           )}

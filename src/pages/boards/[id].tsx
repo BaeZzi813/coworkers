@@ -11,33 +11,74 @@ import { GetCommentResponse } from "@/features/boards/api/index";
 import ArticleContent from "@/features/boards/article/ArticleContent";
 import ArticleHeader from "@/features/boards/article/ArticleHeader";
 import ArticleLikeButton from "@/features/boards/article/ArticleLikeButton";
+import {
+  prefetchArticle,
+  prefetchComment,
+} from "@/features/boards/query/prefetch-article";
 import { CommentSection } from "@/features/comment/components";
-import { useAuthStore } from "@/stores/auth-store";
+import { prefetchUser, useUserQuery } from "@/features/user/query";
+import {
+  GSSP_NOT_FOUND_RETURN,
+  gsspPropsWithTokenReturn,
+} from "@/libs/ssr/gssp-return";
+import {
+  gsspWithAuth,
+  serverSideComponentWithAuth,
+} from "@/libs/ssr/with-auth";
 import { Article } from "@/types/article";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  dehydrate,
+  QueryClient,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { useRouter } from "next/router";
 
-export default function ArticlePage() {
-  const router = useRouter();
-  const { id } = router.query;
-  const queryClient = useQueryClient();
-  const articleId = Number(id);
+export const getServerSideProps = gsspWithAuth(async (context, accessToken) => {
+  const params = context.params;
+  const articleId = Number(params?.id);
+  if (isNaN(articleId)) {
+    return GSSP_NOT_FOUND_RETURN;
+  }
+  const queryClient = new QueryClient();
+  try {
+    await Promise.all([
+      prefetchUser(queryClient, { accessToken }),
+      prefetchArticle(queryClient, { articleId }),
+      prefetchComment(queryClient, { articleId }),
+    ]);
+    return gsspPropsWithTokenReturn({
+      props: { articleId },
+      dehydratedState: dehydrate(queryClient),
+      accessToken,
+    });
+  } catch (error) {
+    console.log("prefetch 실패:", error);
+    return GSSP_NOT_FOUND_RETURN;
+  }
+});
 
-  const user = useAuthStore((state) => state.user);
+interface PageProps {
+  articleId: number;
+}
+
+export default serverSideComponentWithAuth<PageProps>(({ articleId }) => {
+  const router = useRouter();
+  const queryClient = useQueryClient();
+  const { user } = useUserQuery();
   const userImage = user?.image;
   const userId = user?.id;
 
-  const { data: article, isLoading } = useQuery({
+  const { data: article } = useQuery({
     queryKey: ["article", articleId],
     queryFn: () => getArticleById(articleId),
-    enabled: !!user,
     refetchOnMount: "always",
   });
 
   const { data: comments } = useQuery({
     queryKey: ["comment", articleId],
     queryFn: () => getCommentById(articleId),
-    enabled: !!articleId,
   });
 
   const postCommentMutation = useMutation({
@@ -66,7 +107,7 @@ export default function ArticlePage() {
         articleId,
       ]);
       if (prevComment) {
-        queryClient.setQueryData<GetCommentResponse>(["comment", id], {
+        queryClient.setQueryData<GetCommentResponse>(["comment", articleId], {
           ...prevComment,
           list: prevComment.list.map((comment) =>
             comment.id === commentId ? { ...comment, content } : comment
@@ -121,6 +162,7 @@ export default function ArticlePage() {
       return { prevArticle };
     },
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["article", articleId] });
       queryClient.invalidateQueries({ queryKey: ["articles"] });
     },
     onError: (_error, _variables, context) => {
@@ -142,22 +184,6 @@ export default function ArticlePage() {
     });
   };
 
-  if (isLoading) {
-    return (
-      <section className="flex min-h-screen items-center justify-center">
-        <div>Loading...</div>;
-      </section>
-    );
-  }
-
-  if (!article) {
-    return (
-      <section className="flex min-h-screen items-center justify-center">
-        <div>존재하지 않는 게시글입니다.</div>;
-      </section>
-    );
-  }
-
   const convertedComments =
     comments?.list.map((comment) => ({
       commentId: comment.id,
@@ -173,29 +199,38 @@ export default function ArticlePage() {
     <section className="min-h-screen w-full bg-background-secondary py-5 tablet:py-[68px]">
       <div className="relative mx-auto w-[343px] rounded-[20px] bg-background-primary tablet:w-[620px] desktop:mr-20 desktop:ml-[184px] desktop:w-auto desktop:max-w-[900px]">
         <div className="mx-auto w-[300px] pt-10 pb-10 tablet:w-[540px] tablet:pt-[54px] tablet:pb-[54px] desktop:mx-[60px] desktop:w-auto desktop:max-w-[780px]">
-          <ArticleHeader
-            currentUserId={userId}
-            article={article}
-            userImage={userImage}
-          />
-          <ArticleContent article={article} />
-          <ArticleLikeButton
-            likeCount={article?.likeCount}
-            isLiked={article?.isLiked ?? false}
-            onToggle={handleToggleLike}
-          />
-          <CommentSection
-            comments={convertedComments}
-            onSubmit={(content) =>
-              postCommentMutation.mutate({ id: articleId, content })
-            }
-            onEdit={(commentId, newContent) =>
-              patchCommentMutation.mutate({ commentId, content: newContent })
-            }
-            onDelete={(commentId) => deleteCommentMutation.mutate(commentId)}
-          />
+          {article && (
+            <>
+              <ArticleHeader
+                currentUserId={userId}
+                article={article}
+                userImage={userImage}
+              />
+              <ArticleContent article={article} />
+              <ArticleLikeButton
+                likeCount={article?.likeCount}
+                isLiked={article?.isLiked ?? false}
+                onToggle={handleToggleLike}
+              />
+              <CommentSection
+                comments={convertedComments}
+                onSubmit={(content) =>
+                  postCommentMutation.mutate({ id: articleId, content })
+                }
+                onEdit={(commentId, newContent) =>
+                  patchCommentMutation.mutate({
+                    commentId,
+                    content: newContent,
+                  })
+                }
+                onDelete={(commentId) =>
+                  deleteCommentMutation.mutate(commentId)
+                }
+              />
+            </>
+          )}
         </div>
       </div>
     </section>
   );
-}
+});
