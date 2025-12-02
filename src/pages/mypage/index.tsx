@@ -6,23 +6,42 @@ import { openErrorAlert } from "@/components/modal/ErrorAlert";
 import { postSignOut } from "@/features/auth/apis";
 import InputLabel from "@/features/login/components/InputLabel";
 import PasswordVisible from "@/features/login/components/PasswordVisible";
-import { deleteUser } from "@/features/user/apis";
+import { deleteUser, patchProfile } from "@/features/user/apis";
 import { useChangePasswordMutation } from "@/features/user/query";
 import { useAuthStore } from "@/stores/auth-store";
 import {
   validatePassword,
   validatePasswordConfirm,
 } from "@/utils/login-validator";
+import { isAxiosError } from "axios";
 import { useRouter } from "next/router";
 import { overlay } from "overlay-kit";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function MyPage() {
   const user = useAuthStore((state) => state.user);
   const logOut = useAuthStore((state) => state.logOut);
+  const updateUser = useAuthStore((state) => state.updateUser);
   const router = useRouter();
   const [name, setName] = useState(user?.nickname || "");
+  const [profileImage, setProfileImage] = useState<File | undefined>();
+  const [previewImageUrl, setPreviewImageUrl] = useState<string | undefined>(
+    user?.image
+  );
+  const [isLoading, setIsLoading] = useState(false);
   const email = user?.email || "";
+
+  const hasChanges =
+    (name || "").trim() !== (user?.nickname || "").trim() ||
+    profileImage !== undefined;
+
+  useEffect(() => {
+    if (user) {
+      setName(user.nickname || "");
+      setProfileImage(undefined);
+      setPreviewImageUrl(user.image);
+    }
+  }, [user]);
 
   const handleChangePasswordClick = () => {
     overlay.open(
@@ -52,17 +71,117 @@ export default function MyPage() {
     );
   };
 
+  const handleAvatarChange = (file: File) => {
+    setProfileImage(file);
+    if (previewImageUrl && previewImageUrl.startsWith("blob:")) {
+      URL.revokeObjectURL(previewImageUrl);
+    }
+    const fileUrl = URL.createObjectURL(file);
+    setPreviewImageUrl(fileUrl);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (previewImageUrl && previewImageUrl.startsWith("blob:")) {
+        URL.revokeObjectURL(previewImageUrl);
+      }
+    };
+  }, [previewImageUrl]);
+
+  const handleSaveClick = () => {
+    overlay.open(
+      ({ isOpen, close, unmount }) => (
+        <SaveConfirmAlert
+          isOpen={isOpen}
+          onClose={close}
+          onExit={unmount}
+          onConfirm={async () => {
+            setIsLoading(true);
+            try {
+              const response = await patchProfile({
+                nickname: name !== user?.nickname ? name : undefined,
+                imageFile: profileImage,
+              });
+
+              if (
+                profileImage &&
+                previewImageUrl &&
+                previewImageUrl.startsWith("blob:")
+              ) {
+                URL.revokeObjectURL(previewImageUrl);
+              }
+
+              if (user) {
+                const updatedUser = {
+                  ...user,
+                  ...response,
+                };
+                updateUser(updatedUser);
+              }
+
+              setProfileImage(undefined);
+              setPreviewImageUrl(response.image ?? user?.image);
+              setName(response.nickname ?? user?.nickname ?? "");
+              close();
+
+              overlay.open(
+                ({ isOpen, close, unmount }) => (
+                  <Alert
+                    isOpen={isOpen}
+                    onClose={close}
+                    onExit={unmount}
+                    title="프로필이 변경되었습니다"
+                    actions={[
+                      <Button
+                        key="confirm"
+                        title="확인"
+                        variant="primary"
+                        size="large"
+                        isFullWidth={true}
+                        onClick={close}
+                      />,
+                    ]}
+                  />
+                ),
+                { overlayId: "profile-update-success-alert" }
+              );
+            } catch (error) {
+              if (isAxiosError(error) && error.response?.status === 400) {
+                overlay.open(
+                  ({ isOpen, close, unmount }) => (
+                    <ErrorAlert
+                      isOpen={isOpen}
+                      onClose={close}
+                      onExit={unmount}
+                      title="프로필 변경이 실패하였습니다."
+                      error={new Error("다시 시도해주세요.")}
+                    />
+                  ),
+                  { overlayId: "profile-update-error-alert" }
+                );
+              } else {
+                openErrorAlert({
+                  title: "프로필 변경이 실패하였습니다.",
+                  error: new Error("다시 시도해주세요."),
+                });
+              }
+            } finally {
+              setIsLoading(false);
+            }
+          }}
+        />
+      ),
+      { overlayId: "save-confirm-alert" }
+    );
+  };
+
   return (
     <div className="flex h-screen items-center justify-center bg-background-secondary">
       <div className="flex h-195 w-230 flex-col rounded-2xl border border-border-primary bg-background-primary px-18 pt-16 pb-16">
         <h1 className="mb-10 text-2xl-b text-text-primary">계정 설정</h1>
 
         <div className="mb-9 flex justify-center">
-          <AvatarInput
-            onChange={(file) => {
-              console.log(file);
-            }}
-          />
+          <AvatarInput source={previewImageUrl} onChange={handleAvatarChange} />
         </div>
 
         <div className="flex flex-col gap-6">
@@ -103,7 +222,7 @@ export default function MyPage() {
             }
           />
 
-          <div className="mt-1 flex items-center gap-2">
+          <div className="mt-1 mr-3 flex items-center justify-between">
             <button
               className="flex h-6 w-32 cursor-pointer items-center text-left text-lg-m text-status-danger hover:text-lg-s hover:underline"
               onClick={handleMembershipWithdrawalClick}
@@ -111,6 +230,14 @@ export default function MyPage() {
               <Icon name="secession" size="large" />
               회원 탈퇴하기
             </button>
+            <Button
+              title="저장"
+              variant="primary"
+              size="small"
+              isFullWidth={false}
+              onClick={handleSaveClick}
+              disabled={!hasChanges || isLoading}
+            />
           </div>
         </div>
       </div>
@@ -294,6 +421,47 @@ function ChangePasswordModal({
           isFullWidth={true}
           onClick={handleChangeClick}
           disabled={!isFormValid() || isLoading}
+        />,
+      ]}
+    />
+  );
+}
+
+interface SaveConfirmAlertProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onExit: () => void;
+  onConfirm: () => void;
+}
+
+function SaveConfirmAlert({
+  isOpen,
+  onClose,
+  onExit,
+  onConfirm,
+}: SaveConfirmAlertProps) {
+  return (
+    <Alert
+      isOpen={isOpen}
+      onClose={onClose}
+      onExit={onExit}
+      title="변경사항을 저장하시겠습니까?"
+      actions={[
+        <Button
+          key="close"
+          title="닫기"
+          variant="outlinedPrimary"
+          size="large"
+          isFullWidth={true}
+          onClick={onClose}
+        />,
+        <Button
+          key="save"
+          title="저장하기"
+          variant="primary"
+          size="large"
+          isFullWidth={true}
+          onClick={onConfirm}
         />,
       ]}
     />

@@ -11,6 +11,7 @@ interface AuthActions {
   logIn: ({ accessToken, user }: { accessToken: string; user: User }) => void;
   logOut: () => void;
   refreshToken: ({ accessToken }: { accessToken: string }) => void;
+  updateUser: (user: User) => void;
 }
 
 export const useAuthStore = create<AuthState & AuthActions>()((set) => ({
@@ -20,4 +21,5 @@ export const useAuthStore = create<AuthState & AuthActions>()((set) => ({
   logIn: ({ accessToken, user }) => set({ accessToken, user, loggedIn: true }),
   logOut: () => set({ accessToken: "", user: null, loggedIn: false }),
   refreshToken: ({ accessToken }) => set({ accessToken }),
+  updateUser: (user) => set({ user }),
 }));
