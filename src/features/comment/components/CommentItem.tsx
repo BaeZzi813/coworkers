@@ -17,7 +17,12 @@ export interface CommentModel {
 }
 
 export interface CommentItemProps extends CommentModel {
-  onEdit?: (commentId: number, newContent: string) => void;
+  onEdit?: (
+    commentId: number,
+    newContent: string,
+    onSuccess?: () => void
+  ) => void;
+  editOnSuccess: boolean;
   onDelete?: (commentId: number) => void;
   className?: string;
   horizontalPadding?: number;
@@ -32,6 +37,7 @@ export default function CommentItem({
   createdAt,
   updatedAt,
   onEdit,
+  editOnSuccess,
   onDelete,
   className,
   horizontalPadding,
@@ -54,8 +60,24 @@ export default function CommentItem({
   });
 
   const handleEditSubmit = () => {
-    onEdit?.(commentId, editContent);
-    setIsEditing(false);
+    if (!onEdit || editContent === content) {
+      setIsEditing(false);
+      return;
+    }
+
+    onEdit(
+      commentId,
+      editContent,
+      editOnSuccess
+        ? () => {
+            setIsEditing(false);
+          }
+        : undefined
+    );
+
+    if (!editOnSuccess) {
+      setIsEditing(false);
+    }
   };
   const handleEditCancel = () => {
     setEditContent(content);
@@ -125,6 +147,7 @@ export default function CommentItem({
           </div>
 
           {isMine && !isEditing && (
+            // <EditDropdown />
             <Dropdown anchor={anchor} options={options} alignment="right" />
           )}
         </div>

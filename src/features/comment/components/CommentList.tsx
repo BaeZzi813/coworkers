@@ -1,9 +1,10 @@
 import clsx from "clsx";
-import CommentItem, { CommentItemProps } from "./CommentItem";
+import CommentItem, { CommentModel } from "./CommentItem";
 
 interface CommentListProps {
-  comments: CommentItemProps[];
+  comments: CommentModel[];
   onEdit?: (commentId: number, newContent: string) => void;
+  editOnSuccess: boolean;
   onDelete?: (commentId: number) => void;
   className?: string;
   horizontalPadding?: number;
@@ -12,6 +13,7 @@ interface CommentListProps {
 export default function CommentList({
   comments,
   onEdit,
+  editOnSuccess,
   onDelete,
   className,
   horizontalPadding,
@@ -23,6 +25,7 @@ export default function CommentList({
           key={comment.commentId}
           {...comment}
           onEdit={onEdit}
+          editOnSuccess={editOnSuccess}
           onDelete={onDelete}
           horizontalPadding={horizontalPadding}
         />

@@ -65,7 +65,7 @@ export function TaskDetail({ groupId, taskListId, taskId, close }: Props) {
     });
   };
 
-  const comments = taskComments.map((comment) => ({
+  const comments = taskComments?.map((comment) => ({
     commentId: comment.id,
     userId: comment.userId,
     name: comment.user.nickname,
@@ -168,7 +168,8 @@ export function TaskDetail({ groupId, taskListId, taskId, close }: Props) {
       </div>
 
       <CommentSection
-        comments={comments}
+        comments={comments ?? []}
+        taskId={taskId}
         horizontalPadding={isDesktop ? 40 : isTablet ? 28 : 16}
         className="py-7 tablet:py-4"
       />

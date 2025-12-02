@@ -4,15 +4,19 @@ import clsx from "clsx";
 import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 
 interface CommentPostProps {
+  onSubmit?: (content: string, onSuccess?: () => void) => void;
+  submitOnSuccess: boolean;
+  isPending: boolean;
   profileImage?: string;
-  onSubmit?: (content: string) => void;
   className?: string;
   horizontalPadding?: number;
 }
 
 export default function CommentPost({
-  profileImage,
   onSubmit,
+  submitOnSuccess,
+  isPending,
+  profileImage,
   className,
   horizontalPadding,
 }: CommentPostProps) {
@@ -42,10 +46,24 @@ export default function CommentPost({
   };
 
   const handleSubmit = () => {
-    if (!content.trim()) return;
-    onSubmit?.(content);
-    setContent("");
-    resizeTextarea(textareaRef.current, { resize: false });
+    if (!content.trim() || isPending) {
+      return;
+    }
+
+    onSubmit?.(
+      content.trim(),
+      submitOnSuccess
+        ? () => {
+            setContent("");
+            resizeTextarea(textareaRef.current, { resize: false });
+          }
+        : undefined
+    );
+
+    if (!submitOnSuccess) {
+      setContent("");
+      resizeTextarea(textareaRef.current, { resize: false });
+    }
   };
 
   useEffect(() => {
