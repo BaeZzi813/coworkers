@@ -1,48 +1,71 @@
 import Avatar from "@/components/avatar";
 import { Button } from "@/components/button";
-import Dropdown from "@/components/dropdown";
+import EditDropdown from "@/components/dropdown/EditDropdown";
 import Icon from "@/components/icon";
+import { openDeleteAlert } from "@/components/modal/DeleteAlert";
 import { CommentSection } from "@/features/comment/components";
 import { useTaskCommentsQuery } from "@/features/comment/query/use-comment-query";
-import { useEditDeleteMenu } from "@/hooks/use-edit-delete-menu";
 import { useResponsive } from "@/hooks/use-responsive";
 import clsx from "clsx";
-import { FREQUENCY_LABEL } from "../../tasklist/constants/task-frequency";
 import { useToggleTodo } from "../../tasklist/hooks/useToggleTodo";
-import { useTaskQuery } from "../query";
+import { FREQUENCY_LABEL } from "../constants/task-frequency";
+import { useTaskMutation, useTaskQuery } from "../query";
+import { openTaskEditSheet } from "./TaskEditSheet";
 
 interface Props {
   groupId: number;
+  taskListId: number;
   taskId: number;
-  todoId: number;
   close: () => void;
 }
 
-export function TaskDetail({ groupId, taskId, todoId, close }: Props) {
+export function TaskDetail({ groupId, taskListId, taskId, close }: Props) {
   const { isTablet, isDesktop } = useResponsive();
   const toggleTodo = useToggleTodo();
 
-  const { anchor, options } = useEditDeleteMenu({
-    onEdit: () => {},
-    onDelete: () => {},
-  });
-
+  const { deleteMutation } = useTaskMutation({ groupId, taskListId });
   const { task, isFetching } = useTaskQuery({
     groupId,
-    taskListId: taskId,
-    taskId: todoId,
-    enabled: !!taskId && !!todoId,
+    taskListId,
+    taskId,
+    enabled: !!taskListId && !!taskId,
   });
 
-  const { taskComments } = useTaskCommentsQuery({ taskId, enabled: !!todoId });
+  const { taskComments } = useTaskCommentsQuery({ taskId, enabled: !!taskId });
 
   if (!task || isFetching) return null;
 
   const handleToggleDone = () => {
-    toggleTodo.mutate({ taskId, todoId, done: !task.doneAt });
+    toggleTodo.mutate({
+      taskId: taskListId,
+      todoId: taskId,
+      done: !task.doneAt,
+    });
   };
 
-  const comments = taskComments.map((comment) => ({
+  const handleEditTask = () => {
+    if (!groupId || !taskListId) return;
+    openTaskEditSheet({
+      groupId,
+      taskListId,
+      taskId,
+      initialData: {
+        name: task.name,
+        description: task.description,
+        done: !!task.doneAt,
+      },
+    });
+  };
+  const handleDeleteTask = () => {
+    if (!groupId || !taskListId) return;
+    openDeleteAlert({
+      title: `'${task.name}'\n할 일을 정말 삭제하시겠어요?`,
+      onDelete: () =>
+        deleteMutation.mutate(task.id, { onSuccess: () => close() }),
+    });
+  };
+
+  const comments = taskComments?.map((comment) => ({
     commentId: comment.id,
     userId: comment.userId,
     name: comment.user.nickname,
@@ -81,7 +104,20 @@ export function TaskDetail({ groupId, taskId, todoId, close }: Props) {
                 )}
               </div>
 
-              <Dropdown anchor={anchor} options={options} alignment="right" />
+              <EditDropdown
+                anchor={
+                  <div
+                    role="button"
+                    aria-label="할일 설정 열기"
+                    className="cursor-pointer"
+                  >
+                    <Icon name="dots" size="small" />
+                  </div>
+                }
+                alignment="right"
+                onEdit={handleEditTask}
+                onDelete={handleDeleteTask}
+              />
             </header>
 
             <div className="flex items-center gap-3">
@@ -132,7 +168,8 @@ export function TaskDetail({ groupId, taskId, todoId, close }: Props) {
       </div>
 
       <CommentSection
-        comments={comments}
+        comments={comments ?? []}
+        taskId={taskId}
         horizontalPadding={isDesktop ? 40 : isTablet ? 28 : 16}
         className="py-7 tablet:py-4"
       />

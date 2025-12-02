@@ -1,5 +1,18 @@
-import { MutationOptions, useMutation } from "@tanstack/react-query";
-import { patchTask, PatchTaskParams, PatchTaskResult } from "../apis";
+import {
+  MutationOptions,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
+import {
+  deleteTask,
+  patchTask,
+  PatchTaskParams,
+  PatchTaskResult,
+  postTask,
+  PostTaskBody,
+  PostTaskResult,
+} from "../apis";
+import { tasksQueryKey } from "./query-key";
 
 interface TaskMutationProps
   extends Pick<
@@ -15,10 +28,28 @@ export function useTaskMutation({
   taskListId,
   ...options
 }: TaskMutationProps) {
+  const queryClient = useQueryClient();
+  const handleMutationSuccess = () => {
+    queryClient.invalidateQueries({
+      queryKey: tasksQueryKey({ groupId, taskListId }),
+    });
+  };
+
+  const postMutation = useMutation<PostTaskResult, Error, PostTaskBody>({
+    mutationFn: (params) => postTask({ groupId, taskListId, params }),
+    onSuccess: handleMutationSuccess,
+  });
+
   const patchMutation = useMutation<PatchTaskResult, Error, PatchTaskParams>({
     mutationFn: (params) => patchTask({ groupId, taskListId, params }),
+    onSuccess: handleMutationSuccess,
     ...options,
   });
 
-  return { patchMutation };
+  const deleteMutation = useMutation<void, Error, number>({
+    mutationFn: (taskId) => deleteTask({ groupId, taskListId, taskId }),
+    onSuccess: handleMutationSuccess,
+  });
+
+  return { postMutation, patchMutation, deleteMutation };
 }

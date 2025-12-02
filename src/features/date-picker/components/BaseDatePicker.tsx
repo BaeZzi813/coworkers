@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { ko } from "date-fns/locale";
-import { DayPicker, getDefaultClassNames } from "react-day-picker";
+import { DayPicker, getDefaultClassNames, Matcher } from "react-day-picker";
 import "react-day-picker/style.css";
 import DatePickerChevron from "./DatePickerChevron";
 
@@ -9,6 +9,7 @@ interface BaseDatePickerProps {
   onDayClick?: (date: Date) => void;
   onSelect?: (date?: Date) => void;
   modifiers?: Record<string, (day: Date) => boolean>;
+  disabled?: Matcher | Matcher[];
   rdpClassNames?: Record<string, string>;
   className?: string;
 }
@@ -18,6 +19,7 @@ export default function BaseDatePicker({
   onDayClick,
   onSelect,
   modifiers,
+  disabled,
   rdpClassNames,
   className,
 }: BaseDatePickerProps) {
@@ -35,6 +37,7 @@ export default function BaseDatePicker({
         showOutsideDays
         components={{ Chevron: DatePickerChevron }}
         modifiers={modifiers}
+        disabled={disabled}
         style={
           {
             "--rdp-accent-color": "var(--color-brand-primary)",

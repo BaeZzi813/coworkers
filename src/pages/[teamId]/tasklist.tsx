@@ -1,6 +1,6 @@
 import { prefetchGroup, useGroupQuery } from "@/features/group/query";
 import { TaskDetail } from "@/features/task/components/TaskDetail";
-import TaskListContent from "@/features/tasklist/components/TaskListContent";
+import TasksListContent from "@/features/task/components/TasksListContent";
 import TaskListGroup from "@/features/tasklist/components/TaskListGroup";
 import TeamHeader from "@/features/tasklist/components/TeamHeader";
 import { useTaskListQuery } from "@/features/tasklist/query/use-task-list-query";
@@ -123,7 +123,9 @@ export default serverSideComponentWithAuth<PageProps>(
               selectedTaskListId={selectedTaskListId}
               onSelect={handleTaskListSelect}
             />
-            <TaskListContent
+            <TasksListContent
+              groupId={groupId}
+              taskListId={taskListId}
               selectedDate={selectedDate}
               selectedTaskList={selectedTaskList}
               selectedTaskId={selectedTaskId}
@@ -147,7 +149,7 @@ export default serverSideComponentWithAuth<PageProps>(
                 opacity: 0,
                 transition: { duration: 0.2, ease: "easeIn" },
               }}
-              className="fixed top-[52px] right-0 h-[calc(100dvh-52px)] bg-background-primary shadow-2xl tablet:top-0 tablet:h-full"
+              className="fixed top-[52px] right-0 h-[calc(100dvh-52px)] overflow-y-auto bg-background-primary shadow-2xl tablet:top-0 tablet:h-full"
               style={{ width: isMobile ? "100%" : panelWidth }}
             >
               {isDesktop && (
@@ -159,8 +161,8 @@ export default serverSideComponentWithAuth<PageProps>(
 
               <TaskDetail
                 groupId={group.id}
-                taskId={selectedTaskList.id}
-                todoId={selectedTaskId}
+                taskListId={selectedTaskList.id}
+                taskId={selectedTaskId}
                 close={handleCloseDetailPanel}
               />
             </motion.div>

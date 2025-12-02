@@ -1,12 +1,17 @@
 import { FloatingButton } from "@/components/button";
 import Icon from "@/components/icon";
+import { openDeleteAlert } from "@/components/modal/DeleteAlert";
 import TasksListItem from "@/features/task/components/TasksListItem";
-import { useTasksQuery } from "@/features/task/query";
+import { useTaskMutation, useTasksQuery } from "@/features/task/query";
 import { Task, TaskList } from "@/types/task";
-import { useToggleTodo } from "../hooks/useToggleTodo";
-import DateSelector from "./DateSelector";
+import DateSelector from "../../tasklist/components/DateSelector";
+import { useToggleTodo } from "../../tasklist/hooks/useToggleTodo";
+import { openTaskCreateSheet } from "./TaskCreateSheet";
+import { openTaskEditSheet } from "./TaskEditSheet";
 
 interface Props {
+  groupId: number;
+  taskListId: number;
   selectedDate: Date;
   selectedTaskList?: TaskList;
   selectedTaskId?: number;
@@ -14,7 +19,9 @@ interface Props {
   onSelect: (task: Task) => void;
 }
 
-export default function TaskListContent({
+export default function TasksListContent({
+  groupId,
+  taskListId,
   selectedDate,
   selectedTaskList,
   selectedTaskId,
@@ -22,12 +29,11 @@ export default function TaskListContent({
   onSelect,
 }: Props) {
   const toggleTodo = useToggleTodo();
-  const groupId = selectedTaskList?.groupId;
-  const taskListId = selectedTaskList?.id;
 
+  const { deleteMutation } = useTaskMutation({ groupId, taskListId });
   const { tasks, isFetching } = useTasksQuery({
-    groupId: groupId ?? 0,
-    taskListId: taskListId ?? 0,
+    groupId: groupId,
+    taskListId: taskListId,
     date: selectedDate.toISOString(),
     enabled: !!taskListId,
   });
@@ -38,6 +44,28 @@ export default function TaskListContent({
       taskId: taskListId,
       todoId: task.id,
       done: !task.doneAt,
+    });
+  };
+
+  const handleEditTask = (task: Task) => {
+    if (!groupId || !taskListId) return;
+    openTaskEditSheet({
+      groupId,
+      taskListId,
+      taskId: task.id,
+      initialData: {
+        name: task.name,
+        description: task.description,
+        done: !!task.doneAt,
+      },
+    });
+  };
+  const handleDeleteTask = (task: Task) => {
+    if (!groupId || !taskListId) return;
+    openDeleteAlert({
+      title: `'${task.name}'\n할 일을 정말 삭제하시겠어요?`,
+      onDelete: () =>
+        deleteMutation.mutate(task.id, { onSuccess: () => close() }),
     });
   };
 
@@ -61,11 +89,16 @@ export default function TaskListContent({
           selectedTaskId={selectedTaskId}
           onSelect={onSelect}
           onCheckboxClick={handleTaskCheckboxClick}
+          onEdit={handleEditTask}
+          onDelete={handleDeleteTask}
         />
       )}
 
       <div className="fixed right-4 bottom-10 desktop:absolute desktop:top-[260px] desktop:-right-7">
-        <FloatingButton icon={<Icon name="plus" color="white" />} />
+        <FloatingButton
+          icon={<Icon name="plus" size="medium" color="white" />}
+          onClick={() => openTaskCreateSheet({ groupId, taskListId })}
+        />
       </div>
     </section>
   );
@@ -76,11 +109,15 @@ function TasksList({
   selectedTaskId,
   onSelect,
   onCheckboxClick,
+  onEdit,
+  onDelete,
 }: {
   tasks: Task[];
   selectedTaskId?: number;
   onSelect: (task: Task) => void;
   onCheckboxClick: (task: Task) => void;
+  onEdit: (task: Task) => void;
+  onDelete: (task: Task) => void;
 }) {
   return (
     <div className="mt-6 flex flex-col gap-3">
@@ -96,6 +133,8 @@ function TasksList({
             isDone={!!task.doneAt}
             onClick={() => onSelect(task)}
             onCheckboxClick={() => onCheckboxClick(task)}
+            onEdit={() => onEdit(task)}
+            onDelete={() => onDelete(task)}
           />
         ))
       ) : (

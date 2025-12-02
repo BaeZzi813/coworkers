@@ -3,7 +3,7 @@ import type { PropsWithChildren, ReactNode, Ref } from "react";
 import { InputHTMLAttributes } from "react";
 
 type Size = "large" | "small";
-type InputType = "text" | "email" | "password";
+type InputType = "text" | "email" | "password" | "number" | "time";
 
 type PropsWithChildrenAndRef<
   P = unknown,

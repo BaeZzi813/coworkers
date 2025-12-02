@@ -1,9 +1,9 @@
-import Dropdown, { DropdownOption } from "@/components/dropdown";
+import EditDropdown from "@/components/dropdown/EditDropdown";
 import Icon from "@/components/icon";
 import { TaskFrequency } from "@/types/task";
 import clsx from "clsx";
 import { MouseEvent } from "react";
-import { FREQUENCY_LABEL } from "../../tasklist/constants/task-frequency";
+import { FREQUENCY_LABEL } from "../constants/task-frequency";
 
 const spanStyle = "text-xs leading-4 text-text-default no-underline";
 const itemStyle = {
@@ -31,6 +31,8 @@ interface Props {
   isEmpty?: boolean;
   onCheckboxClick?: () => void;
   onClick?: () => void;
+  onEdit?: () => void;
+  onDelete?: () => void;
 }
 
 export default function TasksListItem({
@@ -43,12 +45,9 @@ export default function TasksListItem({
   isEmpty,
   onCheckboxClick,
   onClick,
+  onEdit,
+  onDelete,
 }: Props) {
-  const options: DropdownOption[] = [
-    { label: "수정하기", value: "edit", action: () => {} },
-    { label: "삭제하기", value: "delete", action: () => {} },
-  ];
-
   const handleCheckboxClick = (e: MouseEvent) => {
     e.stopPropagation();
     onCheckboxClick?.();
@@ -99,7 +98,7 @@ export default function TasksListItem({
         )}
         <div className="ml-auto">
           {!isEmpty && (
-            <Dropdown
+            <EditDropdown
               anchor={
                 <div
                   role="button"
@@ -109,8 +108,9 @@ export default function TasksListItem({
                   <Icon name="dots" size="small" />
                 </div>
               }
-              options={options}
               alignment="right"
+              onEdit={onEdit}
+              onDelete={onDelete}
             />
           )}
         </div>

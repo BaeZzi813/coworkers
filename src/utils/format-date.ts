@@ -8,3 +8,15 @@ export function formatDate(ISO: string) {
   });
   return formatter.format(date).replace(/\s/g, "").replace(/\.$/, "");
 }
+
+export function normalizeDate(date: Date = new Date()) {
+  const normalizedDate = new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate(),
+    date.getHours(),
+    date.getMinutes()
+  );
+
+  return normalizedDate.toISOString();
+}

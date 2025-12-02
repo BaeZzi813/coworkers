@@ -15,7 +15,6 @@ export function useTaskCommentsQuery({
     queryKey: taskCommentsQueryKey(taskId),
     queryFn: () => getTaskComments({ taskId }),
     enabled,
-    initialData: [],
   });
 
   return { taskComments: data };
