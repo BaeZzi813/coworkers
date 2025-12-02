@@ -1,17 +1,9 @@
-import { UseMutateFunction } from "@tanstack/react-query";
 import clsx from "clsx";
-import { PatchTaskComentParams, TaskCommentResult } from "../apis";
-import CommentItem, { CommentModel } from "./CommentItem";
+import CommentItem, { CommentItemProps } from "./CommentItem";
 
 interface CommentListProps {
-  comments: CommentModel[];
-  taskId: number;
-  onEdit?: UseMutateFunction<
-    TaskCommentResult,
-    Error,
-    PatchTaskComentParams,
-    unknown
-  >;
+  comments: CommentItemProps[];
+  onEdit?: (commentId: number, newContent: string) => void;
   onDelete?: (commentId: number) => void;
   className?: string;
   horizontalPadding?: number;
@@ -19,7 +11,6 @@ interface CommentListProps {
 
 export default function CommentList({
   comments,
-  taskId,
   onEdit,
   onDelete,
   className,
@@ -31,7 +22,6 @@ export default function CommentList({
         <CommentItem
           key={comment.commentId}
           {...comment}
-          taskId={taskId}
           onEdit={onEdit}
           onDelete={onDelete}
           horizontalPadding={horizontalPadding}

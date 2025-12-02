@@ -3,10 +3,8 @@ import { Button } from "@/components/button";
 import Dropdown from "@/components/dropdown";
 import { useUserQuery } from "@/features/user/query";
 import { useEditDeleteMenu } from "@/hooks/use-edit-delete-menu";
-import { UseMutateFunction } from "@tanstack/react-query";
 import clsx from "clsx";
 import { useState } from "react";
-import { PatchTaskComentParams, TaskCommentResult } from "../apis";
 
 export interface CommentModel {
   commentId: number;
@@ -19,13 +17,7 @@ export interface CommentModel {
 }
 
 export interface CommentItemProps extends CommentModel {
-  taskId: number;
-  onEdit?: UseMutateFunction<
-    TaskCommentResult,
-    Error,
-    PatchTaskComentParams,
-    unknown
-  >;
+  onEdit?: (commentId: number, newContent: string) => void;
   onDelete?: (commentId: number) => void;
   className?: string;
   horizontalPadding?: number;
@@ -39,7 +31,6 @@ export default function CommentItem({
   content,
   createdAt,
   updatedAt,
-  taskId,
   onEdit,
   onDelete,
   className,
@@ -63,19 +54,8 @@ export default function CommentItem({
   });
 
   const handleEditSubmit = () => {
-    if (!onEdit || editContent === content) {
-      setIsEditing(false);
-      return;
-    }
-
-    onEdit(
-      { taskId, commentId, content: editContent },
-      {
-        onSuccess: () => {
-          setIsEditing(false);
-        },
-      }
-    );
+    onEdit?.(commentId, editContent);
+    setIsEditing(false);
   };
   const handleEditCancel = () => {
     setEditContent(content);
@@ -145,7 +125,6 @@ export default function CommentItem({
           </div>
 
           {isMine && !isEditing && (
-            // <EditDropdown />
             <Dropdown anchor={anchor} options={options} alignment="right" />
           )}
         </div>

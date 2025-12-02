@@ -12,7 +12,7 @@ import {
   PostTaskBody,
   PostTaskResult,
 } from "../apis";
-import { tasksQueryKey } from "./query-key";
+import { taskQueryKey, tasksQueryKey } from "./query-key";
 
 interface TaskMutationProps
   extends Pick<
@@ -29,26 +29,50 @@ export function useTaskMutation({
   ...options
 }: TaskMutationProps) {
   const queryClient = useQueryClient();
-  const handleMutationSuccess = () => {
-    queryClient.invalidateQueries({
-      queryKey: tasksQueryKey({ groupId, taskListId }),
-    });
-  };
 
   const postMutation = useMutation<PostTaskResult, Error, PostTaskBody>({
     mutationFn: (params) => postTask({ groupId, taskListId, params }),
-    onSuccess: handleMutationSuccess,
+    onSuccess: (newTask) => {
+      queryClient.invalidateQueries({
+        queryKey: tasksQueryKey({
+          groupId,
+          taskListId,
+          date: newTask.startDate,
+        }),
+      });
+      queryClient.invalidateQueries({
+        queryKey: tasksQueryKey({ groupId, taskListId }),
+      });
+    },
   });
 
   const patchMutation = useMutation<PatchTaskResult, Error, PatchTaskParams>({
     mutationFn: (params) => patchTask({ groupId, taskListId, params }),
-    onSuccess: handleMutationSuccess,
+    onSuccess: (updatedTask) => {
+      queryClient.invalidateQueries({
+        queryKey: tasksQueryKey({
+          groupId,
+          taskListId,
+          date: updatedTask.date,
+        }),
+      });
+      queryClient.invalidateQueries({
+        queryKey: tasksQueryKey({ groupId, taskListId }),
+      });
+    },
     ...options,
   });
 
-  const deleteMutation = useMutation<void, Error, number>({
+  const deleteMutation = useMutation<void, Error, number, unknown>({
     mutationFn: (taskId) => deleteTask({ groupId, taskListId, taskId }),
-    onSuccess: handleMutationSuccess,
+    onSuccess: (_, taskId) => {
+      queryClient.invalidateQueries({
+        queryKey: taskQueryKey({ groupId, taskListId, taskId }),
+      });
+      queryClient.invalidateQueries({
+        queryKey: tasksQueryKey({ groupId, taskListId }),
+      });
+    },
   });
 
   return { postMutation, patchMutation, deleteMutation };

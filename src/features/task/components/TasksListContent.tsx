@@ -32,8 +32,8 @@ export default function TasksListContent({
 
   const { deleteMutation } = useTaskMutation({ groupId, taskListId });
   const { tasks, isFetching } = useTasksQuery({
-    groupId: groupId,
-    taskListId: taskListId,
+    groupId: groupId ?? 0,
+    taskListId: taskListId ?? 0,
     date: selectedDate.toISOString(),
     enabled: !!taskListId,
   });

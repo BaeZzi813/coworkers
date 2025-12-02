@@ -1,39 +1,25 @@
-import { openDeleteAlert } from "@/components/modal/DeleteAlert";
 import clsx from "clsx";
-import { useTaskCommentMutation } from "../query/use-comment-mutation";
 import { CommentModel } from "./CommentItem";
 import CommentList from "./CommentList";
 import CommentPost from "./CommentPost";
 
 interface CommentSectionProps {
   comments: CommentModel[];
-  taskId: number;
+  onSubmit?: (content: string) => void;
+  onEdit?: (commentId: number, newContent: string) => void;
+  onDelete?: (commentId: number) => void;
   className?: string;
   horizontalPadding?: number;
 }
 
 export default function CommentSection({
   comments,
-  taskId,
+  onSubmit,
+  onEdit,
+  onDelete,
   className,
   horizontalPadding,
 }: CommentSectionProps) {
-  const {
-    postMutation,
-    patchMutation: { mutate: patchCommentMutate },
-    deleteMutation,
-  } = useTaskCommentMutation({ taskId });
-
-  const handleEditComment = patchCommentMutate;
-  const handleDeleteComment = (commentId: number) => {
-    openDeleteAlert({
-      title: `댓글을 정말 삭제하시겠어요?`,
-      onDelete: () => {
-        deleteMutation.mutate({ taskId, commentId });
-      },
-    });
-  };
-
   return (
     <section className={clsx("flex flex-col gap-4", className)}>
       <h2
@@ -45,17 +31,11 @@ export default function CommentSection({
       >
         댓글<span className="ml-1 text-brand-primary">{comments.length}</span>
       </h2>
-      <CommentPost
-        taskId={taskId}
-        onSubmit={postMutation.mutate}
-        isPending={postMutation.isPending}
-        horizontalPadding={horizontalPadding}
-      />
+      <CommentPost onSubmit={onSubmit} horizontalPadding={horizontalPadding} />
       <CommentList
         comments={comments}
-        taskId={taskId}
-        onEdit={handleEditComment}
-        onDelete={handleDeleteComment}
+        onEdit={onEdit}
+        onDelete={onDelete}
         horizontalPadding={horizontalPadding}
       />
     </section>
