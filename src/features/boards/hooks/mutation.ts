@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { deleteArticleById } from "../api";
 
-export function useDeleteArticleMutation(id: number) {
+export function useDeleteArticleMutation() {
   const queryClient = useQueryClient();
   const router = useRouter();
 
