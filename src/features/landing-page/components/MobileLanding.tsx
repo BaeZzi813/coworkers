@@ -3,15 +3,27 @@ import landing2small from "@/assets/images/landing-2-small.png";
 import landing3small from "@/assets/images/landing-3-small.png";
 import landing4small from "@/assets/images/landing-4-small.png";
 import Icon from "@/components/icon";
+import { motion } from "framer-motion";
 import Image from "next/image";
 import StartButton from "./StartButton";
+import {
+  defaultMotion,
+  fadeInLeft,
+  fadeInRight,
+  fadeInScale,
+  fadeInUp,
+} from "./landing-motion";
 
 export default function MobileLanding() {
   return (
     <>
       <section className="mb-[30px]">
         <div className="relative min-h-[730px] bg-background-secondary">
-          <div className="min-h-36">
+          <motion.div
+            variants={fadeInLeft}
+            {...defaultMotion}
+            className="min-h-36"
+          >
             <div className="absolute top-9 left-5">
               <Icon name="union" size="small" />
             </div>
@@ -23,23 +35,29 @@ export default function MobileLanding() {
                 Coworkers
               </p>
             </div>
-          </div>
-          <div className="relative h-[586px]">
-            <Image
-              src={landing1small}
-              alt="랜딩이미지1 모바일"
-              fill
-              className="object-contain object-right"
-            />
-          </div>
-          <div className="absolute right-10 bottom-13 w-40">
-            <StartButton />
-          </div>
+          </motion.div>
+          <motion.div variants={fadeInScale} {...defaultMotion}>
+            <div className="relative h-[586px]">
+              <Image
+                src={landing1small}
+                alt="랜딩이미지1 모바일"
+                fill
+                className="object-contain object-right"
+              />
+            </div>
+            <div className="absolute right-10 bottom-13 w-40">
+              <StartButton />
+            </div>
+          </motion.div>
         </div>
       </section>
       <section>
         <div className="min-h-[494px] bg-state-50 pl-[35px]">
-          <div className="min-h-[181px]">
+          <motion.div
+            variants={fadeInUp}
+            {...defaultMotion}
+            className="min-h-[181px]"
+          >
             <div className="flex flex-col gap-3 pt-[43px] pb-[19px]">
               <Icon name="folder" size="small" />
               <p className="text-lg-b text-brand-primary">
@@ -51,20 +69,28 @@ export default function MobileLanding() {
                 <br /> 지금 무엇을 해야 하는지 한눈에 볼 수 있어요
               </p>
             </div>
-          </div>
-          <div className="relative h-[269px] pb-11">
+          </motion.div>
+          <motion.div
+            variants={fadeInRight}
+            {...defaultMotion}
+            className="relative h-[269px] pb-11"
+          >
             <Image
               src={landing2small}
               alt="랜딩이미지2 모바일"
               fill
               className="object-contain object-right"
             />
-          </div>
+          </motion.div>
         </div>
       </section>
       <section>
         <div className="min-h-[494px] overflow-hidden bg-brand-primary pl-[18px]">
-          <div className="min-h-[186px]">
+          <motion.div
+            variants={fadeInLeft}
+            {...defaultMotion}
+            className="min-h-[186px]"
+          >
             <div className="flex flex-col gap-3 pt-[43px] pb-[29px] pl-[17px]">
               <Icon name="doneShadow" size="small" />
               <p className="text-[16px] font-bold text-text-inverse">
@@ -76,20 +102,28 @@ export default function MobileLanding() {
                 <br /> 하나씩 빠르게 완료해보세요
               </p>
             </div>
-          </div>
-          <div className="relative h-[331px]">
+          </motion.div>
+          <motion.div
+            variants={fadeInScale}
+            {...defaultMotion}
+            className="relative h-[331px]"
+          >
             <Image
               src={landing3small}
               alt="랜딩이미지3 모바일"
               fill
               className="object-contain object-bottom-right"
             />
-          </div>
+          </motion.div>
         </div>
       </section>
       <section>
         <div className="min-h-[494px] overflow-hidden bg-state-50 pl-[18px]">
-          <div className="min-h-[207px]">
+          <motion.div
+            variants={fadeInUp}
+            {...defaultMotion}
+            className="min-h-[207px]"
+          >
             <div className="flex flex-col gap-3 pt-[43px] pb-[50px] pl-[17px]">
               <Icon name="commentShadow" size="small" />
               <p className="text-lg-b text-brand-primary">
@@ -101,15 +135,19 @@ export default function MobileLanding() {
                 <br /> 함께 결정을 내릴 수 있어요
               </p>
             </div>
-          </div>
-          <div className="relative mx-auto h-[287px] w-[340px]">
+          </motion.div>
+          <motion.div
+            variants={fadeInRight}
+            {...defaultMotion}
+            className="relative mx-auto h-[287px] w-[340px]"
+          >
             <Image
               src={landing4small}
               alt="랜딩이미지4 모바일"
               fill
               className="object-contain"
             />
-          </div>
+          </motion.div>
         </div>
       </section>
       <div className="flex h-[275px] flex-col items-center">
