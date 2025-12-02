@@ -1,5 +1,5 @@
 import Icon from "@/components/icon";
-import { FREQUENCY_LABEL } from "@/features/tasklist/constants/task-frequency";
+import { FREQUENCY_LABEL } from "@/features/task/constants/task-frequency";
 import {
   prefetchUserHistory,
   useUserHistoryQuery,
