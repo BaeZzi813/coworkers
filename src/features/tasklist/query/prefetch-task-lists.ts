@@ -1,5 +1,5 @@
 import { QueryClient } from "@tanstack/react-query";
-import { getTaskList } from "../apis/mock";
+import { getTaskList } from "../apis/";
 import { taskListQueryKey } from "./query-key";
 
 interface Props {
