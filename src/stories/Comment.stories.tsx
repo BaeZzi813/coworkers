@@ -21,6 +21,7 @@ const baseProps: CommentItemProps = {
   createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString(),
   horizontalPadding: 20,
+  editOnSuccess: false,
 };
 
 export const Item: Story = {
@@ -36,6 +37,8 @@ export const Post: StoryObj<typeof CommentPost> = {
         horizontalPadding={20}
         profileImage=""
         onSubmit={(text) => alert("제출됨: " + text)}
+        isPending={false}
+        submitOnSuccess={false}
       />
     </div>
   ),
